@@ -148,12 +148,16 @@
     <ClCompile Include="Hashing\MD5Hash.cpp" />
     <ClCompile Include="Hashing\SHA256Hash.cpp" />
     <ClCompile Include="Hashing\SHA512Hash.cpp" />
+    <ClCompile Include="Utility\BitwiseUtility.cpp" />
+    <ClCompile Include="Utility\FileUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hashing\HashingAlgorithm.h" />
     <ClInclude Include="Hashing\MD5Hash.h" />
     <ClInclude Include="Hashing\SHA256Hash.h" />
     <ClInclude Include="Hashing\SHA512Hash.h" />
+    <ClInclude Include="Utility\BitwiseUtility.h" />
+    <ClInclude Include="Utility\FileUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,7 +9,7 @@ int main(int argc, char** argv)
     HashingAlgorithm* md5Hasher = new MD5Hasher();
     HashingAlgorithm* sha256Hasher = new SHA256Hasher();
     char* md5Hash = md5Hasher->CalculateHash(L"../../wlPbDX12ex.jpg");
-    char* sha256Hash = sha256Hasher->CalculateHash(L"");
+    char* sha256Hash = sha256Hasher->CalculateHash(L"C:/Dev/Cpp/FileHasher/wlPbDX12ex.jpg");
     
     if (md5Hash != nullptr)
     {
