@@ -24,12 +24,24 @@
     <ClCompile Include="Hashing\MD5Hash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hashing\SHA512Hash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hashing\SHA256Hash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hashing\HashingAlgorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hashing\MD5Hash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hashing\SHA512Hash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hashing\SHA256Hash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
