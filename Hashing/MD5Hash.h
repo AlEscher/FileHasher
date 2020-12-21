@@ -5,5 +5,6 @@
 class MD5Hasher : public HashingAlgorithm
 {
 public:
-	char* CalculateHash(const wchar_t* filePath);
+	std::string CalculateHash(const wchar_t* filePath);
+	std::string CalculateHash(std::string input);
 };

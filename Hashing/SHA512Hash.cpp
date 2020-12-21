@@ -1,17 +1,8 @@
-#include <climits>
-#include <string.h>
 
 #include "./SHA512Hash.h"
 
-// Rotate right: https://stackoverflow.com/a/776523
-static inline uint32_t rotr32(uint32_t n, int c)
-{
-	const unsigned int mask = (CHAR_BIT * sizeof(n) - 1);
-	c &= mask;
-	return (n >> c) | (n << ((-c)&mask));
-}
 
-char* SHA512Hasher::CalculateHash(const wchar_t* filePath)
+std::string SHA512Hasher::CalculateHash(const wchar_t* filePath)
 {
 	return nullptr;
 }

@@ -34,5 +34,5 @@ private:
 
     void PreProcess(const char* inputBuf, size_t numBytes);
 public:
-	char* CalculateHash(const wchar_t* filePath);
+	std::string CalculateHash(const wchar_t* filePath);
 };

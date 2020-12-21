@@ -11,7 +11,7 @@ constexpr auto MD5LEN = 16;
 
 // As specified by https://docs.microsoft.com/en-us/windows/win32/seccrypto/example-c-program--creating-an-md-5-hash-from-file-content
 
-char* MD5Hasher::CalculateHash(const wchar_t* filePath)
+std::string MD5Hasher::CalculateHash(const wchar_t* filePath)
 {
 	uint32_t dwStatus = 0;
 	bool bResult = false;
@@ -34,21 +34,21 @@ char* MD5Hasher::CalculateHash(const wchar_t* filePath)
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
-		return nullptr;
+		return "";
 	}
 
 	// Get handle to the crypto provider
 	if (!CryptAcquireContextA(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
 	{
 		CloseHandle(hFile);
-		return nullptr;
+		return "";
 	}
 
 	if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash))
 	{
 		CloseHandle(hFile);
 		CryptReleaseContext(hProv, 0);
-		return nullptr;
+		return "";
 	}
 
 	while (bResult = ReadFile(hFile, rgbFile, BUFSIZE, &cbRead, NULL))
@@ -63,7 +63,7 @@ char* MD5Hasher::CalculateHash(const wchar_t* filePath)
 			CryptReleaseContext(hProv, 0);
 			CryptDestroyHash(hHash);
 			CloseHandle(hFile);
-			return nullptr;
+			return "";
 		}
 	}
 
@@ -72,7 +72,7 @@ char* MD5Hasher::CalculateHash(const wchar_t* filePath)
 		CryptReleaseContext(hProv, 0);
 		CryptDestroyHash(hHash);
 		CloseHandle(hFile);
-		return nullptr;
+		return "";
 	}
 
 	cbHash = MD5LEN;
@@ -86,7 +86,7 @@ char* MD5Hasher::CalculateHash(const wchar_t* filePath)
 			CryptDestroyHash(hHash);
 			CryptReleaseContext(hProv, 0);
 			CloseHandle(hFile);
-			return nullptr;
+			return "";
 		}
 
 		// Create our hash
@@ -107,5 +107,10 @@ char* MD5Hasher::CalculateHash(const wchar_t* filePath)
 	CryptReleaseContext(hProv, 0);
 	CloseHandle(hFile);
 
-	return imageMD5Hash;
+	return std::string(imageMD5Hash);
+}
+
+std::string MD5Hasher::CalculateHash(std::string input)
+{
+	return "";
 }
