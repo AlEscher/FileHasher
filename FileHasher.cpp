@@ -10,16 +10,28 @@ int main(int argc, char** argv)
     HashingAlgorithm* sha256Hasher = new SHA256Hasher();
     std::string md5Hash = md5Hasher->CalculateHash(L"../../wlPbDX12ex.jpg");
     std::string hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-    
-    //std::cout << md5Hash << std::endl;
-    std::cout << sha256Hasher->CalculateHash("") << std::endl;
-    std::cout << sha256Hasher->CalculateHash("hallo") << std::endl;
-    // File containing the word "hallo"
-    std::cout << sha256Hasher->CalculateHash(L"C:/Dev/Cpp/FileHasher/test.txt") << std::endl;
-    std::cout << sha256Hasher->CalculateHash(L"C:/Dev/Cpp/FileHasher/wlPbDX12ex.jpg") << std::endl;
+    std::string input;
+
+    while (true)
+    {
+        input = "";
+        std::cin >> input;
+
+        if (input == "exit")
+        {
+            break;
+        }
+        else if (input == "file")
+        {
+            // Hash the file "test", can be changed at runtime
+            std::cout << "File SHA256: " << sha256Hasher->CalculateHash(L"C:/Dev/Cpp/FileHasher/test") << std::endl;
+        }
+        else
+        {
+            std::cout << "SHA256: " << sha256Hasher->CalculateHash(input) << std::endl;
+        }
+    }
 
     delete md5Hasher;
     delete sha256Hasher;
-
-    int end = getchar();
 }

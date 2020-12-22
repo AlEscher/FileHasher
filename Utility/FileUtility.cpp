@@ -38,6 +38,7 @@ vector<uint8_t> FileUtil::ReadFileContent(const wchar_t* filePath, size_t& fileS
 	}
 
 	bufferVec = vector<uint8_t>((istreambuf_iterator<char>(input)), istreambuf_iterator<char>());
+	input.close();
 
 	fileSize = size;
 	return bufferVec;

@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <cassert>
 #include <sstream>
+#include <iomanip>
 
 #include "../Utility/FileUtility.h"
 #include "../Utility/BitwiseUtility.h"
@@ -30,6 +31,7 @@ void SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
 	// How many 0-bits we need for padding, should be at least 7
 	uint64_t numKBits = (minExtraBitsNeeded - 1 - 64) % 512;
 
+	// Pad with 1 '1' bit, k 0 bits, and the length as a 64-bit integer
 	buffer.resize(oldByteSize + (1 + 64 + numKBits) / 8UL);
 
 	// Fill out the padding
@@ -42,10 +44,11 @@ void SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
 		buffer[oldByteSize + padCounter] = 0x00;
 	}
 	// append bit-length L as 64-bit big-endian integer
-	for (uint64_t bitMask = 0xFF00000000000000; bitMask > 0; bitMask >>= 8)
+	for (int c = (sizeof(L) - 1) * 8U; c >= 0; c-=8)
 	{
-		// "Iterate" through L's bytes
-		buffer[oldByteSize + padCounter++] = static_cast<uint8_t>(L & bitMask);
+		// "Iterate" through L's bytes by shifting the current byte completely to the right (least significant)
+		// and discarding all higher (by casting to an unsigned byte)
+		buffer[oldByteSize + padCounter++] = static_cast<uint8_t>(L >> c);
 	}
 
 	// Our message should now be a multiple of 64 bytes (512 bits)
@@ -59,7 +62,8 @@ void SHA256Hasher::Process(std::vector<uint8_t>& buffer)
 	{
 		// 64-entry message schedule
 		uint32_t w[64]{ 0 };
-		// Append bytes of this chunk into first 16 32-bit words
+
+		// Load bytes of this chunk into first 16 32-bit words
 		for (size_t i = 0; i < 16; i++)
 		{
 			// Take first byte and shift into upper (first) byte of a 32-bit word
@@ -97,7 +101,8 @@ string SHA256Hasher::Digest()
 	stringstream ss;
 	for (size_t i = 0; i < 8; i++) 
 	{
-		ss << std::hex << hPrime[i];
+		// Keep leading 0s
+		ss << hex << setfill('0') << setw(8) << hPrime[i];
 	}
 
 	return ss.str();
@@ -145,5 +150,6 @@ string SHA256Hasher::CalculateHash(const std::string& input)
 	stringstream ss;
 	ss << input;
 	buffer = vector<uint8_t>((istreambuf_iterator<char>(ss)), istreambuf_iterator<char>());
+
 	return this->Hash(buffer);
 }
