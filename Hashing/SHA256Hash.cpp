@@ -55,7 +55,7 @@ void SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
 	assert(buffer.size() % 64 == 0);
 }
 
-void SHA256Hasher::Process(std::vector<uint8_t>& buffer)
+void SHA256Hasher::Process(vector<uint8_t>& buffer)
 {
 	// Break message into 512-bit chunks
 	for (size_t chunk = 0; chunk < buffer.size(); chunk += 64)
@@ -120,7 +120,7 @@ void SHA256Hasher::Reset()
 	hPrime[7] = 0x5be0cd19U;
 }
 
-std::string SHA256Hasher::Hash(std::vector<uint8_t>& buffer)
+string SHA256Hasher::Hash(vector<uint8_t>& buffer)
 {
 	// Message needs to have a length that is a multiple of 512 bits
 	this->PreProcess(buffer);
@@ -144,7 +144,19 @@ string SHA256Hasher::CalculateHash(const wchar_t* filePath)
 	return this->Hash(buffer);
 }
 
-string SHA256Hasher::CalculateHash(const std::string& input)
+string SHA256Hasher::CalculateHash(const wchar_t* filePath, size_t& fileSize)
+{
+	size_t fileSizeLoc = fileSize = 0;
+	vector<uint8_t> buffer = FileUtil::ReadFileContent(filePath, fileSizeLoc);
+	if (fileSizeLoc == 0)
+	{
+		return "";
+	}
+	fileSize = fileSizeLoc;
+	return this->Hash(buffer);
+}
+
+string SHA256Hasher::CalculateHash(const string& input)
 {
 	vector<uint8_t> buffer;
 	stringstream ss;
