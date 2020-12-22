@@ -110,7 +110,7 @@ std::string MD5Hasher::CalculateHash(const wchar_t* filePath)
 	return std::string(imageMD5Hash);
 }
 
-std::string MD5Hasher::CalculateHash(std::string input)
+std::string MD5Hasher::CalculateHash(const std::string& input)
 {
 	return "";
 }

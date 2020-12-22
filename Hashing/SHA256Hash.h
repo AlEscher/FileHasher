@@ -29,9 +29,11 @@ private:
     void PreProcess(std::vector<uint8_t>& buffer);
     // Process and hash the message
     void Process(std::vector<uint8_t>& buffer);
+    // Resets the prime constants
+    void Reset();
     // Digests the processed message and returns our hash
     std::string Digest();
 public:
 	std::string CalculateHash(const wchar_t* filePath);
-    std::string CalculateHash(std::string input);
+    std::string CalculateHash(const std::string& input);
 };

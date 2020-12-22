@@ -37,7 +37,7 @@ void SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
 	size_t padCounter = 0;
 	buffer[oldByteSize + padCounter++] = 0b10000000;
 	numKBits -= 7;
-	for (; padCounter < numKBits / 8; padCounter++)
+	for (; padCounter <= numKBits / 8; padCounter++)
 	{
 		buffer[oldByteSize + padCounter] = 0x00;
 	}
@@ -103,13 +103,26 @@ string SHA256Hasher::Digest()
 	return ss.str();
 }
 
+void SHA256Hasher::Reset()
+{
+	hPrime[0] = 0x6a09e667U;
+	hPrime[1] = 0xbb67ae85U;
+	hPrime[2] = 0x3c6ef372U;
+	hPrime[3] = 0xa54ff53aU;
+	hPrime[4] = 0x510e527fU;
+	hPrime[5] = 0x9b05688cU;
+	hPrime[6] = 0x1f83d9abU;
+	hPrime[7] = 0x5be0cd19U;
+}
+
 std::string SHA256Hasher::Hash(std::vector<uint8_t>& buffer)
 {
 	// Message needs to have a length that is a multiple of 512 bits
-	PreProcess(buffer);
-	Process(buffer);
+	this->PreProcess(buffer);
+	this->Process(buffer);
 
-	string hash = Digest();
+	string hash = this->Digest();
+	this->Reset();
 
 	return hash;
 }
@@ -123,14 +136,14 @@ string SHA256Hasher::CalculateHash(const wchar_t* filePath)
 		return "";
 	}
 
-	return Hash(buffer);
+	return this->Hash(buffer);
 }
 
-string SHA256Hasher::CalculateHash(std::string input)
+string SHA256Hasher::CalculateHash(const std::string& input)
 {
 	vector<uint8_t> buffer;
 	stringstream ss;
 	ss << input;
 	buffer = vector<uint8_t>((istreambuf_iterator<char>(ss)), istreambuf_iterator<char>());
-	return Hash(buffer);
+	return this->Hash(buffer);
 }
