@@ -7,3 +7,10 @@ This approach also never touches the file in memory, it only reads it from the d
 ## TODO:
 - GUI client
 - Includable header file, DLL, or lib
+
+## Sources:
+The only sources used are:
+- https://en.wikipedia.org/wiki/SHA-2 (SHA256)
+- https://tools.ietf.org/html/rfc3174 (SHA256)
+- https://docs.microsoft.com/en-us/windows/win32/seccrypto/example-c-program--creating-an-md-5-hash-from-file-content (MD5)
+- Sources included in code comments
