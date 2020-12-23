@@ -7,6 +7,7 @@ constexpr auto BUFSIZE = 1024;
 constexpr auto MD5LEN = 16;
 
 #include "MD5Hash.h"
+#include "../Utility/FileUtility.h"
 
 
 // As specified by https://docs.microsoft.com/en-us/windows/win32/seccrypto/example-c-program--creating-an-md-5-hash-from-file-content
@@ -76,12 +77,12 @@ std::string MD5Hasher::CalculateHash(const wchar_t* filePath)
 	}
 
 	cbHash = MD5LEN;
-	char* imageMD5Hash = nullptr;
+	char* md5Hash = nullptr;
 	if (CryptGetHashParam(hHash, HP_HASHVAL, rgbHash, &cbHash, 0))
 	{
 		// +1 for Null termination
-		imageMD5Hash = new char[(unsigned long long)cbHash * 2 * sizeof(char) + 1];
-		if (!imageMD5Hash)
+		md5Hash = new char[(unsigned long long)cbHash * 2 * sizeof(char) + 1];
+		if (!md5Hash)
 		{
 			CryptDestroyHash(hHash);
 			CryptReleaseContext(hProv, 0);
@@ -92,27 +93,29 @@ std::string MD5Hasher::CalculateHash(const wchar_t* filePath)
 		// Create our hash
 		for (DWORD i = 0; i < cbHash; i++)
 		{
-			imageMD5Hash[i * 2] = rgbDigits[rgbHash[i] >> 4];
-			imageMD5Hash[i * 2 + 1] = rgbDigits[rgbHash[i] & 0xf];
+			md5Hash[i * 2] = rgbDigits[rgbHash[i] >> 4];
+			md5Hash[i * 2 + 1] = rgbDigits[rgbHash[i] & 0xf];
 		}
 		// Null terminate
-		imageMD5Hash[cbHash * 2] = 0;
+		md5Hash[cbHash * 2] = 0;
 	}
 	else
 	{
-		// Nothing todo, imageMD5Hash will be NULL which will be handled by caller
+		// Nothing todo, md5Hash will be NULL which will be handled by caller
 	}
 
 	CryptDestroyHash(hHash);
 	CryptReleaseContext(hProv, 0);
 	CloseHandle(hFile);
 
-	return std::string(imageMD5Hash);
+	return (md5Hash != nullptr ? std::string(md5Hash) : "");
 }
 
 std::string MD5Hasher::CalculateHash(const wchar_t* filePath, size_t& fileSize)
 {
-	return std::string();
+	std::string hash = this->CalculateHash(filePath);
+	fileSize = FileUtil::GetFileSize(filePath);
+	return hash;
 }
 
 std::string MD5Hasher::CalculateHash(const std::string& input)

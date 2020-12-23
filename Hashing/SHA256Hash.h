@@ -26,9 +26,9 @@ private:
 
     std::string Hash(std::vector<uint8_t>& buffer);
     // Pad the message so the length in bits is a multiple of 512
-    void PreProcess(std::vector<uint8_t>& buffer);
+    bool PreProcess(std::vector<uint8_t>& buffer);
     // Process and hash the message
-    void Process(std::vector<uint8_t>& buffer);
+    bool Process(std::vector<uint8_t>& buffer);
     // Resets the prime constants
     void Reset();
     // Digests the processed message and returns our hash

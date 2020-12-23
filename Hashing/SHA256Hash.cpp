@@ -22,7 +22,7 @@ using namespace BitUtil;
 #define ch(e, f, g) (XOR((e & f), ((~e) & g)))
 #define maj(a, b, c) (XOR(XOR((a & b), (a & c)), (b & c)))
 
-void SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
+bool SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
 {
 	size_t oldByteSize = buffer.size();
 	uint64_t L = oldByteSize * 8UL;
@@ -32,7 +32,14 @@ void SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
 	uint64_t numKBits = (minExtraBitsNeeded - 1 - 64) % 512;
 
 	// Pad with 1 '1' bit, k 0 bits, and the length as a 64-bit integer
-	buffer.resize(oldByteSize + (1 + 64 + numKBits) / 8UL);
+	try
+	{
+		buffer.resize(oldByteSize + (1 + 64 + numKBits) / 8UL);
+	}
+	catch (const std::bad_alloc&)
+	{
+		return false;
+	}
 
 	// Fill out the padding
 	// Set the first padded bit to 1, and also already the first 7 0-bits
@@ -53,9 +60,11 @@ void SHA256Hasher::PreProcess(vector<uint8_t>& buffer)
 
 	// Our message should now be a multiple of 64 bytes (512 bits)
 	assert(buffer.size() % 64 == 0);
+
+	return true;
 }
 
-void SHA256Hasher::Process(vector<uint8_t>& buffer)
+bool SHA256Hasher::Process(vector<uint8_t>& buffer)
 {
 	// Break message into 512-bit chunks
 	for (size_t chunk = 0; chunk < buffer.size(); chunk += 64)
@@ -94,6 +103,8 @@ void SHA256Hasher::Process(vector<uint8_t>& buffer)
 		hPrime[0] += a; hPrime[1] += b; hPrime[2] += c; hPrime[3] += d;
 		hPrime[4] += e; hPrime[5] += f; hPrime[6] += g; hPrime[7] += h;
 	}
+
+	return true;
 }
 
 string SHA256Hasher::Digest()
@@ -123,8 +134,15 @@ void SHA256Hasher::Reset()
 string SHA256Hasher::Hash(vector<uint8_t>& buffer)
 {
 	// Message needs to have a length that is a multiple of 512 bits
-	this->PreProcess(buffer);
-	this->Process(buffer);
+	if (!this->PreProcess(buffer))
+	{
+		return "";
+	}
+
+	if (!this->Process(buffer))
+	{
+		return "";
+	}
 
 	string hash = this->Digest();
 	this->Reset();
