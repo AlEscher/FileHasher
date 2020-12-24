@@ -183,3 +183,8 @@ string SHA256Hasher::CalculateHash(const string& input)
 
 	return this->Hash(buffer);
 }
+
+SHA256Hasher::~SHA256Hasher()
+{
+
+}

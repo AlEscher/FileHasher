@@ -16,7 +16,12 @@ SOURCES += \
     filehasher.cpp
 
 SOURCES += \
-    C:/Dev/Cpp/FileHasher/Utility/FileUtility.cpp
+    C:/Dev/Cpp/FileHasher/Utility/FileUtility.cpp \
+    C:/Dev/Cpp/FileHasher/Utility/BitwiseUtility.cpp \
+    C:/Dev/Cpp/FileHasher/Hashing/SHA256Hash.cpp \
+    #C:/Dev/Cpp/FileHasher/Hashing/MD5Hash.cpp
+
+LIBS += -LC:/Windows/System32 -lcrypt32
 
 HEADERS += \
     filehasher.h \

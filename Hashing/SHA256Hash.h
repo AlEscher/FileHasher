@@ -37,4 +37,5 @@ public:
 	std::string CalculateHash(const wchar_t* filePath);
     std::string CalculateHash(const wchar_t* filePath, size_t& fileSize);
     std::string CalculateHash(const std::string& input);
+    ~SHA256Hasher();
 };

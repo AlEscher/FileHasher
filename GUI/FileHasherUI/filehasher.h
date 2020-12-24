@@ -22,6 +22,10 @@ private slots:
 
     void on_clearListButton_clicked();
 
+    void on_hashButton_clicked();
+
+    void on_clearOutputButton_clicked();
+
 private:
     Ui::FileHasher *ui;
     FileHasherDelegate *delegate;

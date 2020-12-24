@@ -5,7 +5,7 @@
 # Template: app
 #############################################################################
 
-MAKEFILE      = Makefile.Release
+MAKEFILE      = Makefile.Debug
 
 EQ            = =
 
@@ -13,13 +13,13 @@ EQ            = =
 
 CC            = cl
 CXX           = cl
-DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DNDEBUG -DQT_QML_DEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
-CFLAGS        = -nologo -Zc:wchar_t -FS -Zc:strictStrings -O2 -MD -utf-8 -W3 -w44456 -w44457 -w44458 $(DEFINES)
-CXXFLAGS      = -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -O2 -MD -std:c++17 -utf-8 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -EHsc $(DEFINES)
-INCPATH       = -I..\FileHasherUI -I. -I..\FileHasherUI -IC:\Qt\6.0.0\msvc2019_64\include -IC:\Qt\6.0.0\msvc2019_64\include\QtWidgets -IC:\Qt\6.0.0\msvc2019_64\include\QtGui -IC:\Qt\6.0.0\msvc2019_64\include\QtCore -Irelease -I. -IC:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc 
+DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+CFLAGS        = -nologo -Zc:wchar_t -FS -Zc:strictStrings -Zi -MDd -utf-8 -W3 -w44456 -w44457 -w44458 /Fddebug\FileHasherUI.vc.pdb $(DEFINES)
+CXXFLAGS      = -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -Zi -MDd -std:c++17 -utf-8 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -EHsc /Fddebug\FileHasherUI.vc.pdb $(DEFINES)
+INCPATH       = -I..\FileHasherUI -I. -I..\FileHasherUI -IC:\Qt\6.0.0\msvc2019_64\include -IC:\Qt\6.0.0\msvc2019_64\include\QtWidgets -IC:\Qt\6.0.0\msvc2019_64\include\QtGui -IC:\Qt\6.0.0\msvc2019_64\include\QtCore -Idebug -I. -IC:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc 
 LINKER        = link
-LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /OPT:REF /OPT:ICF /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
-LIBS          = /LIBPATH:C:\Windows\System32 crypt32.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgets.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Gui.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Core.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.lib shell32.lib  
+LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /DEBUG /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
+LIBS          = /LIBPATH:C:\Windows\System32 crypt32.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgetsd.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Guid.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Cored.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPointd.lib shell32.lib  
 QMAKE         = C:\Qt\6.0.0\msvc2019_64\bin\qmake.exe
 DEL_FILE      = del
 CHK_DIR_EXISTS= if not exist
@@ -46,7 +46,7 @@ MOVE          = move
 
 ####### Output directory
 
-OBJECTS_DIR   = release
+OBJECTS_DIR   = debug
 
 ####### Files
 
@@ -55,14 +55,14 @@ SOURCES       = ..\FileHasherUI\FileHasherDelegate.cpp \
 		..\FileHasherUI\filehasher.cpp \
 		..\..\Utility\FileUtility.cpp \
 		..\..\Utility\BitwiseUtility.cpp \
-		..\..\Hashing\SHA256Hash.cpp release\moc_filehasher.cpp
-OBJECTS       = release\FileHasherDelegate.obj \
-		release\main.obj \
-		release\filehasher.obj \
-		release\FileUtility.obj \
-		release\BitwiseUtility.obj \
-		release\SHA256Hash.obj \
-		release\moc_filehasher.obj
+		..\..\Hashing\SHA256Hash.cpp debug\moc_filehasher.cpp
+OBJECTS       = debug\FileHasherDelegate.obj \
+		debug\main.obj \
+		debug\filehasher.obj \
+		debug\FileUtility.obj \
+		debug\BitwiseUtility.obj \
+		debug\SHA256Hash.obj \
+		debug\moc_filehasher.obj
 
 DIST          =  ..\FileHasherUI\filehasher.h \
 		..\FileHasherUI\filehasher_delegate.h ..\FileHasherUI\FileHasherDelegate.cpp \
@@ -72,140 +72,141 @@ DIST          =  ..\FileHasherUI\filehasher.h \
 		..\..\Utility\BitwiseUtility.cpp \
 		..\..\Hashing\SHA256Hash.cpp
 QMAKE_TARGET  = FileHasherUI
-DESTDIR        = release\ #avoid trailing-slash linebreak
+DESTDIR        = debug\ #avoid trailing-slash linebreak
 TARGET         = FileHasherUI.exe
-DESTDIR_TARGET = release\FileHasherUI.exe
+DESTDIR_TARGET = debug\FileHasherUI.exe
 
 ####### Implicit rules
 
 .SUFFIXES: .c .cpp .cc .cxx
 
-{..\..\Hashing}.cpp{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Hashing}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\..\Hashing}.cc{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Hashing}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\..\Hashing}.cxx{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Hashing}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\..\Hashing}.c{release\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Hashing}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\..\Utility}.cpp{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Utility}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\..\Utility}.cc{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Utility}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\..\Utility}.cxx{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Utility}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\..\Utility}.c{release\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Forelease\ @<<
+{..\..\Utility}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{release}.cpp{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\FileHasherUI}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{release}.cc{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\FileHasherUI}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{release}.cxx{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{..\FileHasherUI}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{release}.c{release\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Forelease\ @<<
+{..\FileHasherUI}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\FileHasherUI}.cpp{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{.}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\FileHasherUI}.cc{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{.}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\FileHasherUI}.cxx{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{.}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{..\FileHasherUI}.c{release\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Forelease\ @<<
+{.}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{.}.cpp{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{debug}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{.}.cc{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{debug}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{.}.cxx{release\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
+{debug}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
-{.}.c{release\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Forelease\ @<<
+{debug}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
 
 ####### Build rules
 
 first: all
-all: Makefile.Release  release\FileHasherUI.exe
+all: Makefile.Debug  debug\FileHasherUI.exe
 
-release\FileHasherUI.exe: C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgets.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Gui.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Core.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.lib ui_filehasher.h $(OBJECTS) 
+debug\FileHasherUI.exe: C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgetsd.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Guid.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Cored.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPointd.lib ui_filehasher.h $(OBJECTS) 
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
-release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\moc_filehasher.obj
+debug\FileHasherDelegate.obj debug\main.obj debug\filehasher.obj debug\FileUtility.obj debug\BitwiseUtility.obj debug\SHA256Hash.obj debug\moc_filehasher.obj
 $(LIBS)
 <<
 
 qmake: FORCE
-	@$(QMAKE) -o Makefile.Release ..\FileHasherUI\FileHasherUI.pro -spec win32-msvc "CONFIG+=debug" "CONFIG+=qml_debug"
+	@$(QMAKE) -o Makefile.Debug ..\FileHasherUI\FileHasherUI.pro -spec win32-msvc "CONFIG+=qtquickcompiler"
 
 qmake_all: FORCE
 
 dist:
-	$(ZIP) FileHasherUI.zip $(SOURCES) $(DIST) ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows_vulkan_sdk.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-vulkan.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\qconfig.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_freetype.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_libpng.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_qobject_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_entrypoint_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_fb_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_packetprotocol_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldebug_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickshapes_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_tools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uiplugin.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_zlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_post.prf .qmake.stash C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-version.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\toolchain.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resolve_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\build_pass.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qml_debug.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\entrypoint.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\precompile_header.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\warn_on.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\moc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\opengl.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\uic.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qmake_use.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\file_copies.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\testcase_targets.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exceptions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\yacc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\lex.prf ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.prl FileHasherUI_en_US.ts FileHasherUI_en_US.ts   C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp ..\FileHasherUI\filehasher.h ..\FileHasherUI\filehasher_delegate.h  ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.cpp ..\..\Utility\FileUtility.cpp ..\..\Utility\BitwiseUtility.cpp ..\..\Hashing\SHA256Hash.cpp ..\FileHasherUI\filehasher.ui    
+	$(ZIP) FileHasherUI.zip $(SOURCES) $(DIST) ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows_vulkan_sdk.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-vulkan.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\qconfig.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_freetype.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_libpng.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_qobject_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_entrypoint_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_fb_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_packetprotocol_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldebug_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickshapes_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_tools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uiplugin.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_zlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_post.prf .qmake.stash C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-version.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\toolchain.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resolve_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\build_pass.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qtquickcompiler.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\entrypoint.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\precompile_header.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\warn_on.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\moc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\opengl.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\uic.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qmake_use.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\file_copies.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\testcase_targets.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exceptions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\yacc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\lex.prf ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPointd.prl FileHasherUI_en_US.ts FileHasherUI_en_US.ts   C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp ..\FileHasherUI\filehasher.h ..\FileHasherUI\filehasher_delegate.h  ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.cpp ..\..\Utility\FileUtility.cpp ..\..\Utility\BitwiseUtility.cpp ..\..\Hashing\SHA256Hash.cpp ..\FileHasherUI\filehasher.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\moc_filehasher.obj
+	-$(DEL_FILE) debug\FileHasherDelegate.obj debug\main.obj debug\filehasher.obj debug\FileUtility.obj debug\BitwiseUtility.obj debug\SHA256Hash.obj debug\moc_filehasher.obj
+	-$(DEL_FILE) debug\FileHasherUI.vc.pdb debug\FileHasherUI.ilk debug\FileHasherUI.idb
 
 distclean: clean 
-	-$(DEL_FILE) .qmake.stash
+	-$(DEL_FILE) .qmake.stash debug\FileHasherUI.pdb
 	-$(DEL_FILE) $(DESTDIR_TARGET)
-	-$(DEL_FILE) Makefile.Release
+	-$(DEL_FILE) Makefile.Debug
 
 mocclean: compiler_moc_header_clean compiler_moc_objc_header_clean compiler_moc_source_clean
 
@@ -219,16 +220,16 @@ compiler_no_pch_compiler_make_all:
 compiler_no_pch_compiler_clean:
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_predefs_make_all: release\moc_predefs.h
+compiler_moc_predefs_make_all: debug\moc_predefs.h
 compiler_moc_predefs_clean:
-	-$(DEL_FILE) release\moc_predefs.h
-release\moc_predefs.h: C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp
-	cl -BxC:\Qt\6.0.0\msvc2019_64\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -O2 -MD -std:c++17 -utf-8 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp 2>NUL >release\moc_predefs.h
+	-$(DEL_FILE) debug\moc_predefs.h
+debug\moc_predefs.h: C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp
+	cl -BxC:\Qt\6.0.0\msvc2019_64\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -Zi -MDd -std:c++17 -utf-8 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp 2>NUL >debug\moc_predefs.h
 
-compiler_moc_header_make_all: release\moc_filehasher.cpp
+compiler_moc_header_make_all: debug\moc_filehasher.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) release\moc_filehasher.cpp
-release\moc_filehasher.cpp: ..\FileHasherUI\filehasher.h \
+	-$(DEL_FILE) debug\moc_filehasher.cpp
+debug\moc_filehasher.cpp: ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMainWindow \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qmainwindow.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtwidgetsglobal.h \
@@ -359,9 +360,9 @@ release\moc_filehasher.cpp: ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\QTransform \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabwidget.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qicon.h \
-		release\moc_predefs.h \
+		debug\moc_predefs.h \
 		C:\Qt\6.0.0\msvc2019_64\bin\moc.exe
-	C:\Qt\6.0.0\msvc2019_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include C:/Dev/Cpp/FileHasher/GUI/build-FileHasherUI-Desktop_Qt_6_0_0_MSVC2019_64bit-Debug/release/moc_predefs.h -IC:/Qt/6.0.0/msvc2019_64/mkspecs/win32-msvc -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Qt/6.0.0/msvc2019_64/include -IC:/Qt/6.0.0/msvc2019_64/include/QtWidgets -IC:/Qt/6.0.0/msvc2019_64/include/QtGui -IC:/Qt/6.0.0/msvc2019_64/include/QtCore -I. -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" ..\FileHasherUI\filehasher.h -o release\moc_filehasher.cpp
+	C:\Qt\6.0.0\msvc2019_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include C:/Dev/Cpp/FileHasher/GUI/build-FileHasherUI-Desktop_Qt_6_0_0_MSVC2019_64bit-Release/debug/moc_predefs.h -IC:/Qt/6.0.0/msvc2019_64/mkspecs/win32-msvc -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Qt/6.0.0/msvc2019_64/include -IC:/Qt/6.0.0/msvc2019_64/include/QtWidgets -IC:/Qt/6.0.0/msvc2019_64/include/QtGui -IC:/Qt/6.0.0/msvc2019_64/include/QtCore -I. -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" ..\FileHasherUI\filehasher.h -o debug\moc_filehasher.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -386,7 +387,7 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-release\FileHasherDelegate.obj: ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\filehasher_delegate.h \
+debug\FileHasherDelegate.obj: ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\filehasher_delegate.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QString \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qstring.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qchar.h \
@@ -433,7 +434,7 @@ release\FileHasherDelegate.obj: ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHa
 		..\..\Hashing\HashingAlgorithm.h \
 		..\..\Utility\FileUtility.h
 
-release\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
+debug\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMainWindow \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qmainwindow.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtwidgetsglobal.h \
@@ -572,7 +573,7 @@ release\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qinputmethod.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h
 
-release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehasher.h \
+debug\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMainWindow \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qmainwindow.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtwidgetsglobal.h \
@@ -704,29 +705,28 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabwidget.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qicon.h \
 		ui_filehasher.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QVariant \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QApplication \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qapplication.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qeventloop.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qguiapplication.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qinputmethod.h \
+		..\FileHasherUI\filehasher_delegate.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QString \
+		..\..\Hashing\HashingAlgorithm.h \
+		..\..\Hashing\SHA256Hash.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QFileDialog \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qfiledialog.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdir.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfile.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfiledevice.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfileinfo.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdatetime.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcalendar.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QCheckBox \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractbutton.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QGroupBox \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qgroupbox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qframe.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QHBoxLayout \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qboxlayout.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qlayout.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qlayoutitem.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qgridlayout.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QHeaderView \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qheaderview.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qdialog.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMessageBox \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidgetItem \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtableview.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemview.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qframe.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qabstractitemmodel.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qitemselectionmodel.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemdelegate.h \
@@ -738,57 +738,18 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractslider.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyle.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qrubberband.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QProgressBar \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qprogressbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QPushButton \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qpushbutton.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QStatusBar \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstatusbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTabWidget \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidget \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtableview.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTextBrowser \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtextbrowser.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextdocument.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextoption.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextcursor.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextformat.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qpen.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QToolBar \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtoolbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qaction.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QWidget \
-		..\FileHasherUI\filehasher_delegate.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QString \
-		..\..\Hashing\HashingAlgorithm.h \
-		..\..\Hashing\SHA256Hash.h \
-		..\..\Hashing\MD5Hash.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QFileDialog \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qfiledialog.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdir.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfile.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfiledevice.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfileinfo.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdatetime.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcalendar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qdialog.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMessageBox \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidgetItem
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qrubberband.h
 
-release\FileUtility.obj: ..\..\Utility\FileUtility.cpp ..\..\Utility\FileUtility.h
+debug\FileUtility.obj: ..\..\Utility\FileUtility.cpp ..\..\Utility\FileUtility.h
 
-release\BitwiseUtility.obj: ..\..\Utility\BitwiseUtility.cpp ..\..\Utility\BitwiseUtility.h
+debug\BitwiseUtility.obj: ..\..\Utility\BitwiseUtility.cpp ..\..\Utility\BitwiseUtility.h
 
-release\SHA256Hash.obj: ..\..\Hashing\SHA256Hash.cpp ..\..\Utility\FileUtility.h \
+debug\SHA256Hash.obj: ..\..\Hashing\SHA256Hash.cpp ..\..\Utility\FileUtility.h \
 		..\..\Utility\BitwiseUtility.h \
 		..\..\Hashing\SHA256Hash.h \
 		..\..\Hashing\HashingAlgorithm.h
 
-release\moc_filehasher.obj: release\moc_filehasher.cpp 
+debug\moc_filehasher.obj: debug\moc_filehasher.cpp 
 
 ####### Install
 
