@@ -14,5 +14,6 @@ The only sources used are:
 - [SHA RFC](https://tools.ietf.org/html/rfc3174)
 - Sources included in code comments
 
-## Libraries
+## External
 I am using [Qt](https://www.qt.io/) for the GUI
+and [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet) for the dark mode
