@@ -5,8 +5,9 @@ By doing so you can detect updates for any game / software without relying on st
 This approach also never touches the file in memory, it only reads it from the disk.  
 
 ## TODO:
-- GUI client
-- Includable header file, DLL, or lib
+- Threading for the GUI client (one thread that does hashing)  
+- Make Hash function read in blocks instead of the whole file at once  
+- Support 16-bit strings as input  
 
 ## Sources:
 The only sources used are:
