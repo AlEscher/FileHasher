@@ -19,7 +19,7 @@ CXXFLAGS      = -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStri
 INCPATH       = -I..\FileHasherUI -I. -I..\FileHasherUI -IC:\Qt\6.0.0\msvc2019_64\include -IC:\Qt\6.0.0\msvc2019_64\include\QtWidgets -IC:\Qt\6.0.0\msvc2019_64\include\QtGui -IC:\Qt\6.0.0\msvc2019_64\include\QtCore -Irelease -I. -IC:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc 
 LINKER        = link
 LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /OPT:REF /OPT:ICF /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
-LIBS          = /LIBPATH:C:\Windows\System32 crypt32.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgets.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Gui.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Core.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.lib shell32.lib  
+LIBS          = /LIBPATH:C:\Windows\System32 crypt32.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgets.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Gui.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Core.lib release\FileHasherUI_resource.res C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.lib shell32.lib  
 QMAKE         = C:\Qt\6.0.0\msvc2019_64\bin\qmake.exe
 DEL_FILE      = del
 CHK_DIR_EXISTS= if not exist
@@ -40,7 +40,7 @@ IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = release\FileHasherUI_resource.res
 SED           = $(QMAKE) -install sed
 MOVE          = move
 
@@ -55,13 +55,15 @@ SOURCES       = ..\FileHasherUI\FileHasherDelegate.cpp \
 		..\FileHasherUI\filehasher.cpp \
 		..\..\Utility\FileUtility.cpp \
 		..\..\Utility\BitwiseUtility.cpp \
-		..\..\Hashing\SHA256Hash.cpp release\moc_filehasher.cpp
+		..\..\Hashing\SHA256Hash.cpp release\qrc_style.cpp \
+		release\moc_filehasher.cpp
 OBJECTS       = release\FileHasherDelegate.obj \
 		release\main.obj \
 		release\filehasher.obj \
 		release\FileUtility.obj \
 		release\BitwiseUtility.obj \
 		release\SHA256Hash.obj \
+		release\qrc_style.obj \
 		release\moc_filehasher.obj
 
 DIST          =  ..\FileHasherUI\filehasher.h \
@@ -185,11 +187,14 @@ DESTDIR_TARGET = release\FileHasherUI.exe
 first: all
 all: Makefile.Release  release\FileHasherUI.exe
 
-release\FileHasherUI.exe: C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgets.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Gui.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Core.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.lib ui_filehasher.h $(OBJECTS) 
+release\FileHasherUI.exe: C:\Qt\6.0.0\msvc2019_64\lib\Qt6Widgets.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Gui.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6Core.lib C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.lib ui_filehasher.h $(OBJECTS) release\FileHasherUI_resource.res
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
-release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\moc_filehasher.obj
+release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\qrc_style.obj release\moc_filehasher.obj
 $(LIBS)
 <<
+
+release\FileHasherUI_resource.res: FileHasherUI_resource.rc
+	rc /NOLOGO $(DEFINES) -fo release\FileHasherUI_resource.res FileHasherUI_resource.rc
 
 qmake: FORCE
 	@$(QMAKE) -o Makefile.Release ..\FileHasherUI\FileHasherUI.pro -spec win32-msvc "CONFIG+=qtquickcompiler"
@@ -197,10 +202,11 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) FileHasherUI.zip $(SOURCES) $(DIST) ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows_vulkan_sdk.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-vulkan.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\qconfig.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_freetype.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_libpng.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_qobject_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_entrypoint_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_fb_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_packetprotocol_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldebug_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickshapes_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_tools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uiplugin.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_zlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_post.prf .qmake.stash C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-version.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\toolchain.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resolve_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\build_pass.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qtquickcompiler.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\entrypoint.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\precompile_header.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\warn_on.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\moc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\opengl.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\uic.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qmake_use.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\file_copies.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\testcase_targets.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exceptions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\yacc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\lex.prf ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.prl FileHasherUI_en_US.ts FileHasherUI_en_US.ts   C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp ..\FileHasherUI\filehasher.h ..\FileHasherUI\filehasher_delegate.h  ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.cpp ..\..\Utility\FileUtility.cpp ..\..\Utility\BitwiseUtility.cpp ..\..\Hashing\SHA256Hash.cpp ..\FileHasherUI\filehasher.ui    
+	$(ZIP) FileHasherUI.zip $(SOURCES) $(DIST) ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows_vulkan_sdk.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\windows-vulkan.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-desktop.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\qconfig.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_freetype.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_ext_libpng.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core5compat_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_core_qobject_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_entrypoint_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_fb_support_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_linguist_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_openglwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_packetprotocol_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldebug_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickshapes_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_shadertools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_svgwidgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_tools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uiplugin.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\modules\qt_lib_zlib_private.pri C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_post.prf .qmake.stash C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-version.conf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\toolchain.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\default_pre.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resolve_config.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\default_post.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\build_pass.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qtquickcompiler.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\entrypoint.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\precompile_header.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\warn_on.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources_functions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\resources.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\moc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\opengl.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\uic.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qmake_use.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\file_copies.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\win32\windows.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\testcase_targets.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exceptions.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\yacc.prf C:\Qt\6.0.0\msvc2019_64\mkspecs\features\lex.prf ..\FileHasherUI\FileHasherUI.pro ..\FileHasherUI\qdarkstyle\style.qrc C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.prl FileHasherUI_en_US.ts FileHasherUI_en_US.ts  ..\FileHasherUI\qdarkstyle\style.qrc C:\Qt\6.0.0\msvc2019_64\mkspecs\features\data\dummy.cpp ..\FileHasherUI\filehasher.h ..\FileHasherUI\filehasher_delegate.h  ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.cpp ..\..\Utility\FileUtility.cpp ..\..\Utility\BitwiseUtility.cpp ..\..\Hashing\SHA256Hash.cpp ..\FileHasherUI\filehasher.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\moc_filehasher.obj
+	-$(DEL_FILE) release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\qrc_style.obj release\moc_filehasher.obj
+	-$(DEL_FILE) release\FileHasherUI_resource.res
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -217,8 +223,222 @@ benchmark: first
 
 compiler_no_pch_compiler_make_all:
 compiler_no_pch_compiler_clean:
-compiler_rcc_make_all:
+compiler_rcc_make_all: release\qrc_style.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) release\qrc_style.cpp
+release\qrc_style.cpp: ..\FileHasherUI\qdarkstyle\style.qrc \
+		C:\Qt\6.0.0\msvc2019_64\bin\rcc.exe \
+		..\FileHasherUI\qdarkstyle\style.qss \
+		..\FileHasherUI\qdarkstyle\rc\window_close_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_close@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_close_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\window_close.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_end_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\window_close_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_unchecked_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_vertical_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_minimize@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\transparent_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_left_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\line_vertical_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_separator_horizontal_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_open.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_line_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_right_focus@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_undock_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\line_horizontal_disabled.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_more_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon.png \
+		..\FileHasherUI\qdarkstyle\rc\branch_closed_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical.png \
+		..\FileHasherUI\qdarkstyle\rc\window_grip_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\base_icon_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_close_focus.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_vertical_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\window_close_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_indeterminate_pressed.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_unchecked_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\checkbox_checked_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_down_disabled@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\arrow_up@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\radio_checked.png \
+		..\FileHasherUI\qdarkstyle\rc\window_close_pressed@2x.png \
+		..\FileHasherUI\qdarkstyle\rc\toolbar_move_horizontal_disabled@2x.png
+	C:\Qt\6.0.0\msvc2019_64\bin\rcc.exe -name style ..\FileHasherUI\qdarkstyle\style.qrc -o release\qrc_style.cpp
+
 compiler_moc_predefs_make_all: release\moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) release\moc_predefs.h
@@ -380,7 +600,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 
 
@@ -570,7 +790,10 @@ release\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qeventloop.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qguiapplication.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qinputmethod.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QFile \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfile.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfiledevice.h
 
 release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMainWindow \
@@ -704,6 +927,63 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabwidget.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qicon.h \
 		ui_filehasher.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QVariant \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QApplication \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qapplication.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qeventloop.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qguiapplication.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qinputmethod.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QCheckBox \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractbutton.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QGroupBox \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qgroupbox.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qframe.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QHBoxLayout \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qboxlayout.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qlayout.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qlayoutitem.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qgridlayout.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QHeaderView \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qheaderview.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemview.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qabstractitemmodel.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qitemselectionmodel.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qvalidator.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qregularexpression.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qslider.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyle.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qrubberband.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QProgressBar \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qprogressbar.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QPushButton \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qpushbutton.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QStatusBar \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstatusbar.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTabWidget \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidget \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtableview.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTextBrowser \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtextbrowser.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtextedit.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextdocument.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextoption.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextcursor.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextformat.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qpen.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QToolBar \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtoolbar.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qaction.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QWidget \
 		..\FileHasherUI\filehasher_delegate.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QString \
 		..\..\Hashing\HashingAlgorithm.h \
@@ -716,28 +996,10 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfileinfo.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdatetime.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcalendar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qdialog.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMessageBox \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidgetItem \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtableview.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemview.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractscrollarea.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qframe.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qabstractitemmodel.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qitemselectionmodel.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemdelegate.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyleoption.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractspinbox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qvalidator.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qregularexpression.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qslider.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractslider.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyle.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qrubberband.h
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidgetItem
 
 release\FileUtility.obj: ..\..\Utility\FileUtility.cpp ..\..\Utility\FileUtility.h
 
@@ -747,6 +1009,8 @@ release\SHA256Hash.obj: ..\..\Hashing\SHA256Hash.cpp ..\..\Utility\FileUtility.h
 		..\..\Utility\BitwiseUtility.h \
 		..\..\Hashing\SHA256Hash.h \
 		..\..\Hashing\HashingAlgorithm.h
+
+release\qrc_style.obj: release\qrc_style.cpp 
 
 release\moc_filehasher.obj: release\moc_filehasher.cpp 
 

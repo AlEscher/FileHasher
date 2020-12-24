@@ -56,5 +56,8 @@
     <ClInclude Include="Utility\BitwiseUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\FileHasherUI\UIDelegate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -33,6 +33,10 @@ FORMS += \
 TRANSLATIONS += \
     FileHasherUI_en_US.ts
 
+RESOURCES += qdarkstyle/style.qrc
+
+RC_ICONS = appico.ico
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

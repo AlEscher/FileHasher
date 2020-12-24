@@ -33,7 +33,7 @@ IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = FileHasherUI_resource.res
 SED           = $(QMAKE) -install sed
 MOVE          = move
 SUBTARGETS    =  \
@@ -176,6 +176,7 @@ Makefile: ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\mkspecs\win32
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_config.prf \
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf \
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_post.prf \
+		.qmake.stash \
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds.prf \
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-version.conf \
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\features\toolchain.prf \
@@ -203,8 +204,8 @@ Makefile: ..\FileHasherUI\FileHasherUI.pro C:\Qt\6.0.0\msvc2019_64\mkspecs\win32
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\features\lex.prf \
 		..\FileHasherUI\FileHasherUI.pro \
 		C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.prl \
-		.qmake.stash \
 		C:\Qt\6.0.0\msvc2019_64\mkspecs\features\build_pass.prf \
+		..\FileHasherUI\qdarkstyle\style.qrc \
 		C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPointd.prl
 	$(QMAKE) -o Makefile ..\FileHasherUI\FileHasherUI.pro -spec win32-msvc "CONFIG+=qtquickcompiler"
 C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_pre.prf:
@@ -299,6 +300,7 @@ C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_functions.prf:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\features\qt_config.prf:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\features\spec_post.prf:
+.qmake.stash:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\features\exclusive_builds.prf:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\common\msvc-version.conf:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\features\toolchain.prf:
@@ -326,8 +328,8 @@ C:\Qt\6.0.0\msvc2019_64\mkspecs\features\yacc.prf:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\features\lex.prf:
 ..\FileHasherUI\FileHasherUI.pro:
 C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPoint.prl:
-.qmake.stash:
 C:\Qt\6.0.0\msvc2019_64\mkspecs\features\build_pass.prf:
+..\FileHasherUI\qdarkstyle\style.qrc:
 C:\Qt\6.0.0\msvc2019_64\lib\Qt6EntryPointd.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\FileHasherUI\FileHasherUI.pro -spec win32-msvc "CONFIG+=qtquickcompiler"
