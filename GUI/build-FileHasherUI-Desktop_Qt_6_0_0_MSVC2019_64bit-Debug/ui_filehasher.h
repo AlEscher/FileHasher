@@ -44,7 +44,8 @@ public:
     QCheckBox *sha256CB;
     QCheckBox *md5CB;
     QPushButton *hashButton;
-    QProgressBar *progressBar;
+    QProgressBar *totalProgressBar;
+    QProgressBar *curFileProgressBar;
     QGroupBox *groupBox;
     QTextBrowser *hashOutputBox;
     QPushButton *clearOutputButton;
@@ -122,20 +123,26 @@ public:
         sha256CB->setGeometry(QRect(10, 10, 131, 19));
         md5CB = new QCheckBox(hashAlgoTab);
         md5CB->setObjectName(QString::fromUtf8("md5CB"));
+        md5CB->setEnabled(false);
         md5CB->setGeometry(QRect(10, 30, 101, 19));
-        md5CB->setCursor(QCursor(Qt::ForbiddenCursor));
+        md5CB->setCursor(QCursor(Qt::ArrowCursor));
         md5CB->setCheckable(false);
         hashButton = new QPushButton(hashAlgoTab);
         hashButton->setObjectName(QString::fromUtf8("hashButton"));
         hashButton->setGeometry(QRect(10, 250, 201, 21));
-        progressBar = new QProgressBar(hashAlgoTab);
-        progressBar->setObjectName(QString::fromUtf8("progressBar"));
-        progressBar->setGeometry(QRect(10, 220, 201, 21));
-        progressBar->setCursor(QCursor(Qt::BusyCursor));
-        progressBar->setValue(40);
-        progressBar->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
-        progressBar->setTextVisible(true);
-        progressBar->setInvertedAppearance(false);
+        totalProgressBar = new QProgressBar(hashAlgoTab);
+        totalProgressBar->setObjectName(QString::fromUtf8("totalProgressBar"));
+        totalProgressBar->setEnabled(true);
+        totalProgressBar->setGeometry(QRect(10, 220, 201, 21));
+        totalProgressBar->setCursor(QCursor(Qt::ArrowCursor));
+        totalProgressBar->setValue(0);
+        totalProgressBar->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        totalProgressBar->setTextVisible(true);
+        totalProgressBar->setInvertedAppearance(false);
+        curFileProgressBar = new QProgressBar(hashAlgoTab);
+        curFileProgressBar->setObjectName(QString::fromUtf8("curFileProgressBar"));
+        curFileProgressBar->setGeometry(QRect(10, 190, 201, 23));
+        curFileProgressBar->setValue(24);
         hashAlgosWidget->addTab(hashAlgoTab, QString());
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
@@ -187,8 +194,7 @@ public:
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">MD5: Blablabla</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">SHA256: Blaaaa</p></body></html>", nullptr));
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", nullptr));
         clearOutputButton->setText(QCoreApplication::translate("FileHasher", "Clear Output", nullptr));
         toolBar->setWindowTitle(QCoreApplication::translate("FileHasher", "toolBar", nullptr));
     } // retranslateUi

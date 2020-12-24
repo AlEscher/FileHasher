@@ -580,6 +580,10 @@ debug\moc_filehasher.cpp: ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\QTransform \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabwidget.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qicon.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QThread \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qthread.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		debug\moc_predefs.h \
 		C:\Qt\6.0.0\msvc2019_64\bin\moc.exe
 	C:\Qt\6.0.0\msvc2019_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include C:/Dev/Cpp/FileHasher/GUI/build-FileHasherUI-Desktop_Qt_6_0_0_MSVC2019_64bit-Release/debug/moc_predefs.h -IC:/Qt/6.0.0/msvc2019_64/mkspecs/win32-msvc -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Qt/6.0.0/msvc2019_64/include -IC:/Qt/6.0.0/msvc2019_64/include/QtWidgets -IC:/Qt/6.0.0/msvc2019_64/include/QtGui -IC:/Qt/6.0.0/msvc2019_64/include/QtCore -I. -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" ..\FileHasherUI\filehasher.h -o debug\moc_filehasher.cpp
@@ -785,6 +789,10 @@ debug\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\QTransform \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabwidget.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qicon.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QThread \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qthread.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QApplication \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qapplication.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcoreapplication.h \
@@ -927,64 +935,11 @@ debug\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehasher.
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\QTransform \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabwidget.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qicon.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QThread \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qthread.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		ui_filehasher.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QVariant \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QApplication \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qapplication.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qeventloop.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qguiapplication.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qinputmethod.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QCheckBox \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractbutton.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QGroupBox \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qgroupbox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qframe.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QHBoxLayout \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qboxlayout.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qlayout.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qlayoutitem.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qgridlayout.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QHeaderView \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qheaderview.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemview.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractscrollarea.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qabstractitemmodel.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qitemselectionmodel.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemdelegate.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyleoption.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractspinbox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qvalidator.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qregularexpression.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qslider.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractslider.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyle.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qrubberband.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QProgressBar \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qprogressbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QPushButton \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qpushbutton.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QStatusBar \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstatusbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTabWidget \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidget \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtableview.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTextBrowser \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtextbrowser.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextdocument.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextoption.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextcursor.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qtextformat.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qpen.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QToolBar \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtoolbar.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qaction.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QWidget \
 		..\FileHasherUI\filehasher_delegate.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\QString \
 		..\..\Hashing\HashingAlgorithm.h \
@@ -997,10 +952,28 @@ debug\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehasher.
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qfileinfo.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qdatetime.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qcalendar.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qlocale.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qdialog.h \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QMessageBox \
 		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
-		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidgetItem
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\QTableWidgetItem \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtableview.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemview.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qframe.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qabstractitemmodel.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qitemselectionmodel.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtGui\qvalidator.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtCore\qregularexpression.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qslider.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qstyle.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\6.0.0\msvc2019_64\include\QtWidgets\qrubberband.h
 
 debug\FileUtility.obj: ..\..\Utility\FileUtility.cpp ..\..\Utility\FileUtility.h
 
