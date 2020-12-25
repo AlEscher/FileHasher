@@ -14,4 +14,4 @@ The only sources used are:
 
 ## External
 I am using [Qt](https://www.qt.io/) for the GUI
-and [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet) for the dark mode
+and [QtFramelessWindowDarkStyle](https://github.com/Jorgen-VikingGod/Qt-Frameless-Window-DarkStyle) for the dark mode
