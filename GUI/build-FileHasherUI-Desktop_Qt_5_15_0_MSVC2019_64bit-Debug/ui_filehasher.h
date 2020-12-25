@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'filehasher.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.0
+** Created by: Qt User Interface Compiler version 5.15.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -18,11 +18,9 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTextBrowser>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -49,15 +47,13 @@ public:
     QGroupBox *groupBox;
     QTextBrowser *hashOutputBox;
     QPushButton *clearOutputButton;
-    QStatusBar *statusbar;
-    QToolBar *toolBar;
 
     void setupUi(QMainWindow *FileHasher)
     {
         if (FileHasher->objectName().isEmpty())
             FileHasher->setObjectName(QString::fromUtf8("FileHasher"));
         FileHasher->setEnabled(true);
-        FileHasher->resize(898, 578);
+        FileHasher->resize(898, 545);
         FileHasher->setTabShape(QTabWidget::Rounded);
         centralwidget = new QWidget(FileHasher);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
@@ -74,6 +70,7 @@ public:
             fileTable->setColumnCount(3);
         QFont font;
         font.setBold(true);
+        font.setWeight(75);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         __qtablewidgetitem->setFont(font);
         fileTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
@@ -116,6 +113,11 @@ public:
         hashAlgosWidget->setObjectName(QString::fromUtf8("hashAlgosWidget"));
         hashAlgosWidget->setEnabled(true);
         hashAlgosWidget->setGeometry(QRect(10, 0, 221, 311));
+        QFont font1;
+        font1.setBold(false);
+        font1.setWeight(50);
+        hashAlgosWidget->setFont(font1);
+        hashAlgosWidget->setTabShape(QTabWidget::Rounded);
         hashAlgoTab = new QWidget();
         hashAlgoTab->setObjectName(QString::fromUtf8("hashAlgoTab"));
         sha256CB = new QCheckBox(hashAlgoTab);
@@ -156,12 +158,6 @@ public:
         clearOutputButton->setObjectName(QString::fromUtf8("clearOutputButton"));
         clearOutputButton->setGeometry(QRect(790, 10, 80, 21));
         FileHasher->setCentralWidget(centralwidget);
-        statusbar = new QStatusBar(FileHasher);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        FileHasher->setStatusBar(statusbar);
-        toolBar = new QToolBar(FileHasher);
-        toolBar->setObjectName(QString::fromUtf8("toolBar"));
-        FileHasher->addToolBar(Qt::TopToolBarArea, toolBar);
 
         retranslateUi(FileHasher);
 
@@ -196,7 +192,6 @@ public:
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", nullptr));
         clearOutputButton->setText(QCoreApplication::translate("FileHasher", "Clear Output", nullptr));
-        toolBar->setWindowTitle(QCoreApplication::translate("FileHasher", "toolBar", nullptr));
     } // retranslateUi
 
 };

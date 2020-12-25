@@ -10,7 +10,7 @@ size_t FileUtil::GetFileSize(const wchar_t* filePath)
 	size_t size = 0;
 	try
 	{
-		size = filesystem::file_size(filePath);
+        size = filesystem::file_size(filePath);
 	}
 	catch (filesystem::filesystem_error& e)
 	{

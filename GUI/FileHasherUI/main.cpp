@@ -1,26 +1,21 @@
 #include "filehasher.h"
+#include "framelesswindow.h"
+#include "Style/DarkStyle.h"
 
 #include <QApplication>
 #include <QFile>
+#include <QTextStream>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    FileHasher w;
-    //w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    QFile f(":qdarkstyle/style.qss");
+    QApplication::setStyle(new DarkStyle);
+    QApplication::setPalette(QApplication::style()->standardPalette());
+    FileHasher* w = new FileHasher;
+    FramelessWindow framelessWindow;
+    framelessWindow.setContent(w);
+    framelessWindow.setWindowTitle("FileHasher UI");
+    framelessWindow.show();
 
-    if (!f.exists())
-    {
-        return -1;
-    }
-    else
-    {
-        f.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&f);
-        w.setStyleSheet(ts.readAll());
-        f.close();
-    }
-    w.show();
     return a.exec();
 }

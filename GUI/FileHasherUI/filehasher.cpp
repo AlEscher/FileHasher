@@ -16,6 +16,9 @@ FileHasher::FileHasher(QWidget *parent) : QMainWindow(parent), ui(new Ui::FileHa
     delegate = new FileHasherDelegate();
     controller = new Controller(ui, delegate);
     setFixedSize(size());
+
+    qRegisterMetaType<std::vector<HashingAlgorithm*>>("std::vector<HashingAlgorithm*>");
+    qRegisterMetaType<std::vector<QStringList>>("std::vector<QStringList>");
 }
 
 FileHasher::~FileHasher()
@@ -106,10 +109,10 @@ void FileHasher::on_hashButton_clicked()
     if (totalFiles > 0)
     {
         // Set total-progress bar information
-        ui->totalProgressBar->setRange(0U, this->totalFileSize);
+        ui->totalProgressBar->setRange(0, this->totalFileSize);
         ui->totalProgressBar->setValue(0);
         ui->totalProgressBar->setTextVisible(true);
-        ui->totalProgressBar->setFormat("1 / " + QString::number(table->rowCount()));
+        ui->totalProgressBar->setFormat("0%");
         // Move Hashing to other thread so that it doesn't impede our GUI's responsiveness.
         // Collect parameters to pass onto Worker thread
         std::vector<QStringList> parameters;
@@ -159,7 +162,7 @@ Controller::~Controller()
 
 void Controller::HandleResults(const QStringList& result)
 {
-    if (!(result.size() >= 5))
+    if (!(result.size() >= 3))
     {
         return;
     }
@@ -169,8 +172,18 @@ void Controller::HandleResults(const QStringList& result)
     ui->hashOutputBox->append(result[0] + ": " + result[1]);
 
     int value = ui->totalProgressBar->value() + (int)GetSizeFromString(result[2]);
+    float percentage = (float)value / (float)ui->totalProgressBar->maximum();
     ui->totalProgressBar->setValue(value);
-    ui->totalProgressBar->setFormat(result[4] + " / " + result[3]);
+    // Fix rounding error at 100%
+    if (value == ui->totalProgressBar->maximum())
+    {
+        ui->totalProgressBar->setFormat("100%");
+    }
+    else
+    {
+        ui->totalProgressBar->setFormat(QString::number((percentage * 100), 'g', 2)+ "%");
+    }
+
 }
 
 Worker::Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate)
@@ -184,9 +197,9 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
     // This will contain our results to send to the Controller (main thread)
     QStringList result;
     // Parameters contains one QStringList for each file, containing its name, path and size
-    int totalFiles = parameters.size();
+    size_t totalFiles = parameters.size();
 
-    for (int row = 0; row < totalFiles; row++)
+    for (size_t row = 0; row < totalFiles; row++)
     {
         result.clear();
         const QStringList& currentParam = parameters[row];
@@ -197,8 +210,6 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
         result.append(currentParam[0]);
         result.append(hash);
         result.append(currentParam[2]);
-        result.append(QString::number(totalFiles));
-        result.append(QString::number(row + 1));
         // Signal to the controller that we have completed one hash and pass him the result
         emit resultReady(result);
     }
