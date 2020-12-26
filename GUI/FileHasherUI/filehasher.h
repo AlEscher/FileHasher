@@ -4,9 +4,10 @@
 #include <QMainWindow>
 #include <QThread>
 #include "../../Hashing/HashingAlgorithm.h"
+#include <QString>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class FileHasher; class Worker; class Controller; }
+namespace Ui { class FileHasher; }
 QT_END_NAMESPACE
 
 class FileHasherDelegate;
@@ -71,6 +72,17 @@ class Controller : public QObject
         void HandleResults(const QStringList &);
     signals:
         void operate(const std::vector<HashingAlgorithm*> &, const std::vector<QStringList> &);
+};
+
+// Delegates calls from the UI to our backend
+class FileHasherDelegate
+{
+private:
+    Worker* worker = nullptr;
+public:
+    // Get the size in bytes of the specified file
+    size_t GetFileSize(QString filePath);
+    QString CreateHash(QString filePath, HashingAlgorithm* hashAlgo);
 };
 
 #endif // FILEHASHER_H

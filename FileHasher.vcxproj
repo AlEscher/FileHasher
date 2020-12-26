@@ -153,6 +153,7 @@
     <ClCompile Include="Utility\FileUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GUI\FileHasherUI\filehasher.h" />
     <ClInclude Include="GUI\FileHasherUI\UIDelegate.h" />
     <ClInclude Include="Hashing\HashingAlgorithm.h" />
     <ClInclude Include="Hashing\MD5Hash.h" />

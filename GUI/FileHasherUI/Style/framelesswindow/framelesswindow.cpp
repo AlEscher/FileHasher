@@ -37,7 +37,6 @@ FramelessWindow::FramelessWindow(QWidget *parent)
   setAttribute(Qt::WA_TranslucentBackground);
 
   ui->setupUi(this);
-  ui->restoreButton->setVisible(false);
 
   // shadow under window title text
   QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
@@ -66,35 +65,12 @@ FramelessWindow::~FramelessWindow()
     delete ui;
 }
 
-void FramelessWindow::on_restoreButton_clicked() {
-  ui->restoreButton->setVisible(false);
-
-  ui->maximizeButton->setVisible(true);
-  setWindowState(Qt::WindowNoState);
-  // on MacOS this hack makes sure the
-  // background window is repaint correctly
-  hide();
-  show();
-}
-
-void FramelessWindow::on_maximizeButton_clicked() {
-  ui->restoreButton->setVisible(true);
-  ui->maximizeButton->setVisible(false);
-  this->setWindowState(Qt::WindowMaximized);
-  this->showMaximized();
-  styleWindow(true, false);
-}
-
 void FramelessWindow::changeEvent(QEvent *event) {
   if (event->type() == QEvent::WindowStateChange) {
     if (windowState().testFlag(Qt::WindowNoState)) {
-      ui->restoreButton->setVisible(false);
-      ui->maximizeButton->setVisible(true);
       styleWindow(true, true);
       event->ignore();
     } else if (windowState().testFlag(Qt::WindowMaximized)) {
-      ui->restoreButton->setVisible(true);
-      ui->maximizeButton->setVisible(false);
       styleWindow(true, false);
       event->ignore();
     }
@@ -201,11 +177,6 @@ void FramelessWindow::on_minimizeButton_clicked() {
 void FramelessWindow::on_closeButton_clicked() { close(); }
 
 void FramelessWindow::on_windowTitlebar_doubleClicked() {
-  if (windowState().testFlag(Qt::WindowNoState)) {
-    on_maximizeButton_clicked();
-  } else if (windowState().testFlag(Qt::WindowFullScreen)) {
-    on_restoreButton_clicked();
-  }
 }
 
 void FramelessWindow::mouseDoubleClickEvent(QMouseEvent *event) {

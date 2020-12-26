@@ -12,7 +12,6 @@ INCLUDEPATH += $$_PRO_FILE_PWD_
 INCLUDEPATH += "Style/framelesswindow"
 
 SOURCES += \
-    FileHasherDelegate.cpp \
     main.cpp \
     filehasher.cpp \
     ../../Utility/FileUtility.cpp \
@@ -25,7 +24,6 @@ SOURCES += \
 
 HEADERS += \
     filehasher.h \
-    filehasher_delegate.h \
     Style/DarkStyle.h \
     Style/framelesswindow/framelesswindow.h \
     Style/framelesswindow/windowdragger.h

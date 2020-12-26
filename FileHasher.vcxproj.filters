@@ -59,5 +59,8 @@
     <ClInclude Include="GUI\FileHasherUI\UIDelegate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\FileHasherUI\filehasher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #include "filehasher.h"
 #include "ui_filehasher.h"
-#include "filehasher_delegate.h"
 #include "../../Hashing/SHA256Hash.h"
+#include "../../Utility/FileUtility.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -66,7 +66,7 @@ size_t GetSizeFromString(QString string)
 
 void FileHasher::on_addFileButton_clicked()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "Open the file");
+    QString filePath = QFileDialog::getOpenFileName(this, "Select a file to hash");
     QString fileName = "";
 
     // Check if the file path is valid
@@ -129,7 +129,7 @@ void FileHasher::on_hashButton_clicked()
         }
 
         // Call to controller who will delegate the call to the Worker thread
-        controller->operate(hashAlgoVec, parameters);
+        emit controller->operate(hashAlgoVec, parameters);
     }
     else
     {
@@ -141,6 +141,8 @@ void FileHasher::on_clearOutputButton_clicked()
 {
     ui->hashOutputBox->clear();
 }
+
+// ========================= Controller / Worker class =========================
 
 Controller::Controller(Ui::FileHasher* ui, FileHasherDelegate* delegate)
 {
@@ -183,7 +185,6 @@ void Controller::HandleResults(const QStringList& result)
     {
         ui->totalProgressBar->setFormat(QString::number((percentage * 100), 'g', 2)+ "%");
     }
-
 }
 
 Worker::Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate)
@@ -201,9 +202,9 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
 
     for (size_t row = 0; row < totalFiles; row++)
     {
-        result.clear();
         const QStringList& currentParam = parameters[row];
         QString hash = delegate->CreateHash(currentParam[1], hashAlgorithms[0]);
+        result.clear();
         // Append all values as we got them before starting the hashing,
         // as it may take some time and the user may add / delete files from the list
         // in the meantime
@@ -218,4 +219,16 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
     {
         delete hashAlgo;
     }
+}
+
+// ========================= Delegate class =========================
+
+size_t FileHasherDelegate::GetFileSize(QString filePath)
+{
+    return FileUtil::GetFileSize(reinterpret_cast<const wchar_t*>(filePath.unicode()));
+}
+
+QString FileHasherDelegate::CreateHash(QString filePath, HashingAlgorithm *hashAlgo)
+{
+    return QString::fromStdString(hashAlgo->CalculateHash(reinterpret_cast<const wchar_t*>(filePath.unicode())));
 }
