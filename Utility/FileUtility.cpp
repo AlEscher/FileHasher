@@ -23,15 +23,35 @@ FileUtil::~FileUtil()
 	}
 }
 
-bool FileUtil::OpenFileStream(const char* filePath)
+bool FileUtil::OpenFileStreamA(const char* filePath)
 {
+	Reset();
 	m_bIsOpen = fopen_s(&m_pInput, filePath, "rb") == 0;
+	if (m_bIsOpen)
+	{
+		m_nTotalFileSize = FileUtil::GetFileSizeA(filePath);
+	}
+
 	return m_bIsOpen;
+}
+
+bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
+{
+	size_t len = wcsnlen_s(filePath, 1024U);
+	size_t ret = 0U;
+	bool success = false;
+	char* path = new char[len + 1];
+
+	wcstombs_s(&ret, path, len + 1, filePath, len);
+	success = FileUtil::OpenFileStreamA(path);
+	delete[] path;
+
+	return success;
 }
 
 bool FileUtil::CanRead()
 {
-	return (m_bIsOpen && ferror(m_pInput) == 0 && feof(m_pInput) == 0);
+	return (m_bIsOpen && (ferror(m_pInput) == 0) && (BytesRemaining() > 0));
 }
 
 uint8_t* FileUtil::GetNextBlock()
@@ -48,7 +68,7 @@ uint8_t* FileUtil::GetNextBlock()
 	}
 
 	size_t elementsRead = fread(block, 1U, m_nBlockSize, m_pInput);
-	if (elementsRead != m_nBlockSize && feof(m_pInput) == 0)
+	if (elementsRead != m_nBlockSize && BytesRemaining() > 0)
 	{
 		// If we read less than one blocksize and End Of File is not reached, something went wrong
 		delete[] block;
@@ -60,7 +80,7 @@ uint8_t* FileUtil::GetNextBlock()
 
 size_t FileUtil::BytesRemaining()
 {
-	if (!CanRead())
+	if (!m_bIsOpen)
 	{
 		return 0U;
 	}
@@ -71,10 +91,20 @@ size_t FileUtil::BytesRemaining()
 		return 0U;
 	}
 
-	return m_nTotalFileSIze - bytesRead;
+	return m_nTotalFileSize - bytesRead;
 }
 
-size_t FileUtil::GetFileSize(const wchar_t* filePath)
+void FileUtil::Reset()
+{
+	if (m_bIsOpen)
+	{
+		fclose(m_pInput);
+		m_nTotalFileSize = 0U;
+		m_bIsOpen = false;
+	}
+}
+
+size_t FileUtil::GetFileSizeW(const wchar_t* filePath)
 {
 	size_t size = 0;
 	try
@@ -89,12 +119,26 @@ size_t FileUtil::GetFileSize(const wchar_t* filePath)
 	return size;
 }
 
+size_t FileUtil::GetFileSizeA(const char* filePath)
+{
+	size_t len = strnlen_s(filePath, 1024U) + 1;
+	size_t fileSize = 0U;
+	size_t ret = 0U;
+	wchar_t* widePath = new wchar_t[len];
+
+	mbstowcs_s(&ret, widePath, len, filePath, len - 1);
+	fileSize = FileUtil::GetFileSizeW(widePath);
+	delete[] widePath;
+
+	return fileSize;
+}
+
 vector<uint8_t> FileUtil::ReadFileContent(const wchar_t* filePath, size_t& fileSize)
 {
 	vector<uint8_t> bufferVec;
 	fileSize = 0;
 
-	uintmax_t size = FileUtil::GetFileSize(filePath);
+	uintmax_t size = FileUtil::GetFileSizeW(filePath);
 	if (size == 0)
 	{
 		return bufferVec;

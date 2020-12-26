@@ -7,11 +7,13 @@ private:
 	FILE* m_pInput = nullptr;
 	bool m_bIsOpen = false;
 	size_t m_nBlockSize = 4096U;
-	size_t m_nTotalFileSIze = 0U;
+	size_t m_nTotalFileSize = 0U;
 public:
 	// Get the size of a file on disk.
 	// Returns file size on success, 0 otherwise
-	static size_t GetFileSize(const wchar_t* filePath);
+	static size_t GetFileSizeW(const wchar_t* filePath);
+	// Wrapper around GetFileSizeW
+	static size_t GetFileSizeA(const char* filePath);
 	// Reads the specified file into memory, and sets fileSize to the size of the file in bytes
 	// fileSize will be set to 0 if anything fails
 	static std::vector<uint8_t> ReadFileContent(const wchar_t* filePath, size_t& fileSize);
@@ -21,7 +23,9 @@ public:
 	FileUtil(size_t blockSize);
 	~FileUtil();
 	// Opens the specified file stream in binary mode, and keeps it open until this object is deleted
-	bool OpenFileStream(const char* filePath);
+	bool OpenFileStreamA(const char* filePath);
+	// Wrapper for OpenFileStreamA
+	bool OpenFileStreamW(const wchar_t* filePath);
 	// Return whether we can read anymore from our input stream,
 	// checks if the file stream is open and available, and that we didn't reach EOF
 	bool CanRead();
@@ -29,4 +33,10 @@ public:
 	uint8_t* GetNextBlock();
 	// Returns how many bytes we still have to read
 	size_t BytesRemaining();
+	// Close the file stream and reset internal values
+	void Reset();
+	inline size_t GetBlockSize()
+	{
+		return this->m_nBlockSize;
+	}
 };

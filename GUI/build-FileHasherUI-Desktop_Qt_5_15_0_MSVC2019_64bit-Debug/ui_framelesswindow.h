@@ -32,8 +32,6 @@ public:
     QLabel *icon;
     QLabel *titleText;
     QToolButton *minimizeButton;
-    QToolButton *restoreButton;
-    QToolButton *maximizeButton;
     QToolButton *closeButton;
     QWidget *windowContent;
     QVBoxLayout *verticalLayout_3;
@@ -121,44 +119,6 @@ public:
 
         horizontalLayout->addWidget(minimizeButton);
 
-        restoreButton = new QToolButton(windowTitlebar);
-        restoreButton->setObjectName(QString::fromUtf8("restoreButton"));
-        restoreButton->setStyleSheet(QString::fromUtf8("#restoreButton{\n"
-"  background-color:none;\n"
-"  border:none;\n"
-"  width:16px;\n"
-"  height:16px;\n"
-"  padding:4px;\n"
-"  image:url(:/images/icon_window_restore.png);\n"
-"}\n"
-"#restoreButton:hover{\n"
-"  background-color:palette(alternate-base);\n"
-"}\n"
-"#restoreButton:pressed{\n"
-"  background-color:palette(highlight);\n"
-"}"));
-
-        horizontalLayout->addWidget(restoreButton);
-
-        maximizeButton = new QToolButton(windowTitlebar);
-        maximizeButton->setObjectName(QString::fromUtf8("maximizeButton"));
-        maximizeButton->setStyleSheet(QString::fromUtf8("#maximizeButton{\n"
-"  background-color:none;\n"
-"  border:none;\n"
-"  width:16px;\n"
-"  height:16px;\n"
-"  padding:4px;\n"
-"  image:url(:/images/icon_window_maximize.png);\n"
-"}\n"
-"#maximizeButton:hover{\n"
-"  background-color:palette(alternate-base);\n"
-"}\n"
-"##maximizeButton:pressed{\n"
-"  background-color:palette(highlight);\n"
-"}"));
-
-        horizontalLayout->addWidget(maximizeButton);
-
         closeButton = new QToolButton(windowTitlebar);
         closeButton->setObjectName(QString::fromUtf8("closeButton"));
         closeButton->setFont(font);
@@ -213,8 +173,6 @@ public:
         FramelessWindow->setWindowTitle(QString());
         titleText->setText(QCoreApplication::translate("FramelessWindow", "Frameless Window (Dark Style)", nullptr));
         minimizeButton->setText(QString());
-        restoreButton->setText(QString());
-        maximizeButton->setText(QString());
     } // retranslateUi
 
 };

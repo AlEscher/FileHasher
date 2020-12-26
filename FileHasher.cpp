@@ -37,13 +37,13 @@ int main(int argc, char** argv)
             // Hash the file "test", can be changed at runtime
             size_t fileSize = 0;
             auto start = std::chrono::high_resolution_clock::now();
-            std::string sha256Hash = sha256Hasher->CalculateHash(L"C:/Dev/Cpp/FileHasher/test", fileSize);
+            std::string sha256Hash = sha256Hasher->CalculateFileHash(L"C:/Dev/Cpp/FileHasher/test");
             auto end = std::chrono::high_resolution_clock::now();
             std::cout << "File SHA256: " << sha256Hash << std::endl;
             std::cout << "Took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << std::endl;
 
             start = std::chrono::high_resolution_clock::now();
-            std::string md5Hash = md5Hasher->CalculateHash(L"C:/Dev/Cpp/FileHasher/test");
+            std::string md5Hash = md5Hasher->CalculateFileHash(L"C:/Dev/Cpp/FileHasher/test");
             end = std::chrono::high_resolution_clock::now();
             std::cout << "File MD5:    " << md5Hash << std::endl;
             std::cout << "Took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << std::endl;
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
         else
         {
             auto start = std::chrono::high_resolution_clock::now();
-            std::string hash = sha256Hasher->CalculateHash(input);
+            std::string hash = sha256Hasher->CalculateStringHash(input);
             auto end = std::chrono::high_resolution_clock::now();
             std::cout << "SHA256: " << hash << std::endl;
             std::cout << "Took: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " microseconds" << std::endl;

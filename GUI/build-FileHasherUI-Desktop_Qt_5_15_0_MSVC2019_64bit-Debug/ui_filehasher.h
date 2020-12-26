@@ -43,7 +43,6 @@ public:
     QCheckBox *md5CB;
     QPushButton *hashButton;
     QProgressBar *totalProgressBar;
-    QProgressBar *curFileProgressBar;
     QGroupBox *groupBox;
     QTextBrowser *hashOutputBox;
     QPushButton *clearOutputButton;
@@ -141,10 +140,6 @@ public:
         totalProgressBar->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         totalProgressBar->setTextVisible(true);
         totalProgressBar->setInvertedAppearance(false);
-        curFileProgressBar = new QProgressBar(hashAlgoTab);
-        curFileProgressBar->setObjectName(QString::fromUtf8("curFileProgressBar"));
-        curFileProgressBar->setGeometry(QRect(10, 190, 201, 23));
-        curFileProgressBar->setValue(24);
         hashAlgosWidget->addTab(hashAlgoTab, QString());
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));

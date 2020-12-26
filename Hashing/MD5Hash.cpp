@@ -11,7 +11,7 @@ constexpr auto MD5LEN = 16;
 
 // As specified by https://docs.microsoft.com/en-us/windows/win32/seccrypto/example-c-program--creating-an-md-5-hash-from-file-content
 
-std::string MD5Hasher::CalculateHash(const wchar_t* filePath)
+std::string MD5Hasher::CalculateFileHash(const wchar_t* filePath)
 {
 	uint32_t dwStatus = 0;
 	bool bResult = false;
@@ -110,14 +110,19 @@ std::string MD5Hasher::CalculateHash(const wchar_t* filePath)
 	return (md5Hash != nullptr ? std::string(md5Hash) : "");
 }
 
-std::string MD5Hasher::CalculateHash(const wchar_t* filePath, size_t& fileSize)
+std::string MD5Hasher::CalculateFileHash(const char* filePath)
 {
-	std::string hash = this->CalculateHash(filePath);
-	fileSize = FileUtil::GetFileSize(filePath);
+	return std::string();
+}
+
+std::string MD5Hasher::CalculateFileHash(const wchar_t* filePath, size_t& fileSize)
+{
+	std::string hash = this->CalculateFileHash(filePath);
+	fileSize = FileUtil::GetFileSizeW(filePath);
 	return hash;
 }
 
-std::string MD5Hasher::CalculateHash(const std::string& input)
+std::string MD5Hasher::CalculateStringHash(const std::string& input)
 {
 	return "";
 }

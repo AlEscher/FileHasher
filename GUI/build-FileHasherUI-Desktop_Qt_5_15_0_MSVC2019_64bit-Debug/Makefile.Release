@@ -50,8 +50,7 @@ OBJECTS_DIR   = release
 
 ####### Files
 
-SOURCES       = ..\FileHasherUI\FileHasherDelegate.cpp \
-		..\FileHasherUI\main.cpp \
+SOURCES       = ..\FileHasherUI\main.cpp \
 		..\FileHasherUI\filehasher.cpp \
 		..\..\Utility\FileUtility.cpp \
 		..\..\Utility\BitwiseUtility.cpp \
@@ -64,8 +63,7 @@ SOURCES       = ..\FileHasherUI\FileHasherDelegate.cpp \
 		release\moc_DarkStyle.cpp \
 		release\moc_framelesswindow.cpp \
 		release\moc_windowdragger.cpp
-OBJECTS       = release\FileHasherDelegate.obj \
-		release\main.obj \
+OBJECTS       = release\main.obj \
 		release\filehasher.obj \
 		release\FileUtility.obj \
 		release\BitwiseUtility.obj \
@@ -81,11 +79,9 @@ OBJECTS       = release\FileHasherDelegate.obj \
 		release\moc_windowdragger.obj
 
 DIST          =  ..\FileHasherUI\filehasher.h \
-		..\FileHasherUI\filehasher_delegate.h \
 		..\FileHasherUI\Style\DarkStyle.h \
 		..\FileHasherUI\Style\framelesswindow\framelesswindow.h \
-		..\FileHasherUI\Style\framelesswindow\windowdragger.h ..\FileHasherUI\FileHasherDelegate.cpp \
-		..\FileHasherUI\main.cpp \
+		..\FileHasherUI\Style\framelesswindow\windowdragger.h ..\FileHasherUI\main.cpp \
 		..\FileHasherUI\filehasher.cpp \
 		..\..\Utility\FileUtility.cpp \
 		..\..\Utility\BitwiseUtility.cpp \
@@ -249,7 +245,7 @@ all: Makefile.Release  release\FileHasherUI.exe
 
 release\FileHasherUI.exe: C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgets.lib C:\Qt\5.15.0\msvc2019_64\lib\Qt5Gui.lib C:\Qt\5.15.0\msvc2019_64\lib\Qt5Core.lib C:\Qt\5.15.0\msvc2019_64\lib\qtmain.lib ui_filehasher.h ui_framelesswindow.h $(OBJECTS) release\FileHasherUI_resource.res
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
-release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\framelesswindow.obj release\DarkStyle.obj release\windowdragger.obj release\qrc_framelesswindow.obj release\qrc_darkstyle.obj release\moc_filehasher.obj release\moc_DarkStyle.obj release\moc_framelesswindow.obj release\moc_windowdragger.obj
+release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\framelesswindow.obj release\DarkStyle.obj release\windowdragger.obj release\qrc_framelesswindow.obj release\qrc_darkstyle.obj release\moc_filehasher.obj release\moc_DarkStyle.obj release\moc_framelesswindow.obj release\moc_windowdragger.obj
 $(LIBS)
 <<
 
@@ -262,10 +258,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) FileHasherUI.zip $(SOURCES) $(DIST) ..\FileHasherUI\FileHasherUI.pro C:\Qt\5.15.0\msvc2019_64\mkspecs\features\spec_pre.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\angle.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\windows-desktop.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\windows_vulkan_sdk.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\windows-vulkan.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\msvc-desktop.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\qconfig.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3danimation.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3danimation_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dcore.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dcore_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dextras.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dextras_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dinput.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dinput_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dlogic.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dlogic_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquick.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquick_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickanimation.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickanimation_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickextras.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickextras_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickinput.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickinput_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickrender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickrender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickscene2d.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickscene2d_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3drender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3drender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_accessibility_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axbase.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axserver.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bodymovin_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_core.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_datavisualization.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_datavisualization_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_dbus.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_edid_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_egl_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_fb_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_fontdatabase_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gamepad.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gamepad_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_help.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_location.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_location_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_network.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_nfc.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_packetprotocol_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_platformcompositor_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioning.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioningquick.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioningquick_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmldebug_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3drender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3drender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickshapes_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_remoteobjects.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_remoteobjects_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_repparser.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_repparser_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_script.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_script_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scxml.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scxml_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sensors.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialbus.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialbus_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialport.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_texttospeech.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_texttospeech_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_theme_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_uiplugin.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_virtualkeyboard.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_virtualkeyboard_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_vulkan_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_websockets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webview.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webview_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_windowsuiautomation_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_winextras.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_zlib_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qt_functions.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qt_config.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\spec_post.prf .qmake.stash C:\Qt\5.15.0\msvc2019_64\mkspecs\features\exclusive_builds.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\msvc-version.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\toolchain.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\default_pre.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\default_pre.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\resolve_config.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\default_post.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\build_pass.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qml_debug.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\precompile_header.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\warn_on.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qt.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\resources_functions.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\resources.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\moc.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\opengl.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\uic.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qmake_use.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\file_copies.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\windows.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\testcase_targets.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\exceptions.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\yacc.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\lex.prf ..\FileHasherUI\FileHasherUI.pro ..\FileHasherUI\Style\framelesswindow.qrc ..\FileHasherUI\Style\darkstyle.qrc C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgets.prl C:\Qt\5.15.0\msvc2019_64\lib\Qt5Gui.prl C:\Qt\5.15.0\msvc2019_64\lib\Qt5Core.prl C:\Qt\5.15.0\msvc2019_64\lib\qtmain.prl FileHasherUI_en_US.ts FileHasherUI_en_US.ts  ..\FileHasherUI\Style\framelesswindow.qrc ..\FileHasherUI\Style\darkstyle.qrc C:\Qt\5.15.0\msvc2019_64\mkspecs\features\data\dummy.cpp ..\FileHasherUI\filehasher.h ..\FileHasherUI\filehasher_delegate.h ..\FileHasherUI\Style\DarkStyle.h ..\FileHasherUI\Style\framelesswindow\framelesswindow.h ..\FileHasherUI\Style\framelesswindow\windowdragger.h  ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.cpp ..\..\Utility\FileUtility.cpp ..\..\Utility\BitwiseUtility.cpp ..\..\Hashing\SHA256Hash.cpp ..\FileHasherUI\Style\framelesswindow\framelesswindow.cpp ..\FileHasherUI\Style\DarkStyle.cpp ..\FileHasherUI\Style\framelesswindow\windowdragger.cpp ..\FileHasherUI\filehasher.ui ..\FileHasherUI\Style\framelesswindow\framelesswindow.ui    
+	$(ZIP) FileHasherUI.zip $(SOURCES) $(DIST) ..\FileHasherUI\FileHasherUI.pro C:\Qt\5.15.0\msvc2019_64\mkspecs\features\spec_pre.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\angle.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\windows-desktop.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\windows_vulkan_sdk.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\windows-vulkan.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\msvc-desktop.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\qconfig.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3danimation.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3danimation_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dcore.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dcore_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dextras.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dextras_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dinput.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dinput_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dlogic.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dlogic_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquick.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquick_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickanimation.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickanimation_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickextras.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickextras_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickinput.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickinput_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickrender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickrender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickscene2d.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3dquickscene2d_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3drender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_3drender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_accessibility_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axbase.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axserver.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bodymovin_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_core.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_datavisualization.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_datavisualization_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_dbus.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_edid_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_egl_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_fb_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_fontdatabase_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gamepad.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gamepad_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_help.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_location.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_location_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_network.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_nfc.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_packetprotocol_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_platformcompositor_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioning.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioningquick.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_positioningquick_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmldebug_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlmodels_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3d_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3drender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3drender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick3dutils_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickshapes_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_remoteobjects.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_remoteobjects_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_repparser.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_repparser_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_script.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_script_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scxml.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_scxml_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sensors.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialbus.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialbus_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialport.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_texttospeech.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_texttospeech_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_theme_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_uiplugin.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_virtualkeyboard.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_virtualkeyboard_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_vulkan_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_websockets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webview.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_webview_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_windowsuiautomation_support_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_winextras.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\modules\qt_lib_zlib_private.pri C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qt_functions.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qt_config.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\win32-msvc\qmake.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\spec_post.prf .qmake.stash C:\Qt\5.15.0\msvc2019_64\mkspecs\features\exclusive_builds.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\common\msvc-version.conf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\toolchain.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\default_pre.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\default_pre.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\resolve_config.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\default_post.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\build_pass.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qml_debug.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\precompile_header.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\warn_on.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qt.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\resources_functions.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\resources.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\moc.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\opengl.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\uic.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\qmake_use.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\file_copies.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\win32\windows.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\testcase_targets.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\exceptions.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\yacc.prf C:\Qt\5.15.0\msvc2019_64\mkspecs\features\lex.prf ..\FileHasherUI\FileHasherUI.pro ..\FileHasherUI\Style\framelesswindow.qrc ..\FileHasherUI\Style\darkstyle.qrc C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgets.prl C:\Qt\5.15.0\msvc2019_64\lib\Qt5Gui.prl C:\Qt\5.15.0\msvc2019_64\lib\Qt5Core.prl C:\Qt\5.15.0\msvc2019_64\lib\qtmain.prl FileHasherUI_en_US.ts FileHasherUI_en_US.ts  ..\FileHasherUI\Style\framelesswindow.qrc ..\FileHasherUI\Style\darkstyle.qrc C:\Qt\5.15.0\msvc2019_64\mkspecs\features\data\dummy.cpp ..\FileHasherUI\filehasher.h ..\FileHasherUI\Style\DarkStyle.h ..\FileHasherUI\Style\framelesswindow\framelesswindow.h ..\FileHasherUI\Style\framelesswindow\windowdragger.h  ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.cpp ..\..\Utility\FileUtility.cpp ..\..\Utility\BitwiseUtility.cpp ..\..\Hashing\SHA256Hash.cpp ..\FileHasherUI\Style\framelesswindow\framelesswindow.cpp ..\FileHasherUI\Style\DarkStyle.cpp ..\FileHasherUI\Style\framelesswindow\windowdragger.cpp ..\FileHasherUI\filehasher.ui ..\FileHasherUI\Style\framelesswindow\framelesswindow.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\FileHasherDelegate.obj release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\framelesswindow.obj release\DarkStyle.obj release\windowdragger.obj release\qrc_framelesswindow.obj release\qrc_darkstyle.obj release\moc_filehasher.obj release\moc_DarkStyle.obj release\moc_framelesswindow.obj release\moc_windowdragger.obj
+	-$(DEL_FILE) release\main.obj release\filehasher.obj release\FileUtility.obj release\BitwiseUtility.obj release\SHA256Hash.obj release\framelesswindow.obj release\DarkStyle.obj release\windowdragger.obj release\qrc_framelesswindow.obj release\qrc_darkstyle.obj release\moc_filehasher.obj release\moc_DarkStyle.obj release\moc_framelesswindow.obj release\moc_windowdragger.obj
 	-$(DEL_FILE) release\FileHasherUI_resource.res
 
 distclean: clean 
@@ -443,6 +439,8 @@ release\moc_filehasher.cpp: ..\FileHasherUI\filehasher.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Hashing\HashingAlgorithm.h \
+		..\..\Utility\FileUtility.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
 		release\moc_predefs.h \
 		C:\Qt\5.15.0\msvc2019_64\bin\moc.exe
 	C:\Qt\5.15.0\msvc2019_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include C:/Dev/Cpp/FileHasher/GUI/build-FileHasherUI-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug/release/moc_predefs.h -IC:/Qt/5.15.0/msvc2019_64/mkspecs/win32-msvc -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI -IC:/Dev/Cpp/FileHasher/GUI/FileHasherUI/Style/framelesswindow -IC:/Qt/5.15.0/msvc2019_64/include -IC:/Qt/5.15.0/msvc2019_64/include/QtWidgets -IC:/Qt/5.15.0/msvc2019_64/include/QtGui -IC:/Qt/5.15.0/msvc2019_64/include/QtANGLE -IC:/Qt/5.15.0/msvc2019_64/include/QtCore -I. -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" ..\FileHasherUI\filehasher.h -o release\moc_filehasher.cpp
@@ -920,42 +918,6 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-release\FileHasherDelegate.obj: ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHasherUI\filehasher_delegate.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qstring.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qchar.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qglobal.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qconfig-bootstrapped.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qconfig.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qtcore-config.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qsystemdetection.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qprocessordetection.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qcompilerdetection.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qtypeinfo.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qsysinfo.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qlogging.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qflags.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qatomic.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qbasicatomic.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qatomic_bootstrap.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qgenericatomic.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qatomic_cxx11.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qatomic_msvc.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qglobalstatic.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qmutex.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qnumeric.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qversiontagging.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qbytearray.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qrefcount.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qnamespace.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qarraydata.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qstringliteral.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qstringalgorithms.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qstringview.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qstringbuilder.h \
-		..\..\Hashing\HashingAlgorithm.h \
-		..\..\Utility\FileUtility.h
-
 release\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QMainWindow \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qmainwindow.h \
@@ -1068,6 +1030,8 @@ release\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Hashing\HashingAlgorithm.h \
+		..\..\Utility\FileUtility.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
 		..\FileHasherUI\Style\framelesswindow\framelesswindow.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QWidget \
 		..\FileHasherUI\Style\DarkStyle.h \
@@ -1201,23 +1165,32 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Hashing\HashingAlgorithm.h \
-		ui_filehasher.h \
-		..\FileHasherUI\filehasher_delegate.h \
+		..\..\Utility\FileUtility.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
-		..\..\Hashing\SHA256Hash.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QFileDialog \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qfiledialog.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdir.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qfileinfo.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qdialog.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QMessageBox \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTableWidgetItem \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtableview.h \
+		ui_filehasher.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QVariant \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QApplication \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qapplication.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qeventloop.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qguiapplication.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qinputmethod.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QCheckBox \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractbutton.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QGroupBox \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qgroupbox.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qframe.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QHBoxLayout \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qboxlayout.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayout.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayoutitem.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qgridlayout.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QHeaderView \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qheaderview.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractitemview.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractscrollarea.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qframe.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qabstractitemmodel.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qitemselectionmodel.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractitemdelegate.h \
@@ -1229,7 +1202,33 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractslider.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qstyle.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtabbar.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qrubberband.h
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qrubberband.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QProgressBar \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qprogressbar.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QPushButton \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qpushbutton.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTabWidget \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTableWidget \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtableview.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTextBrowser \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtextbrowser.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtextedit.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextdocument.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextoption.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextcursor.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextformat.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qpen.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QWidget \
+		..\..\Hashing\SHA256Hash.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QFileDialog \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qfiledialog.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdir.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qfileinfo.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qdialog.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QMessageBox \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTableWidgetItem
 
 release\FileUtility.obj: ..\..\Utility\FileUtility.cpp ..\..\Utility\FileUtility.h
 
@@ -1362,7 +1361,23 @@ release\framelesswindow.obj: ..\FileHasherUI\Style\framelesswindow\framelesswind
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QSize \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QSizeF \
 		C:\Qt\5.15.0\msvc2019_64\include\QtGui\QTransform \
-		ui_framelesswindow.h
+		ui_framelesswindow.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QVariant \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QHBoxLayout \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qboxlayout.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayout.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayoutitem.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qgridlayout.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QLabel \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlabel.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qframe.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QToolButton \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtoolbutton.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractbutton.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qicon.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QVBoxLayout \
+		..\FileHasherUI\Style\framelesswindow\windowdragger.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\QMouseEvent
 
 release\DarkStyle.obj: ..\FileHasherUI\Style\DarkStyle.cpp ..\FileHasherUI\Style\DarkStyle.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QApplication \

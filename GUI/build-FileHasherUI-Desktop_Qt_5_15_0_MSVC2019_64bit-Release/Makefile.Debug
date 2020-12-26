@@ -440,6 +440,7 @@ debug\moc_filehasher.cpp: ..\FileHasherUI\filehasher.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Hashing\HashingAlgorithm.h \
+		..\..\Utility\FileUtility.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
 		debug\moc_predefs.h \
 		C:\Qt\5.15.0\msvc2019_64\bin\moc.exe
@@ -1030,6 +1031,7 @@ debug\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Hashing\HashingAlgorithm.h \
+		..\..\Utility\FileUtility.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
 		..\FileHasherUI\Style\framelesswindow\framelesswindow.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QWidget \
@@ -1164,10 +1166,10 @@ debug\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehasher.
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Hashing\HashingAlgorithm.h \
+		..\..\Utility\FileUtility.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
 		ui_filehasher.h \
 		..\..\Hashing\SHA256Hash.h \
-		..\..\Utility\FileUtility.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QFileDialog \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qfiledialog.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdir.h \

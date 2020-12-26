@@ -8,20 +8,23 @@
 class HashingAlgorithm
 {
 protected:
-	FileUtil* fileUtil;
+	FileUtil* m_pFileUtil;
 public:
 	// Calculate file hash
-	virtual std::string CalculateHash(const wchar_t* filePath) = 0;
+	virtual std::string CalculateFileHash(const wchar_t* filePath) = 0;
+	virtual std::string CalculateFileHash(const char* filePath) = 0;
 	// Calculate file hash and set fileSize (not really needed, mostly for debugging purposes)
-	virtual std::string CalculateHash(const wchar_t* filePath, size_t& fileSize) = 0;
+	virtual std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize) = 0;
 	// Calculate hash for given string
-	virtual std::string CalculateHash(const std::string& input) = 0;
+	virtual std::string CalculateStringHash(const std::string& input) = 0;
 	HashingAlgorithm()
 	{
-		this->fileUtil = new FileUtil;
+		// 2^24
+		//m_pFileUtil = new FileUtil(16777216U);
+		m_pFileUtil = new FileUtil(4096);
 	}
 	virtual ~HashingAlgorithm()
 	{
-		delete this->fileUtil;
+		delete m_pFileUtil;
 	}
 };
