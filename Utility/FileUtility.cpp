@@ -85,8 +85,8 @@ size_t FileUtil::BytesRemaining()
 		return 0U;
 	}
 
-	long bytesRead = ftell(m_pInput);
-	if (bytesRead == -1L)
+	int64_t bytesRead = _ftelli64(m_pInput);
+	if (bytesRead == -1LL)
 	{
 		return 0U;
 	}

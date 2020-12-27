@@ -341,5 +341,4 @@ healthchecksdb
 *.jpg
 *.txt
 /test
-# All the icons etc... for the dark mode
-/GUI/FileHasherUI/qdarkstyle/rc
+/test2
