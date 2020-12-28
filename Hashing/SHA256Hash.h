@@ -30,7 +30,7 @@ private:
     // Process and hash the message
     bool Process(const uint8_t* padding, const size_t paddingSize);
     // Resets the prime constants
-    void Reset();
+    void ResetPrimes();
     // Digests the processed message and returns our hash
     std::string Digest();
 public:

@@ -45,22 +45,30 @@ class Worker : public QObject
 {
     Q_OBJECT
     public:
-        Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate);
+        Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate, Controller* controller);
     private:
         Ui::FileHasher* ui;
         FileHasherDelegate* delegate;
+        Controller* controller;
+        bool m_bContinue = false;
     public slots:
-        // This function will get called by the Controller
+        // This function will get called by the Controller to do the hashing (HashWorker)
         void DoWork(const std::vector<HashingAlgorithm*> &hashAlgorithms, const std::vector<QStringList> &parameters);
+        // This function will monitor the progress for the current file, aswell as handle some animations (DisplayWorker)
+        void MonitorProgress(const HashingAlgorithm* algorithm, const size_t fileSize);
+        void TerminateMonitoring();
 
     signals:
         void resultReady(const QStringList &result);
+        void UpdateFileStatus(const size_t min, const size_t max, const size_t value);
+        void WaitForMonitor();
 };
 
 class Controller : public QObject
 {
     Q_OBJECT
     QThread workerThread;
+    QThread displayThread;
     public:
         Controller(Ui::FileHasher* ui, FileHasherDelegate* delegate);
         ~Controller();
@@ -71,6 +79,7 @@ class Controller : public QObject
         // This function will be called when the Worker thread wants to pass on his results,
         // most importantly this function will be executed in our main thread, meaning we can do send events
         void HandleResults(const QStringList &);
+        void UpdateFileProgress(const size_t min, const size_t max, const size_t value);
         inline void SetHashingStatus(const bool status)
         {
             m_bHashing = status;
@@ -81,6 +90,7 @@ class Controller : public QObject
         }
     signals:
         void operate(const std::vector<HashingAlgorithm*> &, const std::vector<QStringList> &);
+        void StartMonitoring(const HashingAlgorithm* algorithm, const size_t fileSize);
 };
 
 // Delegates calls from the UI to our backend
@@ -92,6 +102,13 @@ public:
     // Get the size in bytes of the specified file
     size_t GetFileSize(QString filePath);
     QString CreateHash(QString filePath, HashingAlgorithm* hashAlgo);
+    inline void ResetHashingAlgorithm(HashingAlgorithm* hashAlgo)
+    {
+        if (hashAlgo)
+        {
+            hashAlgo->Reset();
+        }
+    }
 };
 
 #endif // FILEHASHER_H

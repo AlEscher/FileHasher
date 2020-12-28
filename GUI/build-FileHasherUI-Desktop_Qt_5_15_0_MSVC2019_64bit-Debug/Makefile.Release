@@ -1168,29 +1168,20 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		..\..\Utility\FileUtility.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QString \
 		ui_filehasher.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QVariant \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QApplication \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qapplication.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qeventloop.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qguiapplication.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qinputmethod.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QCheckBox \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractbutton.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QGroupBox \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qgroupbox.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qframe.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QHBoxLayout \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qboxlayout.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayout.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayoutitem.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qgridlayout.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QHeaderView \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qheaderview.h \
+		..\..\Hashing\SHA256Hash.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QFileDialog \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qfiledialog.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdir.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qfileinfo.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qdialog.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QMessageBox \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTableWidgetItem \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtableview.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractitemview.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qframe.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qabstractitemmodel.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qitemselectionmodel.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractitemdelegate.h \
@@ -1202,33 +1193,7 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractslider.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qstyle.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtabbar.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qrubberband.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QProgressBar \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qprogressbar.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QPushButton \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qpushbutton.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTabWidget \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTableWidget \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtablewidget.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtableview.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTextBrowser \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtextbrowser.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextdocument.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextoption.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextcursor.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qtextformat.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qpen.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QWidget \
-		..\..\Hashing\SHA256Hash.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QFileDialog \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qfiledialog.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdir.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qfileinfo.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qdialog.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QMessageBox \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qmessagebox.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QTableWidgetItem
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qrubberband.h
 
 release\FileUtility.obj: ..\..\Utility\FileUtility.cpp ..\..\Utility\FileUtility.h
 
@@ -1361,23 +1326,7 @@ release\framelesswindow.obj: ..\FileHasherUI\Style\framelesswindow\framelesswind
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QSize \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QSizeF \
 		C:\Qt\5.15.0\msvc2019_64\include\QtGui\QTransform \
-		ui_framelesswindow.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QVariant \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QHBoxLayout \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qboxlayout.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayout.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlayoutitem.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qgridlayout.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QLabel \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qlabel.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qframe.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QToolButton \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qtoolbutton.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qabstractbutton.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qicon.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QVBoxLayout \
-		..\FileHasherUI\Style\framelesswindow\windowdragger.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\QMouseEvent
+		ui_framelesswindow.h
 
 release\DarkStyle.obj: ..\FileHasherUI\Style\DarkStyle.cpp ..\FileHasherUI\Style\DarkStyle.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QApplication \

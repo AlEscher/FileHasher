@@ -49,7 +49,7 @@ bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
 	return success;
 }
 
-bool FileUtil::CanRead()
+bool FileUtil::CanRead() const
 {
 	return (m_bIsOpen && (ferror(m_pInput) == 0) && (BytesRemaining() > 0));
 }
@@ -78,7 +78,7 @@ uint8_t* FileUtil::GetNextBlock()
 	return block;
 }
 
-size_t FileUtil::BytesRemaining()
+size_t FileUtil::BytesRemaining() const
 {
 	if (!m_bIsOpen)
 	{

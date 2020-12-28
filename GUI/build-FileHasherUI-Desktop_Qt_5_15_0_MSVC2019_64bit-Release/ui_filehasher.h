@@ -43,6 +43,7 @@ public:
     QCheckBox *md5CB;
     QPushButton *hashButton;
     QProgressBar *totalProgressBar;
+    QProgressBar *fileProgressBar;
     QGroupBox *groupBox;
     QTextBrowser *hashOutputBox;
     QPushButton *clearOutputButton;
@@ -140,6 +141,10 @@ public:
         totalProgressBar->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         totalProgressBar->setTextVisible(true);
         totalProgressBar->setInvertedAppearance(false);
+        fileProgressBar = new QProgressBar(hashAlgoTab);
+        fileProgressBar->setObjectName(QString::fromUtf8("fileProgressBar"));
+        fileProgressBar->setGeometry(QRect(10, 190, 201, 23));
+        fileProgressBar->setValue(0);
         hashAlgosWidget->addTab(hashAlgoTab, QString());
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
@@ -180,6 +185,7 @@ public:
         md5CB->setText(QCoreApplication::translate("FileHasher", "MD5", nullptr));
         hashButton->setText(QCoreApplication::translate("FileHasher", "Generate Hashes", nullptr));
         totalProgressBar->setFormat(QCoreApplication::translate("FileHasher", "Idle", nullptr));
+        fileProgressBar->setFormat(QCoreApplication::translate("FileHasher", "Idle", nullptr));
         hashAlgosWidget->setTabText(hashAlgosWidget->indexOf(hashAlgoTab), QCoreApplication::translate("FileHasher", "Hash Algorithms", nullptr));
         groupBox->setTitle(QCoreApplication::translate("FileHasher", "Output", nullptr));
         hashOutputBox->setHtml(QCoreApplication::translate("FileHasher", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

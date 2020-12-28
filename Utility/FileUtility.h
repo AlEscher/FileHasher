@@ -28,14 +28,14 @@ public:
 	bool OpenFileStreamW(const wchar_t* filePath);
 	// Return whether we can read anymore from our input stream,
 	// checks if the file stream is open and available, and that we didn't reach EOF
-	bool CanRead();
+	bool CanRead() const;
 	// Read the next block from the file, returns a heap allocated pointer, nullptr if anything fails
 	uint8_t* GetNextBlock();
 	// Returns how many bytes we still have to read
-	size_t BytesRemaining();
+	size_t BytesRemaining() const;
 	// Close the file stream and reset internal values
 	void Reset();
-	inline size_t GetBlockSize()
+	inline size_t GetBlockSize() const
 	{
 		return this->m_nBlockSize;
 	}

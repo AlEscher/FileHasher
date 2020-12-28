@@ -96,6 +96,7 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 		{
 			return false;
 		}
+		m_nBytesProcessed += currentBlockSize;
 
 		// Break one block of the message into 512-bit chunks
 		for (size_t chunk = 0; chunk < currentBlockSize; chunk += 64)
@@ -153,7 +154,7 @@ string SHA256Hasher::Digest()
 	return ss.str();
 }
 
-void SHA256Hasher::Reset()
+void SHA256Hasher::ResetPrimes()
 {
 	hPrime[0] = 0x6a09e667U;
 	hPrime[1] = 0xbb67ae85U;
@@ -175,6 +176,7 @@ string SHA256Hasher::Hash(const size_t fileSize)
 		return "";
 	}
 
+	m_nBytesProcessed = 0U;
 	if (!this->Process(padding, paddingSize))
 	{
 		return "";
@@ -183,7 +185,7 @@ string SHA256Hasher::Hash(const size_t fileSize)
 	delete[] padding;
 
 	string hash = this->Digest();
-	this->Reset();
+	this->ResetPrimes();
 
 	return hash;
 }

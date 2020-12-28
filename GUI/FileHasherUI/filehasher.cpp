@@ -19,6 +19,8 @@ FileHasher::FileHasher(QWidget *parent) : QMainWindow(parent), ui(new Ui::FileHa
 
     qRegisterMetaType<std::vector<HashingAlgorithm*>>("std::vector<HashingAlgorithm*>");
     qRegisterMetaType<std::vector<QStringList>>("std::vector<QStringList>");
+    qRegisterMetaType<size_t>("size_t");
+    qRegisterMetaType<HashingAlgorithm*>("HashingAlgorithm*");
 }
 
 FileHasher::~FileHasher()
@@ -99,7 +101,6 @@ void FileHasher::on_hashButton_clicked()
     {
         return;
     }
-    controller->SetHashingStatus(true);
 
     if (ui->sha256CB->isChecked())
     {
@@ -109,9 +110,10 @@ void FileHasher::on_hashButton_clicked()
     if (hashAlgoVec.empty())
     {
         QMessageBox::warning(this, "Warning", "Select a Hash Algorithm!");
-        controller->SetHashingStatus(false);
         return;
     }
+    controller->SetHashingStatus(true);
+    ui->hashButton->setCursor(Qt::BusyCursor);
 
     QTableWidget* table = ui->fileTable;
     int totalFiles = table->rowCount();
@@ -144,6 +146,7 @@ void FileHasher::on_hashButton_clicked()
     {
         QMessageBox::warning(this, "Warning", "No files selected!");
         controller->SetHashingStatus(false);
+        ui->hashButton->setCursor(Qt::ArrowCursor);
         return;
     }
 }
@@ -158,27 +161,41 @@ void FileHasher::on_clearOutputButton_clicked()
 Controller::Controller(Ui::FileHasher* ui, FileHasherDelegate* delegate)
 {
     this->ui = ui;
-    Worker *worker = new Worker(ui, delegate);
+    Worker *worker = new Worker(ui, delegate, this);
     worker->moveToThread(&workerThread);
+    // The worker will delete itself once the thread finishes
     connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
     connect(this, &Controller::operate, worker, &Worker::DoWork);
     connect(worker, &Worker::resultReady, this, &Controller::HandleResults);
+    connect(worker, &Worker::UpdateFileStatus, this, &Controller::UpdateFileProgress);
     // Worker thread will stay active and accept input until we close the application
-    workerThread.start();
+    workerThread.start(QThread::HighPriority);
+
+    Worker *displayWorker = new Worker(ui, delegate, this);
+    displayWorker->moveToThread(&displayThread);
+    connect(&displayThread, &QThread::finished, displayWorker, &QObject::deleteLater);
+    connect(displayWorker, &Worker::UpdateFileStatus, this, &Controller::UpdateFileProgress);
+    connect(this, &Controller::StartMonitoring, displayWorker, &Worker::MonitorProgress);
+    // When worker has finished hashing a file, he will send a blocking signal to the displayWorker,
+    // which will only return once the displayWorker has safely stopped his monitoring (Checked his loop condition once)
+    connect(worker, &Worker::WaitForMonitor, displayWorker, &Worker::TerminateMonitoring, Qt::BlockingQueuedConnection);
+    displayThread.start(QThread::LowestPriority);
 }
 
 Controller::~Controller()
 {
     workerThread.quit();
+    displayThread.quit();
     workerThread.wait();
+    displayThread.wait();
 }
 
 void Controller::HandleResults(const QStringList& result)
 {
     if (result.size() < 3)
     {
-        m_bHashing = false;
-        //ui->totalProgressBar->setFormat("Idle");
+        SetHashingStatus(false);
+        ui->hashButton->setCursor(Qt::ArrowCursor);
         return;
     }
 
@@ -200,10 +217,27 @@ void Controller::HandleResults(const QStringList& result)
     }
 }
 
-Worker::Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate)
+void Controller::UpdateFileProgress(const size_t min, const size_t max, const size_t value)
+{
+    ui->fileProgressBar->setRange(min, max);
+    ui->fileProgressBar->setValue(std::min(value, max));
+
+    if (value >= max)
+    {
+        ui->fileProgressBar->setFormat("100%");
+    }
+    else
+    {
+        double percentage = (double)value / (double)ui->fileProgressBar->maximum();
+        ui->fileProgressBar->setFormat(QString::number((percentage * 100), 'g', 3)+ "%");
+    }
+}
+
+Worker::Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate, Controller* controller)
 {
     this->ui = ui;
     this->delegate = delegate;
+    this->controller = controller;
 }
 
 void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const std::vector<QStringList>& parameters)
@@ -216,7 +250,16 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
     for (size_t row = 0; row < totalFiles; row++)
     {
         const QStringList& currentParam = parameters[row];
+        // Set the progress bar for this file
+        size_t currentFileSize = delegate->GetFileSize(currentParam[1]);
+        // Reset the HashAlgorithm's state before starting the displayWorker
+        delegate->ResetHashingAlgorithm(hashAlgorithms[0]);
+        emit UpdateFileStatus(0U, currentFileSize, 0U);
+        // Tell the display worker to start monitoring the progress of this hash
+        emit controller->StartMonitoring(hashAlgorithms[0], currentFileSize);
+
         QString hash = delegate->CreateHash(currentParam[1], hashAlgorithms[0]);
+
         result.clear();
         // Append all values as we got them before starting the hashing,
         // as it may take some time and the user may add / delete files from the list
@@ -226,16 +269,49 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
         result.append(currentParam[2]);
         // Signal to the controller that we have completed one hash and pass him the result
         emit resultReady(result);
+        // Send blocking signal to displayWorker
+        emit WaitForMonitor();
     }
+
+    // Send empty result list to Controller to signal that we are done hashing, which will also inform the displayWorker
+    result.clear();
+    emit resultReady(result);
 
     for (HashingAlgorithm* hashAlgo : hashAlgorithms)
     {
         delete hashAlgo;
     }
+}
 
-    // Send empty result list to Controller to signal that we are done hashing
-    result.clear();
-    emit resultReady(result);
+void Worker::MonitorProgress(const HashingAlgorithm* algorithm, const size_t fileSize)
+{
+    size_t oldValue = 0U;
+    m_bContinue = true;
+    while (algorithm->GetBytesProcessed() <= fileSize)
+    {
+        if (!controller->GetHashingStatus() || !m_bContinue)
+        {
+            return;
+        }
+
+        size_t progress = algorithm->GetBytesProcessed();
+        if (progress != oldValue)
+        {
+            emit UpdateFileStatus(ui->fileProgressBar->minimum(), fileSize, progress);
+            oldValue = progress;
+        }
+
+        QThread::msleep(10);
+    }
+
+    emit UpdateFileStatus(ui->fileProgressBar->minimum(), fileSize, algorithm->GetBytesProcessed());
+}
+
+void Worker::TerminateMonitoring()
+{
+    // This function won't really stop the monitoring process itself,
+    // it is only intended to offer a blocking signal for the hashing thread
+    m_bContinue = false;
 }
 
 // ========================= Delegate class =========================
