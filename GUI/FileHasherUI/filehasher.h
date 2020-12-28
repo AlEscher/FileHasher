@@ -36,7 +36,7 @@ private:
     Ui::FileHasher *ui;
     FileHasherDelegate *delegate;
     Controller* controller;
-    size_t totalFileSize = 0;
+    size_t m_nTotalFileSize = 0;
 
     void AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize);
 };
@@ -66,10 +66,19 @@ class Controller : public QObject
         ~Controller();
     private:
         Ui::FileHasher* ui;
+        bool m_bHashing = false;
     public slots:
         // This function will be called when the Worker thread wants to pass on his results,
         // most importantly this function will be executed in our main thread, meaning we can do send events
         void HandleResults(const QStringList &);
+        inline void SetHashingStatus(const bool status)
+        {
+            m_bHashing = status;
+        }
+        inline bool GetHashingStatus()
+        {
+            return m_bHashing;
+        }
     signals:
         void operate(const std::vector<HashingAlgorithm*> &, const std::vector<QStringList> &);
 };

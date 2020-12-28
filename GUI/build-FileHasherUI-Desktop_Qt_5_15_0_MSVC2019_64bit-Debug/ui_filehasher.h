@@ -179,6 +179,7 @@ public:
         sha256CB->setText(QCoreApplication::translate("FileHasher", "SHA256", nullptr));
         md5CB->setText(QCoreApplication::translate("FileHasher", "MD5", nullptr));
         hashButton->setText(QCoreApplication::translate("FileHasher", "Generate Hashes", nullptr));
+        totalProgressBar->setFormat(QCoreApplication::translate("FileHasher", "Idle", nullptr));
         hashAlgosWidget->setTabText(hashAlgosWidget->indexOf(hashAlgoTab), QCoreApplication::translate("FileHasher", "Hash Algorithms", nullptr));
         groupBox->setTitle(QCoreApplication::translate("FileHasher", "Output", nullptr));
         hashOutputBox->setHtml(QCoreApplication::translate("FileHasher", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

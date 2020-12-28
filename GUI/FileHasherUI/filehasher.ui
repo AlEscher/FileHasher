@@ -245,6 +245,9 @@
       <property name="invertedAppearance">
        <bool>false</bool>
       </property>
+      <property name="format">
+       <string>Idle</string>
+      </property>
      </widget>
     </widget>
    </widget>

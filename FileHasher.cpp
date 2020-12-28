@@ -33,20 +33,40 @@ int main(int argc, char** argv)
             * - 103972 KB       => 928 ms
             * - 1245 KB         => 11 ms
             * - 115 KB          => 1 ms
+            * 
+            * New results after runtime and memory improvement:
+            * Blocksize used: 16777216 (2^24) Bytes
+            * - 14847574 KB     => 60012 ms
+            * - 5186093 KB      => 19041 ms
+            * - 3770744 KB      => 13883 ms
+            * - 1039630 KB      => 3829 ms
+            * 
+            * Blocksize used: 4096 (2^12) Bytes
+            * - 14847574 KB     => 67985 ms
+            * - 5186093 KB      => 23678 ms
+            * - 3770744 KB      => 17276 ms
+            * - 1039630 KB      => 4771 ms
+            * 
+            * Blocksize used: 4294967296 (2^32) Bytes
+            * - 14847574 KB     => 56566 ms
+            * - 5186093 KB      => 19465 ms
+            * - 3770744 KB      => 14608 ms
+            * - 1039630 KB      => 4205 ms
             */
+
             // Hash the file "test", can be changed at runtime
             size_t fileSize = 0;
             auto start = std::chrono::high_resolution_clock::now();
-            std::string sha256Hash = sha256Hasher->CalculateFileHash(L"C:/Dev/Cpp/FileHasher/test");
+            std::string sha256Hash = sha256Hasher->CalculateFileHash(L"C:/Dev/Cpp/FileHasher/test", fileSize);
             auto end = std::chrono::high_resolution_clock::now();
             std::cout << "File SHA256: " << sha256Hash << std::endl;
             std::cout << "Took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << std::endl;
 
-            start = std::chrono::high_resolution_clock::now();
+            /*start = std::chrono::high_resolution_clock::now();
             std::string md5Hash = md5Hasher->CalculateFileHash(L"C:/Dev/Cpp/FileHasher/test");
             end = std::chrono::high_resolution_clock::now();
             std::cout << "File MD5:    " << md5Hash << std::endl;
-            std::cout << "Took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << std::endl;
+            std::cout << "Took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << std::endl;*/
         }
         else
         {

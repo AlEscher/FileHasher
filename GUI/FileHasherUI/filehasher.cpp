@@ -47,7 +47,7 @@ void FileHasher::AddFileToTable(QTableWidget* table, const QString& fileName, co
     table->setItem(row, 1, filePathCell);
     table->setItem(row, 2, fileSizeCell);
 
-    this->totalFileSize += fileSize / 1000;
+    m_nTotalFileSize += fileSize / 1000;
 }
 
 // Get the file size from a string, for example 123 from "123 KB"
@@ -86,13 +86,21 @@ void FileHasher::on_addFileButton_clicked()
 void FileHasher::on_clearListButton_clicked()
 {
     ui->fileTable->setRowCount(0);
-    this->totalFileSize = 0;
+    m_nTotalFileSize = 0;
 }
 
 void FileHasher::on_hashButton_clicked()
 {
     vector<HashingAlgorithm*> hashAlgoVec;
     vector<QString> hashVector;
+
+    // If we are already hashing, don't accept new jobs
+    if (controller->GetHashingStatus())
+    {
+        return;
+    }
+    controller->SetHashingStatus(true);
+
     if (ui->sha256CB->isChecked())
     {
         hashAlgoVec.push_back(new SHA256Hasher());
@@ -101,6 +109,7 @@ void FileHasher::on_hashButton_clicked()
     if (hashAlgoVec.empty())
     {
         QMessageBox::warning(this, "Warning", "Select a Hash Algorithm!");
+        controller->SetHashingStatus(false);
         return;
     }
 
@@ -109,7 +118,7 @@ void FileHasher::on_hashButton_clicked()
     if (totalFiles > 0)
     {
         // Set total-progress bar information
-        ui->totalProgressBar->setRange(0, this->totalFileSize);
+        ui->totalProgressBar->setRange(0, m_nTotalFileSize);
         ui->totalProgressBar->setValue(0);
         ui->totalProgressBar->setTextVisible(true);
         ui->totalProgressBar->setFormat("0%");
@@ -134,6 +143,8 @@ void FileHasher::on_hashButton_clicked()
     else
     {
         QMessageBox::warning(this, "Warning", "No files selected!");
+        controller->SetHashingStatus(false);
+        return;
     }
 }
 
@@ -164,8 +175,10 @@ Controller::~Controller()
 
 void Controller::HandleResults(const QStringList& result)
 {
-    if (!(result.size() >= 3))
+    if (result.size() < 3)
     {
+        m_bHashing = false;
+        //ui->totalProgressBar->setFormat("Idle");
         return;
     }
 
@@ -219,6 +232,10 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
     {
         delete hashAlgo;
     }
+
+    // Send empty result list to Controller to signal that we are done hashing
+    result.clear();
+    emit resultReady(result);
 }
 
 // ========================= Delegate class =========================
