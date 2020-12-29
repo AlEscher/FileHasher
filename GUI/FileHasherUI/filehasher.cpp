@@ -1,11 +1,14 @@
 #include "filehasher.h"
 #include "ui_filehasher.h"
+#include "FileHasherDelegate.h"
 #include "../../Hashing/SHA256Hash.h"
 #include "../../Utility/FileUtility.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTableWidgetItem>
+#include <QMenu>
+#include <QClipboard>
 
 using namespace std;
 
@@ -16,6 +19,7 @@ FileHasher::FileHasher(QWidget *parent) : QMainWindow(parent), ui(new Ui::FileHa
     delegate = new FileHasherDelegate();
     controller = new Controller(ui, delegate);
     setFixedSize(size());
+    PopulateToolButton();
 
     qRegisterMetaType<std::vector<HashingAlgorithm*>>("std::vector<HashingAlgorithm*>");
     qRegisterMetaType<std::vector<QStringList>>("std::vector<QStringList>");
@@ -28,6 +32,7 @@ FileHasher::~FileHasher()
     delete ui;
     delete delegate;
     delete controller;
+    delete actionsMenu;
 }
 
 void FileHasher::AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize)
@@ -50,6 +55,21 @@ void FileHasher::AddFileToTable(QTableWidget* table, const QString& fileName, co
     table->setItem(row, 2, fileSizeCell);
 
     m_nTotalFileSize += fileSize / 1000;
+}
+
+void FileHasher::PopulateToolButton()
+{
+    actionsMenu = new QMenu;
+    // Create and assign Actions to menu, menu will take ownership of these
+    QAction* clearAction = actionsMenu->addAction("Clear Output");
+    QAction* exportAction = actionsMenu->addAction("Export to Clipboard");
+
+    connect(clearAction, &QAction::triggered, this, &FileHasher::ClearOutputBox);
+    connect(exportAction, &QAction::triggered, this, &FileHasher::ExportOuputToClipboard);
+
+    ui->actionsButton->setMenu(actionsMenu);
+    // Let the last chosen action be the current default
+    connect(ui->actionsButton, &QToolButton::triggered, ui->actionsButton, &QToolButton::setDefaultAction);
 }
 
 // Get the file size from a string, for example 123 from "123 KB"
@@ -151,9 +171,22 @@ void FileHasher::on_hashButton_clicked()
     }
 }
 
-void FileHasher::on_clearOutputButton_clicked()
+void FileHasher::ClearOutputBox()
 {
     ui->hashOutputBox->clear();
+    controller->ClearCache();
+}
+
+void FileHasher::ExportOuputToClipboard()
+{
+    const QString hashes = "{ " + controller->GetCacheContents() + " }";
+
+    QClipboard* clipboard = QGuiApplication::clipboard();
+    if (clipboard)
+    {
+        clipboard->clear();
+        clipboard->setText(hashes, QClipboard::Clipboard);
+    }
 }
 
 // ========================= Controller / Worker class =========================
@@ -199,9 +232,10 @@ void Controller::HandleResults(const QStringList& result)
         return;
     }
 
-    // We can only send events in the main thread,
+    // We can only send events to the GUI in the main thread,
     // so we need to do this here instead of in the Worker
     ui->hashOutputBox->append(result[0] + ": " + result[1]);
+    AddToCache(result[1]);
 
     int value = ui->totalProgressBar->value() + (int)GetSizeFromString(result[2]);
     float percentage = (float)value / (float)ui->totalProgressBar->maximum();
@@ -231,6 +265,17 @@ void Controller::UpdateFileProgress(const size_t min, const size_t max, const si
         double percentage = (double)value / (double)ui->fileProgressBar->maximum();
         ui->fileProgressBar->setFormat(QString::number((percentage * 100), 'g', 3)+ "%");
     }
+}
+
+QString Controller::GetCacheContents()
+{
+    QString hashes = "";
+    for (int i = 0; i < m_vGeneratedHashes.size(); i++)
+    {
+        hashes += "\"" + m_vGeneratedHashes[i] + "\"" + ((i < m_vGeneratedHashes.size() - 1) ? ", " : "");
+    }
+
+    return hashes;
 }
 
 Worker::Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate, Controller* controller)
@@ -269,11 +314,11 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
         result.append(currentParam[2]);
         // Signal to the controller that we have completed one hash and pass him the result
         emit resultReady(result);
-        // Send blocking signal to displayWorker
+        // Send blocking signal to wait for displayWorker
         emit WaitForMonitor();
     }
 
-    // Send empty result list to Controller to signal that we are done hashing, which will also inform the displayWorker
+    // Send empty result list to Controller to signal that we are done hashing
     result.clear();
     emit resultReady(result);
 
@@ -312,16 +357,4 @@ void Worker::TerminateMonitoring()
     // This function won't really stop the monitoring process itself,
     // it is only intended to offer a blocking signal for the hashing thread
     m_bContinue = false;
-}
-
-// ========================= Delegate class =========================
-
-size_t FileHasherDelegate::GetFileSize(QString filePath)
-{
-    return FileUtil::GetFileSizeW(reinterpret_cast<const wchar_t*>(filePath.unicode()));
-}
-
-QString FileHasherDelegate::CreateHash(QString filePath, HashingAlgorithm *hashAlgo)
-{
-    return QString::fromStdString(hashAlgo->CalculateFileHash(reinterpret_cast<const wchar_t*>(filePath.unicode())));
 }

@@ -21,6 +21,7 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -46,7 +47,7 @@ public:
     QProgressBar *fileProgressBar;
     QGroupBox *groupBox;
     QTextBrowser *hashOutputBox;
-    QPushButton *clearOutputButton;
+    QToolButton *actionsButton;
 
     void setupUi(QMainWindow *FileHasher)
     {
@@ -154,9 +155,10 @@ public:
         hashOutputBox->setObjectName(QString::fromUtf8("hashOutputBox"));
         hashOutputBox->setGeometry(QRect(10, 30, 861, 192));
         hashOutputBox->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
-        clearOutputButton = new QPushButton(groupBox);
-        clearOutputButton->setObjectName(QString::fromUtf8("clearOutputButton"));
-        clearOutputButton->setGeometry(QRect(790, 10, 80, 21));
+        actionsButton = new QToolButton(groupBox);
+        actionsButton->setObjectName(QString::fromUtf8("actionsButton"));
+        actionsButton->setGeometry(QRect(725, 10, 141, 21));
+        actionsButton->setPopupMode(QToolButton::MenuButtonPopup);
         FileHasher->setCentralWidget(centralwidget);
 
         retranslateUi(FileHasher);
@@ -193,7 +195,7 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", nullptr));
-        clearOutputButton->setText(QCoreApplication::translate("FileHasher", "Clear Output", nullptr));
+        actionsButton->setText(QCoreApplication::translate("FileHasher", "Actions", nullptr));
     } // retranslateUi
 
 };

@@ -302,17 +302,20 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="clearOutputButton">
+    <widget class="QToolButton" name="actionsButton">
      <property name="geometry">
       <rect>
-       <x>790</x>
+       <x>725</x>
        <y>10</y>
-       <width>80</width>
+       <width>141</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>Clear Output</string>
+      <string>Actions</string>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
      </property>
     </widget>
    </widget>

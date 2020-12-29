@@ -30,15 +30,19 @@ private slots:
 
     void on_hashButton_clicked();
 
-    void on_clearOutputButton_clicked();
+public slots:
+    void ClearOutputBox();
+    void ExportOuputToClipboard();
 
 private:
     Ui::FileHasher *ui;
     FileHasherDelegate *delegate;
     Controller* controller;
     size_t m_nTotalFileSize = 0;
+    QMenu* actionsMenu;
 
     void AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize);
+    void PopulateToolButton();
 };
 
 class Worker : public QObject
@@ -72,9 +76,20 @@ class Controller : public QObject
     public:
         Controller(Ui::FileHasher* ui, FileHasherDelegate* delegate);
         ~Controller();
+        inline void AddToCache(QString hash)
+        {
+            m_vGeneratedHashes.append(hash);
+        }
+        inline void ClearCache()
+        {
+            m_vGeneratedHashes.clear();
+        }
+        // Returns the Cache's contents as a string, entries are separated by ','
+        QString GetCacheContents();
     private:
         Ui::FileHasher* ui;
         bool m_bHashing = false;
+        QStringList m_vGeneratedHashes;
     public slots:
         // This function will be called when the Worker thread wants to pass on his results,
         // most importantly this function will be executed in our main thread, meaning we can do send events
@@ -91,24 +106,6 @@ class Controller : public QObject
     signals:
         void operate(const std::vector<HashingAlgorithm*> &, const std::vector<QStringList> &);
         void StartMonitoring(const HashingAlgorithm* algorithm, const size_t fileSize);
-};
-
-// Delegates calls from the UI to our backend
-class FileHasherDelegate
-{
-private:
-    Worker* worker = nullptr;
-public:
-    // Get the size in bytes of the specified file
-    size_t GetFileSize(QString filePath);
-    QString CreateHash(QString filePath, HashingAlgorithm* hashAlgo);
-    inline void ResetHashingAlgorithm(HashingAlgorithm* hashAlgo)
-    {
-        if (hashAlgo)
-        {
-            hashAlgo->Reset();
-        }
-    }
 };
 
 #endif // FILEHASHER_H

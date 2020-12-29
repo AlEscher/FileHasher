@@ -286,6 +286,7 @@ Makefile: ..\FileHasherUI\FileHasherUI.pro C:\Qt\5.15.0\msvc2019_64\mkspecs\win3
 		C:\Qt\5.15.0\msvc2019_64\mkspecs\features\build_pass.prf \
 		..\FileHasherUI\Style\framelesswindow.qrc \
 		..\FileHasherUI\Style\darkstyle.qrc \
+		..\FileHasherUI\Resources\resources.qrc \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgetsd.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Guid.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Cored.prl \
@@ -493,6 +494,7 @@ C:\Qt\5.15.0\msvc2019_64\lib\qtmain.prl:
 C:\Qt\5.15.0\msvc2019_64\mkspecs\features\build_pass.prf:
 ..\FileHasherUI\Style\framelesswindow.qrc:
 ..\FileHasherUI\Style\darkstyle.qrc:
+..\FileHasherUI\Resources\resources.qrc:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgetsd.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Guid.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Cored.prl:

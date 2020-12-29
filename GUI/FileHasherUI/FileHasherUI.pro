@@ -12,6 +12,7 @@ INCLUDEPATH += $$_PRO_FILE_PWD_
 INCLUDEPATH += "Style/framelesswindow"
 
 SOURCES += \
+    FileHasherDelegate.cpp \
     main.cpp \
     filehasher.cpp \
     ../../Utility/FileUtility.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     #C:/Dev/Cpp/FileHasher/Hashing/MD5Hash.cpp
 
 HEADERS += \
+    FileHasherDelegate.h \
     filehasher.h \
     Style/DarkStyle.h \
     Style/framelesswindow/framelesswindow.h \
@@ -37,9 +39,10 @@ TRANSLATIONS += \
 
 RESOURCES += \
     Style/framelesswindow.qrc \
-    Style/darkstyle.qrc
+    Style/darkstyle.qrc \
+    Resources/resources.qrc
 
-RC_ICONS = appico.ico
+RC_ICONS = Resources/appico.ico
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
