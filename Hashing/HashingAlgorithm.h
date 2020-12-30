@@ -31,10 +31,10 @@ public:
 	HashingAlgorithm()
 	{
 		// 2^24
-		//m_pFileUtil = new FileUtil(16777216U);
+		m_pFileUtil = new FileUtil(16777216U);
 		// 2^32
 		//m_pFileUtil = new FileUtil(4294967296U);
-		m_pFileUtil = new FileUtil(4096);
+		//m_pFileUtil = new FileUtil(4096);
 	}
 	virtual ~HashingAlgorithm()
 	{

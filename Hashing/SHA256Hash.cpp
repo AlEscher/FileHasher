@@ -96,7 +96,6 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 		{
 			return false;
 		}
-		m_nBytesProcessed += currentBlockSize;
 
 		// Break one block of the message into 512-bit chunks
 		for (size_t chunk = 0; chunk < currentBlockSize; chunk += 64)
@@ -134,6 +133,8 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 
 			hPrime[0] += a; hPrime[1] += b; hPrime[2] += c; hPrime[3] += d;
 			hPrime[4] += e; hPrime[5] += f; hPrime[6] += g; hPrime[7] += h;
+
+			m_nBytesProcessed += 64;
 		}
 
 		delete[] buffer;

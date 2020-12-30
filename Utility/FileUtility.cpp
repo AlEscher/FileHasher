@@ -61,13 +61,14 @@ uint8_t* FileUtil::GetNextBlock()
 		return nullptr;
 	}
 
-	uint8_t* block = new uint8_t[m_nBlockSize];
+	size_t size = std::min(m_nBlockSize, BytesRemaining());
+	uint8_t* block = new uint8_t[size];
 	if (!block)
 	{
 		return nullptr;
 	}
 
-	size_t elementsRead = fread(block, 1U, m_nBlockSize, m_pInput);
+	size_t elementsRead = fread(block, 1U, size, m_pInput);
 	if (elementsRead != m_nBlockSize && BytesRemaining() > 0)
 	{
 		// If we read less than one blocksize and End Of File is not reached, something went wrong
