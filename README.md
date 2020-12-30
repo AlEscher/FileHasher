@@ -4,7 +4,8 @@ Generate the hashes of the files you want (e.g. .exe and .dll) and compare this 
 By doing so you can detect updates for any game / software without relying on strings or version numbers inside the file. This approach also never touches the file in memory, it only reads it from the disk.  
 
 ## Speed:  
-In order to know what to expect in terms of performance, I did some tests with a blocksize of 16777216 (2^24) Bytes:  
+In order to know what to expect in terms of performance, I did some tests with a blocksize of 16777216 (2^24) Bytes.  
+There is no real reason to use a larger blocksize, however other sizes may perform better on different hardware.  
 | FileSize (KB) | Runtime (ms) |
 |:-------------:|:------------:|
 | 14847574      | 54654        |
@@ -15,8 +16,6 @@ In order to know what to expect in terms of performance, I did some tests with a
 | 103972        | 389          |
 | 1245          | 5.1          |
 | 115           | 0.7          |  
-
-There is no real reason to use a larger blocksize, however other sizes may perform better on different hardware.  
 
 ## TODO:
 - [Planned features](https://github.com/AlEscher/FileHasher/projects/1)
