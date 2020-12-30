@@ -17,6 +17,9 @@ There is no real reason to use a larger blocksize, however other sizes may perfo
 | 1245          | 5.1          |
 | 115           | 0.7          |  
 
+## GUI:  
+![GUI_Preview](https://github.com/AlEscher/FileHasher/blob/master/GUI/FileHasherUI/Resources/GUIPreview.PNG)
+
 ## TODO:
 - [Planned features](https://github.com/AlEscher/FileHasher/projects/1)
 
