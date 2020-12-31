@@ -1364,7 +1364,9 @@ release\filehasher.obj: ..\FileHasherUI\filehasher.cpp ..\FileHasherUI\filehashe
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qaction.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qactiongroup.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtGui\QClipboard \
-		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qclipboard.h
+		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qclipboard.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QTime \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdatetime.h
 
 release\FileUtility.obj: ..\..\Utility\FileUtility.cpp ..\..\Utility\FileUtility.h
 

@@ -9,6 +9,7 @@
 #include <QTableWidgetItem>
 #include <QMenu>
 #include <QClipboard>
+#include <QTime>
 
 using namespace std;
 
@@ -133,7 +134,7 @@ void FileHasher::on_hashButton_clicked()
         return;
     }
     controller->SetHashingStatus(true);
-    ui->hashButton->setCursor(Qt::BusyCursor);
+    ui->hashButton->setCursor(Qt::WaitCursor);
 
     QTableWidget* table = ui->fileTable;
     int totalFiles = table->rowCount();
@@ -232,9 +233,13 @@ void Controller::HandleResults(const QStringList& result)
         return;
     }
 
+    // Get current time
+    QTime time = QTime::currentTime();
+    QString timeStr = time.toString("hh:mm:ss");
+
     // We can only send events to the GUI in the main thread,
     // so we need to do this here instead of in the Worker
-    ui->hashOutputBox->append(result[0] + ": " + result[1]);
+    ui->hashOutputBox->append("[" + timeStr + "] " + result[0] + ": " + result[1]);
     AddToCache(result[1]);
 
     int value = ui->totalProgressBar->value() + (int)GetSizeFromString(result[2]);
