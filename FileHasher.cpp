@@ -42,6 +42,13 @@ int HandleCommandLineInput(int argc, char** argv)
         arguments.push_back(argv[i]);
     }
 
+    bool verbose = false;
+    const vector<string>::iterator verbosePosition = find(arguments.begin(), arguments.end(), "-v");
+    if (verbosePosition != arguments.end())
+    {
+        verbose = true;
+    }
+
     HashingAlgorithm* algorithm = nullptr;
     if (arguments[1] == "SHA256")
     {
@@ -49,16 +56,22 @@ int HandleCommandLineInput(int argc, char** argv)
     }
     else
     {
-        cout << "Invalid Hashing Algorithm!" << endl;
-        PrintHelp(arguments[0]);
+        if (verbose)
+        {
+            cout << "Invalid Hashing Algorithm!" << endl;
+            PrintHelp(arguments[0]);
+        }
         return 1;
     }
 
     string hash = algorithm->CalculateFileHash(arguments[2].c_str());
     if (hash == "")
     {
-        cout << "Invalid file path!" << endl;
-        PrintHelp(arguments[0]);
+        if (verbose)
+        {
+            cout << "Invalid file path!" << endl;
+            PrintHelp(arguments[0]);
+        }
         return 1;
     }
 
