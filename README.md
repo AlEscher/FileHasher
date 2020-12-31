@@ -32,4 +32,5 @@ The only sources used are:
 ## External
 I am using [Qt](https://www.qt.io/download-open-source) for the GUI
 and [QtFramelessWindowDarkStyle](https://github.com/Jorgen-VikingGod/Qt-Frameless-Window-DarkStyle) for the dark mode.  
-Download the [Qt Installer](https://www.qt.io/download-qt-installer) and install version 15.5.0, add the project files in [FileHasherUI](https://github.com/AlEscher/FileHasher/tree/master/GUI/FileHasherUI) and you should be good to go.  
+Download the [Qt Installer](https://www.qt.io/download-qt-installer) and install version 15.5.0, add the project files in [FileHasherUI](https://github.com/AlEscher/FileHasher/tree/master/GUI/FileHasherUI) and you should be good to go  
+(you will need to keep the whole project's folder structure, or make appropiate changes to the [.pro file](https://github.com/AlEscher/FileHasher/blob/master/GUI/FileHasherUI/FileHasherUI.pro)).  
