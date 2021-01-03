@@ -30,6 +30,8 @@ private slots:
 
     void on_hashButton_clicked();
 
+    void on_fileTable_customContextMenuRequested(const QPoint &pos);
+
 public slots:
     void ClearOutputBox();
     void ExportOuputToClipboard();

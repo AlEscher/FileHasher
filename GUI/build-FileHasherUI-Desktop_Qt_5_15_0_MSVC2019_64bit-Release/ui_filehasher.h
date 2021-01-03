@@ -37,7 +37,6 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *addFileButton;
     QPushButton *clearListButton;
-    QWidget *strToHashTab;
     QTabWidget *hashAlgosWidget;
     QWidget *hashAlgoTab;
     QCheckBox *sha256CB;
@@ -83,6 +82,7 @@ public:
         fileTable->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         fileTable->setObjectName(QString::fromUtf8("fileTable"));
         fileTable->setGeometry(QRect(9, 9, 631, 241));
+        fileTable->setContextMenuPolicy(Qt::CustomContextMenu);
         fileTable->setAcceptDrops(true);
         fileTable->setLineWidth(1);
         fileTable->setShowGrid(false);
@@ -106,10 +106,6 @@ public:
         horizontalLayout->addWidget(clearListButton);
 
         hashTargetsWidget->addTab(filesToHashTab, QString());
-        strToHashTab = new QWidget();
-        strToHashTab->setObjectName(QString::fromUtf8("strToHashTab"));
-        strToHashTab->setEnabled(true);
-        hashTargetsWidget->addTab(strToHashTab, QString());
         hashAlgosWidget = new QTabWidget(centralwidget);
         hashAlgosWidget->setObjectName(QString::fromUtf8("hashAlgosWidget"));
         hashAlgosWidget->setEnabled(true);
@@ -182,7 +178,6 @@ public:
         addFileButton->setText(QCoreApplication::translate("FileHasher", "Add File", nullptr));
         clearListButton->setText(QCoreApplication::translate("FileHasher", "Clear List", nullptr));
         hashTargetsWidget->setTabText(hashTargetsWidget->indexOf(filesToHashTab), QCoreApplication::translate("FileHasher", "Files to Hash", nullptr));
-        hashTargetsWidget->setTabText(hashTargetsWidget->indexOf(strToHashTab), QCoreApplication::translate("FileHasher", "Strings to Hash", nullptr));
         sha256CB->setText(QCoreApplication::translate("FileHasher", "SHA256", nullptr));
         md5CB->setText(QCoreApplication::translate("FileHasher", "MD5", nullptr));
         hashButton->setText(QCoreApplication::translate("FileHasher", "Generate Hashes", nullptr));

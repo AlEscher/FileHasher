@@ -69,6 +69,7 @@ void FileHasher::PopulateToolButton()
     connect(exportAction, &QAction::triggered, this, &FileHasher::ExportOuputToClipboard);
 
     ui->actionsButton->setMenu(actionsMenu);
+    ui->actionsButton->setDefaultAction(exportAction);
     // Let the last chosen action be the current default
     connect(ui->actionsButton, &QToolButton::triggered, ui->actionsButton, &QToolButton::setDefaultAction);
 }
@@ -141,7 +142,7 @@ void FileHasher::on_hashButton_clicked()
     if (totalFiles > 0)
     {
         // Set total-progress bar information
-        ui->totalProgressBar->setRange(0, m_nTotalFileSize);
+        ui->totalProgressBar->setRange(0, (int)m_nTotalFileSize);
         ui->totalProgressBar->setValue(0);
         ui->totalProgressBar->setTextVisible(true);
         ui->totalProgressBar->setFormat("0%");
@@ -169,6 +170,19 @@ void FileHasher::on_hashButton_clicked()
         controller->SetHashingStatus(false);
         ui->hashButton->setCursor(Qt::ArrowCursor);
         return;
+    }
+}
+
+void FileHasher::on_fileTable_customContextMenuRequested(const QPoint& pos)
+{
+    QMenu menu(this);
+
+    // Menu takes ownership of this action, which will be freed once the function exits
+    QAction* removeAction = menu.addAction("Remove Row");
+    QAction* selectedAction = menu.exec(ui->fileTable->viewport()->mapToGlobal(pos));
+    if (selectedAction == removeAction)
+    {
+        ui->fileTable->removeRow(ui->fileTable->currentRow());
     }
 }
 
@@ -258,8 +272,8 @@ void Controller::HandleResults(const QStringList& result)
 
 void Controller::UpdateFileProgress(const size_t min, const size_t max, const size_t value)
 {
-    ui->fileProgressBar->setRange(min, max);
-    ui->fileProgressBar->setValue(std::min(value, max));
+    ui->fileProgressBar->setRange((int)min, (int)max);
+    ui->fileProgressBar->setValue((int)std::min(value, max));
 
     if (value >= max)
     {

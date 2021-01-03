@@ -54,6 +54,9 @@
         <height>241</height>
        </rect>
       </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
       <property name="acceptDrops">
        <bool>true</bool>
       </property>
@@ -132,14 +135,6 @@
        </item>
       </layout>
      </widget>
-    </widget>
-    <widget class="QWidget" name="strToHashTab">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <attribute name="title">
-      <string>Strings to Hash</string>
-     </attribute>
     </widget>
    </widget>
    <widget class="QTabWidget" name="hashAlgosWidget">
