@@ -8,6 +8,7 @@ By doing so you can detect updates for any game / software without relying on st
 ## Speed:  
 In order to know what to expect in terms of performance, I did some tests with a blocksize of 16777216 (2^24) Bytes.  
 There is no real reason to use a larger blocksize, however other sizes may perform better on different hardware.  
+These measurements were done with the release version of the Console file, the GUI will be slower (more threads, synchronization, etc...)
 | FileSize (KB) | Runtime (ms) |
 |:-------------:|:------------:|
 | 14847574      | 54654        |
@@ -22,8 +23,8 @@ There is no real reason to use a larger blocksize, however other sizes may perfo
 ## GUI:  
 ![GUI_Preview](https://github.com/AlEscher/FileHasher/blob/master/GUI/FileHasherUI/Resources/GUIPreview.PNG)
 
-## TODO:
-- [Planned features](https://github.com/AlEscher/FileHasher/projects/1)
+## Known Issues:  
+- File progress bar breaks with files > 2GB, this is because QProgressBar only takes signed integers  
 
 ## Sources:
 The only sources used are:
