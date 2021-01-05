@@ -182,7 +182,9 @@ void FileHasher::on_fileTable_customContextMenuRequested(const QPoint& pos)
     QAction* selectedAction = menu.exec(ui->fileTable->viewport()->mapToGlobal(pos));
     if (selectedAction == removeAction)
     {
-        ui->fileTable->removeRow(ui->fileTable->currentRow());
+        QTableWidget* table = ui->fileTable;
+        m_nTotalFileSize -= GetSizeFromString(table->item(table->currentRow(), 2)->text());
+        table->removeRow(ui->fileTable->currentRow());
     }
 }
 
