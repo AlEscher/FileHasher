@@ -11,3 +11,8 @@ uint32_t BitUtil::rotr32(uint32_t n, int c)
 {
 	return _rotr(n, c);
 }
+
+uint64_t BitUtil::rotr64(uint64_t n, int c)
+{
+	return _rotr64(n, c);
+}

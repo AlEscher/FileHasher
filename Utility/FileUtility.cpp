@@ -7,7 +7,7 @@ using namespace std;
 
 FileUtil::FileUtil()
 {
-
+	
 }
 
 FileUtil::FileUtil(size_t blockSize)
@@ -69,9 +69,9 @@ uint8_t* FileUtil::GetNextBlock()
 	}
 
 	size_t elementsRead = fread(block, 1U, size, m_pInput);
-	if (elementsRead != m_nBlockSize && BytesRemaining() > 0)
+	if (elementsRead != size && BytesRemaining() > 0)
 	{
-		// If we read less than one blocksize and End Of File is not reached, something went wrong
+		// If we read less than we intended to and End Of File is not reached, something went wrong
 		delete[] block;
 		return nullptr;
 	}
@@ -110,7 +110,7 @@ size_t FileUtil::GetFileSizeW(const wchar_t* filePath)
 	size_t size = 0;
 	try
 	{
-        size = filesystem::file_size(filePath);
+		size = filesystem::file_size(filePath);
 	}
 	catch (filesystem::filesystem_error& e)
 	{

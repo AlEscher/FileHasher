@@ -1,12 +1,13 @@
 #pragma once
+#include <string>
 
-#include "HashingAlgorithm.h"
-
-class MD5Hasher : public HashingAlgorithm
+class MD5Hasher
 {
 public:
-	std::string CalculateFileHash(const wchar_t* filePath);
-	std::string CalculateFileHash(const char* filePath);
-	std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize);
 	std::string CalculateStringHash(const std::string& input);
+
+	inline std::string GetName() const
+	{
+		return "MD5";
+	}
 };

@@ -7,17 +7,21 @@
 
 class HashingAlgorithm
 {
+private:
+	virtual std::string Hash(const size_t fileSize) = 0;
 protected:
 	FileUtil* m_pFileUtil;
 	size_t m_nBytesProcessed = 0U;
 public:
 	// Calculate file hash
-	virtual std::string CalculateFileHash(const wchar_t* filePath) = 0;
-	virtual std::string CalculateFileHash(const char* filePath) = 0;
+	std::string CalculateFileHash(const wchar_t* filePath);
+	std::string CalculateFileHash(const char* filePath);
 	// Calculate file hash and set fileSize (not really needed, mostly for debugging purposes)
-	virtual std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize) = 0;
+	std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize);
 	// Calculate hash for given string
 	virtual std::string CalculateStringHash(const std::string& input) = 0;
+	// Returns the name of the HashingAlgorithm instance, e.g. "SHA256"
+	virtual std::string GetName() const = 0;
 	// Resets the algorithm's internal state, such as bytesRead and the FileUtil class
 	virtual void Reset()
 	{

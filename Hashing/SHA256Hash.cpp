@@ -22,6 +22,8 @@ using namespace BitUtil;
 #define ch(e, f, g) (XOR((e & f), ((~e) & g)))
 #define maj(a, b, c) (XOR(XOR((a & b), (a & c)), (b & c)))
 
+constexpr size_t ENTRY_MESSAGE_SIZE = 64U;
+
 uint8_t* SHA256Hasher::PreProcess(const size_t fileSize, size_t& paddingSize)
 {
 	uint64_t L = fileSize * 8UL;
@@ -102,7 +104,7 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 		for (size_t chunk = 0; chunk < currentBlockSize; chunk += 64)
 		{
 			// 64-entry message schedule
-			uint32_t w[64]{ 0 };
+			uint32_t w[ENTRY_MESSAGE_SIZE]{ 0 };
 
 			// Load bytes of this chunk into first 16 32-bit words
 			for (size_t i = 0; i < 16; i++)
@@ -116,7 +118,7 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			}
 
 			// Extend the first 16 words into the remaining 48 words
-			for (size_t i = 16; i < 64; i++)
+			for (size_t i = 16; i < ENTRY_MESSAGE_SIZE; i++)
 			{
 				w[i] = w[i - 16] + s0(w[i - 15]) + w[i - 7] + s1(w[i - 2]);
 			}
@@ -124,7 +126,7 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			uint32_t a = hPrime[0], b = hPrime[1], c = hPrime[2], d = hPrime[3], e = hPrime[4], f = hPrime[5], g = hPrime[6], h = hPrime[7];
 
 			// Compression
-			for (size_t i = 0; i < 64; i++)
+			for (size_t i = 0; i < ENTRY_MESSAGE_SIZE; i++)
 			{
 				uint32_t temp1 = h + S1(e) + ch(e, f, g) + k[i] + w[i];
 				uint32_t temp2 = S0(a) + maj(a, b, c);
@@ -188,57 +190,6 @@ string SHA256Hasher::Hash(const size_t fileSize)
 	this->ResetPrimes();
 
 	return hash;
-}
-
-string SHA256Hasher::CalculateFileHash(const wchar_t* filePath)
-{
-	size_t fileSize = 0;
-	fileSize = FileUtil::GetFileSizeW(filePath);
-	if (fileSize == 0)
-	{
-		return "";
-	}
-
-	if (!m_pFileUtil->OpenFileStreamW(filePath) || !m_pFileUtil->CanRead())
-	{
-		return "";
-	}
-
-	string hash = this->Hash(fileSize);
-	m_pFileUtil->Reset();
-	return hash;
-}
-
-std::string SHA256Hasher::CalculateFileHash(const char* filePath)
-{
-	size_t fileSize = 0;
-	fileSize = FileUtil::GetFileSizeA(filePath);
-	if (fileSize == 0)
-	{
-		return "";
-	}
-
-	if (!m_pFileUtil->OpenFileStreamA(filePath) || !m_pFileUtil->CanRead())
-	{
-		return "";
-	}
-
-	string hash = this->Hash(fileSize);
-	m_pFileUtil->Reset();
-	return hash;
-}
-
-string SHA256Hasher::CalculateFileHash(const wchar_t* filePath, size_t& fileSize)
-{
-	size_t fileSizeLoc = fileSize = 0;
-	fileSizeLoc = FileUtil::GetFileSizeW(filePath);
-	if (fileSizeLoc == 0)
-	{
-		return "";
-	}
-
-	fileSize = fileSizeLoc;
-	return this->CalculateFileHash(filePath);
 }
 
 string SHA256Hasher::CalculateStringHash(const string& input)

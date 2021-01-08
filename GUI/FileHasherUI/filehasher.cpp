@@ -184,7 +184,7 @@ void FileHasher::on_fileTable_customContextMenuRequested(const QPoint& pos)
     {
         QTableWidget* table = ui->fileTable;
         m_nTotalFileSize -= GetSizeFromString(table->item(table->currentRow(), 2)->text());
-        table->removeRow(ui->fileTable->currentRow());
+        table->removeRow(table->currentRow());
     }
 }
 

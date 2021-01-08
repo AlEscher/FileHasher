@@ -5,6 +5,7 @@
 #include "./Hashing/HashingAlgorithm.h"
 #include "./Hashing/MD5Hash.h"
 #include "./Hashing/SHA256Hash.h"
+#include "./Hashing/SHA512Hash.h"
 
 using namespace std;
 
@@ -54,6 +55,10 @@ int HandleCommandLineInput(int argc, char** argv)
     {
         algorithm = new SHA256Hasher();
     }
+    else if (arguments[1] == "SHA512")
+    {
+        algorithm = new SHA512Hasher();
+    }
     else
     {
         if (verbose)
@@ -82,8 +87,8 @@ int HandleCommandLineInput(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-    HashingAlgorithm* md5Hasher = new MD5Hasher();
     HashingAlgorithm* sha256Hasher = new SHA256Hasher();
+    HashingAlgorithm* sha512Hasher = new SHA512Hasher();
     string input;
     wstring path = L"C:/Dev/Cpp/FileHasher/test";
 
@@ -158,9 +163,16 @@ int main(int argc, char** argv)
             auto start = chrono::high_resolution_clock::now();
             string sha256Hash = sha256Hasher->CalculateFileHash(path.c_str(), fileSize);
             auto end = chrono::high_resolution_clock::now();
-            cout << "File SHA256: " << sha256Hash << endl;
+            cout << "File " << sha256Hasher->GetName() << ": " << sha256Hash << endl;
             cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
             cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " micros, with size: " << fileSize / 1000 << " KB" << endl;
+
+            start = chrono::high_resolution_clock::now();
+            string sha512Hash = sha512Hasher->CalculateFileHash(path.c_str());
+            end = chrono::high_resolution_clock::now();
+            cout << "File " << sha512Hasher->GetName() << ": " << sha512Hash << endl;
+            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms " << endl;
+            cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " micros" << endl;
 
             /*start = chrono::high_resolution_clock::now();
             string md5Hash = md5Hasher->CalculateFileHash(path.c_str());
@@ -178,6 +190,6 @@ int main(int argc, char** argv)
         }
     }
 
-    delete md5Hasher;
     delete sha256Hasher;
+    delete sha512Hasher;
 }

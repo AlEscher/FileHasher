@@ -34,9 +34,10 @@ private:
     // Digests the processed message and returns our hash
     std::string Digest();
 public:
-	std::string CalculateFileHash(const wchar_t* filePath);
-    std::string CalculateFileHash(const char* filePath);
-    std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize);
     std::string CalculateStringHash(const std::string& input);
+    inline std::string GetName() const
+    {
+        return "SHA256";
+    }
     ~SHA256Hasher();
 };
