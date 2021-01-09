@@ -12,6 +12,8 @@ private:
 protected:
 	FileUtil* m_pFileUtil;
 	size_t m_nBytesProcessed = 0U;
+
+	uint8_t* GetDataBlock(const size_t paddingSize, const uint8_t* padding, size_t& blockSize);
 public:
 	// Calculate file hash
 	std::string CalculateFileHash(const wchar_t* filePath);

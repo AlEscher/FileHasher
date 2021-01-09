@@ -7,9 +7,8 @@
 #include "./SHA512Hash.h"
 
 using namespace std;
-using namespace BitUtil;
 
-#define ROTR(n, c) rotr64(n, c)
+#define ROTR(n, c) BitUtil::rotr64(n, c)
 #define XOR(a, b) (a ^ b)
 #define RSH(a, b) (a >> b)
 
@@ -22,6 +21,8 @@ using namespace BitUtil;
 #define maj(a, b, c) (XOR(XOR((a & b), (a & c)), (b & c)))
 
 constexpr size_t ENTRY_MESSAGE_SIZE = 80U;
+constexpr size_t CHUNK_SIZE_BYTES = 128U;
+constexpr size_t CHUNK_SIZE_BITS = 1024U;
 
 std::string SHA512Hasher::Hash(const size_t fileSize)
 {
@@ -49,12 +50,12 @@ std::string SHA512Hasher::Hash(const size_t fileSize)
 uint8_t* SHA512Hasher::PreProcess(const size_t fileSize, size_t& paddingSize)
 {
 	uint64_t L = fileSize * 8UL;
-	uint64_t restBits = L % 1024;
-	uint64_t minExtraBitsNeeded = 1024 - restBits;
+	uint64_t restBits = L % CHUNK_SIZE_BITS;
+	uint64_t minExtraBitsNeeded = CHUNK_SIZE_BITS - restBits;
 	// How many 0-bits we need for padding, should be at least 7
-	uint64_t numKBits = (minExtraBitsNeeded - 1 - 128) % 1024;
+	uint64_t numKBits = (minExtraBitsNeeded - 1 - 128) % CHUNK_SIZE_BITS;
 
-	// Pad with 1 '1' bit, k 0 bits, and the length as a 64-bit integer
+	// Pad with 1 '1' bit, k 0 bits, and the length as a 128-bit integer
 	paddingSize = (1 + 128 + numKBits) / 8UL;
 	uint8_t* buffer = new uint8_t[paddingSize];
 	if (!buffer)
@@ -80,8 +81,8 @@ uint8_t* SHA512Hasher::PreProcess(const size_t fileSize, size_t& paddingSize)
 		buffer[padCounter++] = static_cast<uint8_t>(L >> c);
 	}
 
-	// Our message together with the padding should now be a multiple of 64 bytes (512 bits)
-	assert((fileSize + paddingSize) % 128 == 0);
+	// Our message together with the padding should now be a multiple of 128 bytes (1024 bits)
+	assert((fileSize + paddingSize) % CHUNK_SIZE_BYTES == 0);
 
 	return buffer;
 }
@@ -90,41 +91,15 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 {
 	while (m_pFileUtil->CanRead())
 	{
-		size_t currentBlockSize = std::min(m_pFileUtil->BytesRemaining(), m_pFileUtil->GetBlockSize());
-		uint8_t* buffer = nullptr;
-		// Check if this is our last block to read, if so append our padding
-		if (m_pFileUtil->BytesRemaining() <= m_pFileUtil->GetBlockSize())
-		{
-			size_t lastBlockLength = m_pFileUtil->BytesRemaining();
-			buffer = m_pFileUtil->GetNextBlock();
-			uint8_t* finalBlock = new uint8_t[lastBlockLength + paddingSize];
-			if (!finalBlock)
-			{
-				delete[] buffer;
-				return false;
-			}
-
-			// Copy our block, then append the padding
-			memcpy_s(finalBlock, lastBlockLength + paddingSize, buffer, lastBlockLength);
-			memcpy_s(finalBlock + lastBlockLength, lastBlockLength + paddingSize, padding, paddingSize);
-
-			delete[] buffer;
-			buffer = finalBlock;
-			currentBlockSize = lastBlockLength + paddingSize;
-		}
-		else
-		{
-			buffer = m_pFileUtil->GetNextBlock();
-		}
-
+		size_t currentBlockSize = 0U;
+		uint8_t* buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
 		if (!buffer)
 		{
 			return false;
 		}
-		m_nBytesProcessed += currentBlockSize;
 
 		// Break one block of the message into 1024-bit chunks
-		for (size_t chunk = 0; chunk < currentBlockSize; chunk += 128)
+		for (size_t chunk = 0; chunk < currentBlockSize; chunk += CHUNK_SIZE_BYTES)
 		{
 			// 80-entry message schedule
 			uint64_t w[ENTRY_MESSAGE_SIZE]{ 0 };
@@ -133,17 +108,10 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			for (size_t i = 0; i < 16; i++)
 			{
 				// Combine 8 bytes into one 64-bit entry
-				uint64_t currentEntry = 0ULL;
-				for (size_t j = 0; j < 8; j++)
-				{
-					// Shift one byte into the correct position of the 64-bit value
-					// See SHA256Hasher::Process for easier version
-					currentEntry |= static_cast<uint64_t>(buffer[chunk + i * 8 + j]) << ((7ULL - j) * 8ULL);
-				}
-				w[i] = currentEntry;
+				w[i] = BitUtil::AppendBytes<uint64_t>(buffer + chunk + i * 8);
 			}
 
-			// Extend the first 16 words into the remaining 48 words
+			// Extend the first 16 words into the remaining 64 words
 			for (size_t i = 16; i < ENTRY_MESSAGE_SIZE; i++)
 			{
 				w[i] = w[i - 16] + s0(w[i - 15]) + w[i - 7] + s1(w[i - 2]);
@@ -165,7 +133,6 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 		}
 
 		delete[] buffer;
-
 	}
 
 	return true;
@@ -183,7 +150,7 @@ void SHA512Hasher::ResetPrimes()
 	hPrime[7] = 0x5be0cd19137e2179ULL;
 }
 
-std::string SHA512Hasher::Digest()
+string SHA512Hasher::Digest()
 {
 	stringstream ss;
 	for (size_t i = 0; i < 8; i++)
@@ -195,7 +162,7 @@ std::string SHA512Hasher::Digest()
 	return ss.str();
 }
 
-std::string SHA512Hasher::CalculateStringHash(const std::string& input)
+string SHA512Hasher::CalculateStringHash(const string& input)
 {
 	return std::string();
 }
