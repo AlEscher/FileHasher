@@ -6,7 +6,8 @@ By doing so you can detect updates for any game / software without relying on st
 [![Release](https://img.shields.io/github/v/release/AlEscher/FileHasher?color=light-green&include_prereleases&style=plastic)](https://github.com/AlEscher/FileHasher/releases/latest) [![GitHub](https://img.shields.io/github/license/AlEscher/FileHasher?color=cyan&style=plastic)](https://github.com/AlEscher/FileHasher/blob/master/LICENSE)
 
 ## Speed:  
-In order to know what to expect in terms of performance, I did some tests with a blocksize of 16777216 (2^24) Bytes.  
+In order to know what to expect in terms of performance, I did some tests for SHA256 with a blocksize of 16777216 (2^24) Bytes. 
+SHA512 will be significantly faster, since we only have to do half of the iterations that SHA256 does. 
 There is no real reason to use a larger blocksize, however other sizes may perform better on different hardware.  
 These measurements were done with the release version of the Console file, the GUI will be slower (more threads, synchronization, etc...)
 | FileSize (KB) | Runtime (ms) |
