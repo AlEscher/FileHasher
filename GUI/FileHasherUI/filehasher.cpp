@@ -2,6 +2,7 @@
 #include "ui_filehasher.h"
 #include "FileHasherDelegate.h"
 #include "../../Hashing/SHA256Hash.h"
+#include "../../Hashing/SHA512Hash.h"
 #include "../../Utility/FileUtility.h"
 
 #include <QFileDialog>
@@ -128,6 +129,10 @@ void FileHasher::on_hashButton_clicked()
     {
         hashAlgoVec.push_back(new SHA256Hasher());
     }
+    if (ui->sha512CB->isChecked())
+    {
+        hashAlgoVec.push_back(new SHA512Hasher());
+    }
 
     if (hashAlgoVec.empty())
     {
@@ -142,7 +147,7 @@ void FileHasher::on_hashButton_clicked()
     if (totalFiles > 0)
     {
         // Set total-progress bar information
-        ui->totalProgressBar->setRange(0, (int)m_nTotalFileSize);
+        ui->totalProgressBar->setRange(0, (int)(m_nTotalFileSize * hashAlgoVec.size()));
         ui->totalProgressBar->setValue(0);
         ui->totalProgressBar->setTextVisible(true);
         ui->totalProgressBar->setFormat("0%");
@@ -313,30 +318,34 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
     // Parameters contains one QStringList for each file, containing its name, path and size
     size_t totalFiles = parameters.size();
 
-    for (size_t row = 0; row < totalFiles; row++)
+    for (HashingAlgorithm* hashAlgorithm : hashAlgorithms)
     {
-        const QStringList& currentParam = parameters[row];
-        // Set the progress bar for this file
-        size_t currentFileSize = delegate->GetFileSize(currentParam[1]);
-        // Reset the HashAlgorithm's state before starting the displayWorker
-        delegate->ResetHashingAlgorithm(hashAlgorithms[0]);
-        emit UpdateFileStatus(0U, currentFileSize, 0U);
-        // Tell the display worker to start monitoring the progress of this hash
-        emit controller->StartMonitoring(hashAlgorithms[0], currentFileSize);
+        for (size_t row = 0; row < totalFiles; row++)
+        {
+            const QStringList& currentParam = parameters[row];
+            // Set the progress bar for this file
+            size_t currentFileSize = delegate->GetFileSize(currentParam[1]);
 
-        QString hash = delegate->CreateHash(currentParam[1], hashAlgorithms[0]);
+            // Reset the HashAlgorithm's state before starting the displayWorker
+            delegate->ResetHashingAlgorithm(hashAlgorithm);
+            emit UpdateFileStatus(0U, currentFileSize, 0U);
+            // Tell the display worker to start monitoring the progress of this hash
+            emit controller->StartMonitoring(hashAlgorithm, currentFileSize);
 
-        result.clear();
-        // Append all values as we got them before starting the hashing,
-        // as it may take some time and the user may add / delete files from the list
-        // in the meantime
-        result.append(currentParam[0]);
-        result.append(hash);
-        result.append(currentParam[2]);
-        // Signal to the controller that we have completed one hash and pass him the result
-        emit resultReady(result);
-        // Send blocking signal to wait for displayWorker
-        emit WaitForMonitor();
+            QString hash = delegate->CreateHash(currentParam[1], hashAlgorithm);
+
+            result.clear();
+            // Append all values as we got them before starting the hashing,
+            // as it may take some time and the user may add / delete files from the list
+            // in the meantime
+            result.append(currentParam[0] + " " + QString::fromStdString(hashAlgorithm->GetName()));
+            result.append(hash);
+            result.append(currentParam[2]);
+            // Signal to the controller that we have completed one hash and pass him the result
+            emit resultReady(result);
+            // Send blocking signal to wait for displayWorker
+            emit WaitForMonitor();
+        }
     }
 
     // Send empty result list to Controller to signal that we are done hashing

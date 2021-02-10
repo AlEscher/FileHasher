@@ -20,10 +20,11 @@ SOURCES += \
     ../../Utility/FileUtility.cpp \
     ../../Utility/BitwiseUtility.cpp \
     ../../Hashing/SHA256Hash.cpp \
+    ../../Hashing/SHA512Hash.cpp \
+    ../../Hashing/HashingAlgorithm.cpp \
     Style/framelesswindow/framelesswindow.cpp \
     Style/DarkStyle.cpp \
     Style/framelesswindow/windowdragger.cpp
-    #C:/Dev/Cpp/FileHasher/Hashing/MD5Hash.cpp
 
 HEADERS += \
     FileHasherDelegate.h \
