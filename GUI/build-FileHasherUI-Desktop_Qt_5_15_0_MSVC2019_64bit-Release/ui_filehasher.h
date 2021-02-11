@@ -15,12 +15,12 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
-#include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QWidget>
 
@@ -33,7 +33,7 @@ public:
     QTabWidget *hashTargetsWidget;
     QWidget *filesToHashTab;
     QTableWidget *fileTable;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
     QPushButton *addFileButton;
     QPushButton *clearListButton;
@@ -46,22 +46,22 @@ public:
     QProgressBar *fileProgressBar;
     QCheckBox *sha512CB;
     QGroupBox *groupBox;
-    QTextBrowser *hashOutputBox;
     QToolButton *actionsButton;
+    QListWidget *outputList;
 
     void setupUi(QMainWindow *FileHasher)
     {
         if (FileHasher->objectName().isEmpty())
             FileHasher->setObjectName(QString::fromUtf8("FileHasher"));
         FileHasher->setEnabled(true);
-        FileHasher->resize(923, 568);
+        FileHasher->resize(932, 612);
         FileHasher->setTabShape(QTabWidget::Rounded);
         centralwidget = new QWidget(FileHasher);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         hashTargetsWidget = new QTabWidget(centralwidget);
         hashTargetsWidget->setObjectName(QString::fromUtf8("hashTargetsWidget"));
         hashTargetsWidget->setEnabled(true);
-        hashTargetsWidget->setGeometry(QRect(240, 0, 671, 311));
+        hashTargetsWidget->setGeometry(QRect(240, 0, 681, 311));
         hashTargetsWidget->setAutoFillBackground(false);
         hashTargetsWidget->setMovable(true);
         filesToHashTab = new QWidget();
@@ -90,18 +90,18 @@ public:
         fileTable->horizontalHeader()->setCascadingSectionResizes(false);
         fileTable->horizontalHeader()->setStretchLastSection(false);
         fileTable->verticalHeader()->setStretchLastSection(false);
-        widget = new QWidget(filesToHashTab);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(10, 251, 661, 23));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget = new QWidget(filesToHashTab);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 251, 661, 23));
+        horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        addFileButton = new QPushButton(widget);
+        addFileButton = new QPushButton(layoutWidget);
         addFileButton->setObjectName(QString::fromUtf8("addFileButton"));
 
         horizontalLayout->addWidget(addFileButton);
 
-        clearListButton = new QPushButton(widget);
+        clearListButton = new QPushButton(layoutWidget);
         clearListButton->setObjectName(QString::fromUtf8("clearListButton"));
 
         horizontalLayout->addWidget(clearListButton);
@@ -151,16 +151,15 @@ public:
         hashAlgosWidget->addTab(hashAlgoTab, QString());
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 310, 901, 251));
+        groupBox->setGeometry(QRect(10, 310, 911, 291));
         groupBox->setAutoFillBackground(true);
-        hashOutputBox = new QTextBrowser(groupBox);
-        hashOutputBox->setObjectName(QString::fromUtf8("hashOutputBox"));
-        hashOutputBox->setGeometry(QRect(10, 30, 881, 211));
-        hashOutputBox->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
         actionsButton = new QToolButton(groupBox);
         actionsButton->setObjectName(QString::fromUtf8("actionsButton"));
-        actionsButton->setGeometry(QRect(750, 10, 141, 21));
+        actionsButton->setGeometry(QRect(770, 10, 141, 21));
         actionsButton->setPopupMode(QToolButton::MenuButtonPopup);
+        outputList = new QListWidget(groupBox);
+        outputList->setObjectName(QString::fromUtf8("outputList"));
+        outputList->setGeometry(QRect(0, 30, 911, 261));
         FileHasher->setCentralWidget(centralwidget);
 
         retranslateUi(FileHasher);
@@ -192,11 +191,6 @@ public:
         sha512CB->setText(QCoreApplication::translate("FileHasher", "SHA512", nullptr));
         hashAlgosWidget->setTabText(hashAlgosWidget->indexOf(hashAlgoTab), QCoreApplication::translate("FileHasher", "Hash Algorithms", nullptr));
         groupBox->setTitle(QCoreApplication::translate("FileHasher", "Output", nullptr));
-        hashOutputBox->setHtml(QCoreApplication::translate("FileHasher", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", nullptr));
         actionsButton->setText(QCoreApplication::translate("FileHasher", "Actions", nullptr));
     } // retranslateUi
 

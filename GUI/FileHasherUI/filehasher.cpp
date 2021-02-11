@@ -71,7 +71,7 @@ void FileHasher::PopulateToolButton()
 
     ui->actionsButton->setMenu(actionsMenu);
     ui->actionsButton->setDefaultAction(exportAction);
-    // Let the last chosen action be the current default
+    // Let the last chosen action be the currently displayed action
     connect(ui->actionsButton, &QToolButton::triggered, ui->actionsButton, &QToolButton::setDefaultAction);
 }
 
@@ -110,6 +110,7 @@ void FileHasher::on_addFileButton_clicked()
 
 void FileHasher::on_clearListButton_clicked()
 {
+    // Clear file table
     ui->fileTable->setRowCount(0);
     m_nTotalFileSize = 0;
 }
@@ -184,7 +185,9 @@ void FileHasher::on_fileTable_customContextMenuRequested(const QPoint& pos)
 
     // Menu takes ownership of this action, which will be freed once the function exits
     QAction* removeAction = menu.addAction("Remove Row");
+    // Wait for an action to be selected or the menu to be closed
     QAction* selectedAction = menu.exec(ui->fileTable->viewport()->mapToGlobal(pos));
+    // Execute the selected action, currently only remove
     if (selectedAction == removeAction)
     {
         QTableWidget* table = ui->fileTable;
@@ -195,7 +198,7 @@ void FileHasher::on_fileTable_customContextMenuRequested(const QPoint& pos)
 
 void FileHasher::ClearOutputBox()
 {
-    ui->hashOutputBox->clear();
+    ui->outputList->clear();
     controller->ClearCache();
 }
 
@@ -260,7 +263,9 @@ void Controller::HandleResults(const QStringList& result)
 
     // We can only send events to the GUI in the main thread,
     // so we need to do this here instead of in the Worker
-    ui->hashOutputBox->append("[" + timeStr + "] " + result[0] + ": " + result[1]);
+    QListWidgetItem *newResult = new QListWidgetItem;
+    newResult->setText("[" + timeStr + "] " + result[0] + ": " + result[1]);
+    ui->outputList->addItem(newResult);
     AddToCache(result[1]);
 
     int value = ui->totalProgressBar->value() + (int)GetSizeFromString(result[2]);
@@ -296,6 +301,7 @@ void Controller::UpdateFileProgress(const size_t min, const size_t max, const si
 QString Controller::GetCacheContents()
 {
     QString hashes = "";
+    // Append the hashes into a string such as: "hash1", "hash2", "hash3"
     for (int i = 0; i < m_vGeneratedHashes.size(); i++)
     {
         hashes += "\"" + m_vGeneratedHashes[i] + "\"" + ((i < m_vGeneratedHashes.size() - 1) ? ", " : "");
