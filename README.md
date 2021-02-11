@@ -30,7 +30,6 @@ These measurements were done with the release version of the Console file, the G
 ## Sources:
 The only sources used are:
 - [SHA256](https://en.wikipedia.org/wiki/SHA-2)
-- [SHA RFC](https://tools.ietf.org/html/rfc3174)
 - Sources included in code comments
 
 ## External
