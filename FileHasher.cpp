@@ -69,7 +69,14 @@ int HandleCommandLineInput(int argc, char** argv)
         return 1;
     }
 
-    string hash = algorithm->CalculateFileHash(arguments[2].c_str());
+    size_t len = strnlen_s(arguments[2].c_str(), 1024U) + 1;
+    size_t fileSize = 0U;
+    size_t ret = 0U;
+    wchar_t* widePath = new wchar_t[len];
+    mbstowcs_s(&ret, widePath, len, arguments[2].c_str(), len - 1);
+
+    string hash = algorithm->CalculateFileHash(widePath);
+    delete[] widePath;
     if (hash == "")
     {
         if (verbose)

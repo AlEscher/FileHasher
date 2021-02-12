@@ -152,6 +152,7 @@ string SHA256Hasher::Hash(const size_t fileSize)
 	m_nBytesProcessed = 0U;
 	if (!this->Process(padding, paddingSize))
 	{
+		delete[] padding;
 		return "";
 	}
 
@@ -165,12 +166,6 @@ string SHA256Hasher::Hash(const size_t fileSize)
 
 string SHA256Hasher::CalculateStringHash(const string& input)
 {
-	/*vector<uint8_t> buffer;
-	stringstream ss;
-	ss << input;
-	buffer = vector<uint8_t>((istreambuf_iterator<char>(ss)), istreambuf_iterator<char>());
-
-	return this->Hash(buffer);*/
 	return "";
 }
 

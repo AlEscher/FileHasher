@@ -1,113 +1,88 @@
-#include <cstdint>
-#include <windows.h>
-#include <Wincrypt.h>
-
-constexpr auto BUFSIZE = 1024;
-constexpr auto MD5LEN = 16;
+#include <cassert>
 
 #include "MD5Hash.h"
 #include "../Utility/FileUtility.h"
 
+using namespace std;
 
-// As specified by https://docs.microsoft.com/en-us/windows/win32/seccrypto/example-c-program--creating-an-md-5-hash-from-file-content
+constexpr size_t CHUNK_SIZE_BYTES = 64U;
+constexpr size_t CHUNK_SIZE_BITS = 512U;
 
-std::string CalculateFileHash(const wchar_t* filePath)
+std::string MD5Hasher::Hash(const size_t fileSize)
 {
-	uint32_t dwStatus = 0;
-	bool bResult = false;
-	HCRYPTPROV hProv = 0;
-	HCRYPTHASH hHash = 0;
-	HANDLE hFile = NULL;
-	BYTE rgbFile[BUFSIZE];
-	DWORD cbRead = 0;
-	BYTE rgbHash[MD5LEN];
-	DWORD cbHash = 0;
-	CHAR rgbDigits[] = "0123456789abcdef";
-
-	hFile = CreateFile(filePath,
-		GENERIC_READ,
-		FILE_SHARE_READ,
-		NULL,
-		OPEN_EXISTING,
-		FILE_FLAG_SEQUENTIAL_SCAN,
-		NULL);
-
-	if (INVALID_HANDLE_VALUE == hFile)
+	size_t paddingSize = 0U;
+	uint8_t* padding = this->PreProcess(fileSize, paddingSize);
+	if (!padding)
 	{
 		return "";
 	}
 
-	// Get handle to the crypto provider
-	if (!CryptAcquireContextA(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
+	m_nBytesProcessed = 0U;
+	if (!this->Process(padding, paddingSize))
 	{
-		CloseHandle(hFile);
+		delete[] padding;
 		return "";
 	}
 
-	if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash))
+	delete[] padding;
+
+	string hash = this->Digest();
+	this->ResetPrimes();
+
+	return hash;
+}
+
+uint8_t* MD5Hasher::PreProcess(const size_t fileSize, size_t& paddingSize)
+{
+	uint64_t L = fileSize * 8UL;
+	uint64_t restBits = L % CHUNK_SIZE_BITS;
+	uint64_t minExtraBitsNeeded = CHUNK_SIZE_BITS - restBits;
+	// How many 0-bits we need for padding, should be at least 7
+	uint64_t numKBits = (minExtraBitsNeeded - 1 - 64) % CHUNK_SIZE_BITS;
+
+	// Pad with 1 '1' bit, k 0 bits, and the length as a 64-bit integer
+	paddingSize = (1 + 64 + numKBits) / 8UL;
+	uint8_t* buffer = new uint8_t[paddingSize];
+	if (!buffer)
 	{
-		CloseHandle(hFile);
-		CryptReleaseContext(hProv, 0);
-		return "";
+		return nullptr;
 	}
 
-	while (bResult = ReadFile(hFile, rgbFile, BUFSIZE, &cbRead, NULL))
+	// Fill out the padding
+	// Set the first padded bit to 1, and also already the first 7 0-bits
+	size_t padCounter = 0;
+	buffer[padCounter++] = 0b10000000;
+	numKBits -= 7;
+	for (; padCounter <= numKBits / 8; padCounter++)
 	{
-		if (0 == cbRead)
-		{
-			break;
-		}
-
-		if (!CryptHashData(hHash, rgbFile, cbRead, 0))
-		{
-			CryptReleaseContext(hProv, 0);
-			CryptDestroyHash(hHash);
-			CloseHandle(hFile);
-			return "";
-		}
+		buffer[padCounter] = 0x00;
+	}
+	// append bit-length L as 64-bit big-endian integer
+	for (int c = (sizeof(L) - 1) * 8U; c >= 0; c -= 8)
+	{
+		// "Iterate" through L's bytes by shifting the current byte completely to the right (least significant)
+		// and discarding all higher (by casting to an unsigned byte)
+		buffer[padCounter++] = static_cast<uint8_t>(L >> c);
 	}
 
-	if (!bResult)
-	{
-		CryptReleaseContext(hProv, 0);
-		CryptDestroyHash(hHash);
-		CloseHandle(hFile);
-		return "";
-	}
+	// Our message together with the padding should now be a multiple of 64 bytes (512 bits)
+	assert((fileSize + paddingSize) % CHUNK_SIZE_BYTES == 0);
 
-	cbHash = MD5LEN;
-	char* md5Hash = nullptr;
-	if (CryptGetHashParam(hHash, HP_HASHVAL, rgbHash, &cbHash, 0))
-	{
-		// +1 for Null termination
-		md5Hash = new char[(unsigned long long)cbHash * 2 * sizeof(char) + 1];
-		if (!md5Hash)
-		{
-			CryptDestroyHash(hHash);
-			CryptReleaseContext(hProv, 0);
-			CloseHandle(hFile);
-			return "";
-		}
+	return buffer;
+}
 
-		// Create our hash
-		for (DWORD i = 0; i < cbHash; i++)
-		{
-			md5Hash[i * 2] = rgbDigits[rgbHash[i] >> 4];
-			md5Hash[i * 2 + 1] = rgbDigits[rgbHash[i] & 0xf];
-		}
-		// Null terminate
-		md5Hash[cbHash * 2] = 0;
-	}
-	else
-	{
-		// Nothing todo, md5Hash will be NULL which will be handled by caller
-	}
+bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
+{
+	return false;
+}
 
-	CryptDestroyHash(hHash);
-	CryptReleaseContext(hProv, 0);
-	CloseHandle(hFile);
+void MD5Hasher::ResetPrimes()
+{
+}
 
-	return (md5Hash != nullptr ? std::string(md5Hash) : "");
+std::string MD5Hasher::Digest()
+{
+	return std::string();
 }
 
 std::string MD5Hasher::CalculateStringHash(const std::string& input)

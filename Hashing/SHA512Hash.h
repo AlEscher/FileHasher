@@ -32,7 +32,7 @@ private:
               0x113f9804bef90daeULL, 0x1b710b35131c471bULL, 0x28db77f523047d84ULL, 0x32caab7b40c72493ULL, 0x3c9ebe0a15c9bebcULL,
               0x431d67c49c100d4cULL, 0x4cc5d4becb3e42b6ULL, 0x597f299cfc657e2aULL, 0x5fcb6fab3ad6faecULL, 0x6c44198c4a475817ULL };
 
-    std::string Hash(const size_t fileSize);
+    std::string Hash(const size_t fileSize) override;
     // Pad the message so the length in bits is a multiple of 512, returns the padding
     uint8_t* PreProcess(const size_t fileSize, size_t& paddingSize);
     // Process and hash the message
@@ -43,6 +43,13 @@ private:
     std::string Digest();
 public:
     std::string CalculateStringHash(const std::string& input);
+
+    virtual void Reset() override
+    {
+        m_nBytesProcessed = 0U;
+        m_pFileUtil->Reset();
+        this->ResetPrimes();
+    }
 
     inline std::string GetName() const
     {

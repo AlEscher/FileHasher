@@ -17,7 +17,6 @@ protected:
 public:
 	// Calculate file hash
 	std::string CalculateFileHash(const wchar_t* filePath);
-	std::string CalculateFileHash(const char* filePath);
 	// Calculate file hash and set fileSize (not really needed, mostly for debugging purposes)
 	std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize);
 	// Calculate hash for given string
@@ -30,7 +29,7 @@ public:
 		m_nBytesProcessed = 0U;
 		m_pFileUtil->Reset();
 	}
-	virtual size_t GetBytesProcessed() const
+	inline size_t GetBytesProcessed() const
 	{
 		return m_nBytesProcessed;
 	}

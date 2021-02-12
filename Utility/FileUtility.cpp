@@ -23,30 +23,16 @@ FileUtil::~FileUtil()
 	}
 }
 
-bool FileUtil::OpenFileStreamA(const char* filePath)
+bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
 {
 	Reset();
-	m_bIsOpen = fopen_s(&m_pInput, filePath, "rb") == 0;
+	m_bIsOpen = _wfopen_s(&m_pInput, filePath, L"rb") == 0;
 	if (m_bIsOpen)
 	{
-		m_nTotalFileSize = FileUtil::GetFileSizeA(filePath);
+		m_nTotalFileSize = FileUtil::GetFileSizeW(filePath);
 	}
 
 	return m_bIsOpen;
-}
-
-bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
-{
-	size_t len = wcsnlen_s(filePath, 1024U);
-	size_t ret = 0U;
-	bool success = false;
-	char* path = new char[len + 1];
-
-	wcstombs_s(&ret, path, len + 1, filePath, len);
-	success = FileUtil::OpenFileStreamA(path);
-	delete[] path;
-
-	return success;
 }
 
 bool FileUtil::CanRead() const

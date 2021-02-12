@@ -23,8 +23,6 @@ public:
 	FileUtil(size_t blockSize);
 	~FileUtil();
 	// Opens the specified file stream in binary mode, and keeps it open until this object is deleted
-	bool OpenFileStreamA(const char* filePath);
-	// Wrapper for OpenFileStreamA
 	bool OpenFileStreamW(const wchar_t* filePath);
 	// Return whether we can read anymore from our input stream,
 	// checks if the file stream is open and available, and that we didn't reach EOF

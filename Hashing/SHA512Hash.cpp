@@ -36,6 +36,7 @@ std::string SHA512Hasher::Hash(const size_t fileSize)
 	m_nBytesProcessed = 0U;
 	if (!this->Process(padding, paddingSize))
 	{
+		delete[] padding;
 		return "";
 	}
 
