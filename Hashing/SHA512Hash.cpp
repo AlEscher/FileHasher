@@ -1,4 +1,3 @@
-#include <cassert>
 #include <sstream>
 #include <iomanip>
 
@@ -21,72 +20,7 @@ using namespace std;
 #define maj(a, b, c) (XOR(XOR((a & b), (a & c)), (b & c)))
 
 constexpr size_t ENTRY_MESSAGE_SIZE = 80U;
-constexpr size_t CHUNK_SIZE_BYTES = 128U;
-constexpr size_t CHUNK_SIZE_BITS = 1024U;
 
-std::string SHA512Hasher::Hash(const size_t fileSize)
-{
-	size_t paddingSize = 0U;
-	uint8_t* padding = this->PreProcess(fileSize, paddingSize);
-	if (!padding)
-	{
-		return "";
-	}
-
-	m_nBytesProcessed = 0U;
-	if (!this->Process(padding, paddingSize))
-	{
-		delete[] padding;
-		return "";
-	}
-
-	delete[] padding;
-
-	string hash = this->Digest();
-	this->ResetPrimes();
-
-	return hash;
-}
-
-uint8_t* SHA512Hasher::PreProcess(const size_t fileSize, size_t& paddingSize)
-{
-	uint64_t L = fileSize * 8UL;
-	uint64_t restBits = L % CHUNK_SIZE_BITS;
-	uint64_t minExtraBitsNeeded = CHUNK_SIZE_BITS - restBits;
-	// How many 0-bits we need for padding, should be at least 7
-	uint64_t numKBits = (minExtraBitsNeeded - 1 - 128) % CHUNK_SIZE_BITS;
-
-	// Pad with 1 '1' bit, k 0 bits, and the length as a 128-bit integer
-	paddingSize = (1 + 128 + numKBits) / 8UL;
-	uint8_t* buffer = new uint8_t[paddingSize];
-	if (!buffer)
-	{
-		return nullptr;
-	}
-
-	// Fill out the padding
-	// Set the first padded bit to 1, and also already the first 7 0-bits
-	size_t padCounter = 0;
-	buffer[padCounter++] = 0b10000000;
-	numKBits -= 7;
-	// Extra 8 bytes since for SHA512 L must be 128 bits, upper 64 bits will always be 0
-	for (; padCounter <= numKBits / 8 + 8; padCounter++)
-	{
-		buffer[padCounter] = 0x00;
-	}
-	// append bit-length L creating a 128-bit big-endian integer
-	for (int c = (sizeof(L) - 1) * 8U; c >= 0; c -= 8)
-	{
-		// "Iterate" through L's bytes by shifting the current byte completely to the right (least significant)
-		// and discarding all higher (by casting to an unsigned byte)
-		buffer[padCounter++] = static_cast<uint8_t>(L >> c);
-	}
-
-	// Our message together with the padding should now be a multiple of 128 bytes (1024 bits)
-	assert((fileSize + paddingSize) % CHUNK_SIZE_BYTES == 0);
-
-	return buffer;
-}
 
 bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 {
@@ -118,19 +52,19 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 				w[i] = w[i - 16] + s0(w[i - 15]) + w[i - 7] + s1(w[i - 2]);
 			}
 
-			uint64_t a = hPrime[0], b = hPrime[1], c = hPrime[2], d = hPrime[3], e = hPrime[4], f = hPrime[5], g = hPrime[6], h = hPrime[7];
+			uint64_t a = m_Primes[0], b = m_Primes[1], c = m_Primes[2], d = m_Primes[3], e = m_Primes[4], f = m_Primes[5], g = m_Primes[6], h = m_Primes[7];
 
 			// Compression
 			for (size_t i = 0; i < ENTRY_MESSAGE_SIZE; i++)
 			{
-				uint64_t temp1 = h + S1(e) + ch(e, f, g) + k[i] + w[i];
+				uint64_t temp1 = h + S1(e) + ch(e, f, g) + m_Constants[i] + w[i];
 				uint64_t temp2 = S0(a) + maj(a, b, c);
 
 				h = g; g = f; f = e; e = d + temp1; d = c; c = b; b = a; a = temp1 + temp2;
 			}
 
-			hPrime[0] += a; hPrime[1] += b; hPrime[2] += c; hPrime[3] += d;
-			hPrime[4] += e; hPrime[5] += f; hPrime[6] += g; hPrime[7] += h;
+			m_Primes[0] += a; m_Primes[1] += b; m_Primes[2] += c; m_Primes[3] += d;
+			m_Primes[4] += e; m_Primes[5] += f; m_Primes[6] += g; m_Primes[7] += h;
 		}
 
 		delete[] buffer;
@@ -141,23 +75,23 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 
 void SHA512Hasher::ResetPrimes()
 {
-	hPrime[0] = 0x6a09e667f3bcc908ULL;
-	hPrime[1] = 0xbb67ae8584caa73bULL;
-	hPrime[2] = 0x3c6ef372fe94f82bULL;
-	hPrime[3] = 0xa54ff53a5f1d36f1ULL;
-	hPrime[4] = 0x510e527fade682d1ULL;
-	hPrime[5] = 0x9b05688c2b3e6c1fULL;
-	hPrime[6] = 0x1f83d9abfb41bd6bULL;
-	hPrime[7] = 0x5be0cd19137e2179ULL;
+	m_Primes[0] = 0x6a09e667f3bcc908ULL;
+	m_Primes[1] = 0xbb67ae8584caa73bULL;
+	m_Primes[2] = 0x3c6ef372fe94f82bULL;
+	m_Primes[3] = 0xa54ff53a5f1d36f1ULL;
+	m_Primes[4] = 0x510e527fade682d1ULL;
+	m_Primes[5] = 0x9b05688c2b3e6c1fULL;
+	m_Primes[6] = 0x1f83d9abfb41bd6bULL;
+	m_Primes[7] = 0x5be0cd19137e2179ULL;
 }
 
-string SHA512Hasher::Digest()
+string SHA512Hasher::Digest() const
 {
 	stringstream ss;
 	for (size_t i = 0; i < 8; i++)
 	{
 		// Keep leading 0s
-		ss << hex << setfill('0') << setw(16) << hPrime[i];
+		ss << hex << setfill('0') << setw(16) << m_Primes[i];
 	}
 
 	return ss.str();

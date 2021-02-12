@@ -6,15 +6,12 @@
 class MD5Hasher : public HashingAlgorithm
 {
 private:
-    std::string Hash(const size_t fileSize) override;
-    // Pad the message so the length in bits is a multiple of 512, returns the padding
-    uint8_t* PreProcess(const size_t fileSize, size_t& paddingSize);
     // Process and hash the message
-    bool Process(const uint8_t* padding, const size_t paddingSize);
+    bool Process(const uint8_t* padding, const size_t paddingSize) override;
     // Resets the prime constants
-    void ResetPrimes();
+    void ResetPrimes() override;
     // Digests the processed message and returns our hash
-    std::string Digest();
+    std::string Digest() const override;
 public:
 	std::string CalculateStringHash(const std::string& input);
 
@@ -22,4 +19,11 @@ public:
 	{
 		return "MD5";
 	}
+
+    MD5Hasher()
+    {
+        this->CHUNK_SIZE_BITS = 512U;
+        this->CHUNK_SIZE_BYTES = 64U;
+        this->MESSAGE_LENGTH_SIZE = 64U;
+    }
 };

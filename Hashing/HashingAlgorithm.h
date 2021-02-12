@@ -8,10 +8,23 @@
 class HashingAlgorithm
 {
 private:
-	virtual std::string Hash(const size_t fileSize) = 0;
+	// Start the hashing process
+	std::string Hash(const size_t fileSize);
+	// Pad the message so the length in bits is a multiple of chunk size, returns the padding
+	virtual uint8_t* PreProcess(const size_t fileSize, size_t& paddingSize);
+	// Iterate through the message in blocks and process each block
+	virtual bool Process(const uint8_t* padding, const size_t paddingSize) = 0;
+	// Resets the prime numbers to their initial values
+	virtual void ResetPrimes() = 0;
+	// Digests the processed message and returns our hash
+	virtual std::string Digest() const = 0;
 protected:
 	FileUtil* m_pFileUtil;
 	size_t m_nBytesProcessed = 0U;
+	size_t CHUNK_SIZE_BYTES = 0U;
+	size_t CHUNK_SIZE_BITS = 0U;
+	// The size of the message length to be appended in padding, in bits
+	size_t MESSAGE_LENGTH_SIZE = 0U;
 
 	uint8_t* GetDataBlock(const size_t paddingSize, const uint8_t* padding, size_t& blockSize);
 public:

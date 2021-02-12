@@ -6,7 +6,7 @@ class SHA512Hasher : public HashingAlgorithm
 {
     // Constants for SHA512 as specified by https://en.wikipedia.org/wiki/SHA-2#Pseudocode
 private:
-    uint64_t hPrime[8] = { 0x6a09e667f3bcc908ULL,
+    uint64_t m_Primes[8] = { 0x6a09e667f3bcc908ULL,
                            0xbb67ae8584caa73bULL,
                            0x3c6ef372fe94f82bULL,
                            0xa54ff53a5f1d36f1ULL,
@@ -15,7 +15,7 @@ private:
                            0x1f83d9abfb41bd6bULL,
                            0x5be0cd19137e2179ULL };
 
-    const uint64_t k[80] = { 0x428a2f98d728ae22ULL, 0x7137449123ef65cdULL, 0xb5c0fbcfec4d3b2fULL, 0xe9b5dba58189dbbcULL, 0x3956c25bf348b538ULL,
+    const uint64_t m_Constants[80] = { 0x428a2f98d728ae22ULL, 0x7137449123ef65cdULL, 0xb5c0fbcfec4d3b2fULL, 0xe9b5dba58189dbbcULL, 0x3956c25bf348b538ULL,
               0x59f111f1b605d019ULL, 0x923f82a4af194f9bULL, 0xab1c5ed5da6d8118ULL, 0xd807aa98a3030242ULL, 0x12835b0145706fbeULL,
               0x243185be4ee4b28cULL, 0x550c7dc3d5ffb4e2ULL, 0x72be5d74f27b896fULL, 0x80deb1fe3b1696b1ULL, 0x9bdc06a725c71235ULL,
               0xc19bf174cf692694ULL, 0xe49b69c19ef14ad2ULL, 0xefbe4786384f25e3ULL, 0x0fc19dc68b8cd5b5ULL, 0x240ca1cc77ac9c65ULL,
@@ -32,15 +32,12 @@ private:
               0x113f9804bef90daeULL, 0x1b710b35131c471bULL, 0x28db77f523047d84ULL, 0x32caab7b40c72493ULL, 0x3c9ebe0a15c9bebcULL,
               0x431d67c49c100d4cULL, 0x4cc5d4becb3e42b6ULL, 0x597f299cfc657e2aULL, 0x5fcb6fab3ad6faecULL, 0x6c44198c4a475817ULL };
 
-    std::string Hash(const size_t fileSize) override;
-    // Pad the message so the length in bits is a multiple of 512, returns the padding
-    uint8_t* PreProcess(const size_t fileSize, size_t& paddingSize);
     // Process and hash the message
-    bool Process(const uint8_t* padding, const size_t paddingSize);
+    bool Process(const uint8_t* padding, const size_t paddingSize) override;
     // Resets the prime constants
-    void ResetPrimes();
+    void ResetPrimes() override;
     // Digests the processed message and returns our hash
-    std::string Digest();
+    std::string Digest() const override;
 public:
     std::string CalculateStringHash(const std::string& input);
 
@@ -54,6 +51,13 @@ public:
     inline std::string GetName() const
     {
         return "SHA512";
+    }
+
+    SHA512Hasher()
+    {
+        this->CHUNK_SIZE_BITS = 1024U;
+        this->CHUNK_SIZE_BYTES = 128U;
+        this->MESSAGE_LENGTH_SIZE = 128U;
     }
     ~SHA512Hasher();
 };
