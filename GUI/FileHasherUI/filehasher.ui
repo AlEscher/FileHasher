@@ -183,7 +183,7 @@
      </widget>
      <widget class="QCheckBox" name="md5CB">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -200,7 +200,7 @@
        <string>MD5</string>
       </property>
       <property name="checkable">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QPushButton" name="hashButton">

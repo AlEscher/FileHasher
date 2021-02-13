@@ -3,6 +3,7 @@
 #include "FileHasherDelegate.h"
 #include "../../Hashing/SHA256Hash.h"
 #include "../../Hashing/SHA512Hash.h"
+#include "../../Hashing/MD5Hash.h"
 #include "../../Utility/FileUtility.h"
 
 #include <QFileDialog>
@@ -89,6 +90,17 @@ size_t GetSizeFromString(QString string)
     }
 }
 
+void AddToOutput(QString entry, QListWidget* output)
+{
+    // Get current time
+    QTime time = QTime::currentTime();
+    QString timeStr = time.toString("hh:mm:ss");
+
+    QListWidgetItem *newResult = new QListWidgetItem;
+    newResult->setText("[" + timeStr + "] " + entry);
+    output->addItem(newResult);
+}
+
 void FileHasher::on_addFileButton_clicked()
 {
     QString filePath = QFileDialog::getOpenFileName(this, "Select a file to hash");
@@ -133,6 +145,10 @@ void FileHasher::on_hashButton_clicked()
     if (ui->sha512CB->isChecked())
     {
         hashAlgoVec.push_back(new SHA512Hasher());
+    }
+    if (ui->md5CB->isChecked())
+    {
+        hashAlgoVec.push_back(new MD5Hasher());
     }
 
     if (hashAlgoVec.empty())
@@ -257,15 +273,10 @@ void Controller::HandleResults(const QStringList& result)
         return;
     }
 
-    // Get current time
-    QTime time = QTime::currentTime();
-    QString timeStr = time.toString("hh:mm:ss");
-
     // We can only send events to the GUI in the main thread,
     // so we need to do this here instead of in the Worker
-    QListWidgetItem *newResult = new QListWidgetItem;
-    newResult->setText("[" + timeStr + "] " + result[0] + ": " + result[1]);
-    ui->outputList->addItem(newResult);
+    QString resultText = result[0] + ": " + result[1];
+    AddToOutput(resultText, ui->outputList);
     AddToCache(result[1]);
 
     int value = ui->totalProgressBar->value() + (int)GetSizeFromString(result[2]);
@@ -324,9 +335,9 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
     // Parameters contains one QStringList for each file, containing its name, path and size
     size_t totalFiles = parameters.size();
 
-    for (HashingAlgorithm* hashAlgorithm : hashAlgorithms)
+    for (size_t row = 0; row < totalFiles; row++)
     {
-        for (size_t row = 0; row < totalFiles; row++)
+        for (HashingAlgorithm* hashAlgorithm : hashAlgorithms)
         {
             const QStringList& currentParam = parameters[row];
             // Set the progress bar for this file

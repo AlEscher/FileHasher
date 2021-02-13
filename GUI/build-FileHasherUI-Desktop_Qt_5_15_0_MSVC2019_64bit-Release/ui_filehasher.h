@@ -124,10 +124,10 @@ public:
         sha256CB->setCursor(QCursor(Qt::PointingHandCursor));
         md5CB = new QCheckBox(hashAlgoTab);
         md5CB->setObjectName(QString::fromUtf8("md5CB"));
-        md5CB->setEnabled(false);
+        md5CB->setEnabled(true);
         md5CB->setGeometry(QRect(10, 50, 101, 19));
         md5CB->setCursor(QCursor(Qt::ArrowCursor));
-        md5CB->setCheckable(false);
+        md5CB->setCheckable(true);
         hashButton = new QPushButton(hashAlgoTab);
         hashButton->setObjectName(QString::fromUtf8("hashButton"));
         hashButton->setGeometry(QRect(10, 250, 201, 21));
