@@ -29,7 +29,7 @@ These measurements were done with the release version of the Console file, the G
 
 ## Sources:
 The only sources used are:
-- [SHA256](https://en.wikipedia.org/wiki/SHA-2)
+- [SHA2](https://en.wikipedia.org/wiki/SHA-2)
 - [MD5](https://en.wikipedia.org/wiki/MD5)
 - Sources included in code comments
 
