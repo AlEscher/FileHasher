@@ -3,10 +3,24 @@
 
 namespace BitUtil
 {
-	// Convert a little endian 64-bit integer to big endian
-	uint64_t SwapEndian64(uint64_t in);
-	uint32_t rotr32(uint32_t n, int c);
-	uint64_t rotr64(uint64_t n, int c);
+	inline uint32_t SwapEndian32(uint32_t in)
+	{
+		return _byteswap_ulong(in);
+	}
+	inline uint64_t SwapEndian64(uint64_t in)
+	{
+		return _byteswap_uint64(in);
+	}
+
+	inline uint32_t rotr32(uint32_t n, int c)
+	{
+		return _rotr(n, c);
+	}
+
+	inline uint64_t rotr64(uint64_t n, int c)
+	{
+		return _rotr64(n, c);
+	}
 	// Append one byte after the other and put them into an element of type T
 	template<class T>
 	T AppendBytes(const uint8_t* bytes)

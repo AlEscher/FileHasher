@@ -59,6 +59,10 @@ int HandleCommandLineInput(int argc, char** argv)
     {
         algorithm = new SHA512Hasher();
     }
+    else if (arguments[1] == "MD5")
+    {
+        algorithm = new MD5Hasher();
+    }
     else
     {
         if (verbose)
@@ -96,8 +100,9 @@ int main(int argc, char** argv)
 {
     HashingAlgorithm* sha256Hasher = new SHA256Hasher();
     HashingAlgorithm* sha512Hasher = new SHA512Hasher();
+    HashingAlgorithm* md5Hasher = new MD5Hasher();
     string input;
-    wstring path = L"C:/Dev/Cpp/FileHasher/test";
+    wstring path = L"C:/Dev/Cpp/FileHasher/test2";
 
     if (argc > 1)
     {
@@ -181,11 +186,11 @@ int main(int argc, char** argv)
             cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms " << endl;
             cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " micros" << endl;
 
-            /*start = chrono::high_resolution_clock::now();
+            start = chrono::high_resolution_clock::now();
             string md5Hash = md5Hasher->CalculateFileHash(path.c_str());
             end = chrono::high_resolution_clock::now();
             cout << "File MD5:    " << md5Hash << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;*/
+            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
         }
         else
         {
@@ -199,4 +204,5 @@ int main(int argc, char** argv)
 
     delete sha256Hasher;
     delete sha512Hasher;
+    delete md5Hasher;
 }

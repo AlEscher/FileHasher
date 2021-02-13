@@ -25,6 +25,7 @@ protected:
 	size_t CHUNK_SIZE_BITS = 0U;
 	// The size of the message length to be appended in padding, in bits
 	size_t MESSAGE_LENGTH_SIZE = 0U;
+	bool LITTLE_ENDIAN = false;
 
 	uint8_t* GetDataBlock(const size_t paddingSize, const uint8_t* padding, size_t& blockSize);
 public:

@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "./HashingAlgorithm.h"
+#include "../Utility/BitwiseUtility.h"
 
 using namespace std;
 
@@ -57,6 +58,10 @@ uint8_t* HashingAlgorithm::PreProcess(const size_t fileSize, size_t& paddingSize
 	for (; padCounter <= numKBits / 8 + extraPadding; padCounter++)
 	{
 		buffer[padCounter] = 0x00;
+	}
+	if (LITTLE_ENDIAN)
+	{
+		L = BitUtil::SwapEndian64(L);
 	}
 	// append bit-length L
 	for (int c = (sizeof(L) - 1) * 8U; c >= 0; c -= 8)
