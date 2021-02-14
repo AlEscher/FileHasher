@@ -102,7 +102,7 @@ int main(int argc, char** argv)
     HashingAlgorithm* sha512Hasher = new SHA512Hasher();
     HashingAlgorithm* md5Hasher = new MD5Hasher();
     string input;
-    wstring path = L"C:/Dev/Cpp/FileHasher/test";
+    wstring path = L"C:/Dev/Cpp/FileHasher/test2";
 
     if (argc > 1)
     {

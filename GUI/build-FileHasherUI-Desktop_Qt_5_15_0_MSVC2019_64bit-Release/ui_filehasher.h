@@ -126,7 +126,7 @@ public:
         md5CB->setObjectName(QString::fromUtf8("md5CB"));
         md5CB->setEnabled(true);
         md5CB->setGeometry(QRect(10, 50, 101, 19));
-        md5CB->setCursor(QCursor(Qt::ArrowCursor));
+        md5CB->setCursor(QCursor(Qt::PointingHandCursor));
         md5CB->setCheckable(true);
         hashButton = new QPushButton(hashAlgoTab);
         hashButton->setObjectName(QString::fromUtf8("hashButton"));

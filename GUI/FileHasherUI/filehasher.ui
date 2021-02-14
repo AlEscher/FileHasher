@@ -194,7 +194,7 @@
        </rect>
       </property>
       <property name="cursor">
-       <cursorShape>ArrowCursor</cursorShape>
+       <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="text">
        <string>MD5</string>
