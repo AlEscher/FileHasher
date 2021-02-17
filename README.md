@@ -3,7 +3,7 @@ Create and compare hashes of files and / or text.
 Generate the hashes of the files you want (e.g. .exe and .dll) and compare this hash to the one generated at runtime.  
 By doing so you can detect updates for any game / software without relying on strings or version numbers inside the file. This approach also never touches the file in memory, it only reads it from the disk.  
   
-[![Release](https://img.shields.io/github/v/release/AlEscher/FileHasher?color=light-green&include_prereleases&style=plastic)](https://github.com/AlEscher/FileHasher/releases/latest) [![GitHub](https://img.shields.io/github/license/AlEscher/FileHasher?color=cyan&style=plastic)](https://github.com/AlEscher/FileHasher/blob/master/LICENSE)
+![MSBuild](https://github.com/AlEscher/FileHasher/workflows/MSBuild/badge.svg) ![CodeQL](https://github.com/AlEscher/FileHasher/workflows/CodeQL/badge.svg)  [![Release](https://img.shields.io/github/v/release/AlEscher/FileHasher?color=light-green&include_prereleases&style=plastic)](https://github.com/AlEscher/FileHasher/releases/latest) [![GitHub](https://img.shields.io/github/license/AlEscher/FileHasher?color=cyan&style=plastic)](https://github.com/AlEscher/FileHasher/blob/master/LICENSE)
 
 ## Speed:  
 In order to know what to expect in terms of performance, I did some tests for SHA256 with a blocksize of 16777216 (2^24) Bytes. 
