@@ -202,6 +202,9 @@ int main(int argc, char** argv)
         }
     }
 
+    uint8_t* buffer = new uint8_t[42];
+    free(buffer);
+
     delete sha256Hasher;
     delete sha512Hasher;
     delete md5Hasher;
