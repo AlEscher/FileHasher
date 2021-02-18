@@ -173,8 +173,9 @@ void FileHasher::on_hashButton_clicked()
     int totalFiles = table->rowCount();
     if (totalFiles > 0)
     {
+        int progressBarMax = std::max((int)(m_nTotalFileSize * hashAlgoVec.size()), 1);
         // Set total-progress bar information
-        ui->totalProgressBar->setRange(0, (int)(m_nTotalFileSize * hashAlgoVec.size()));
+        ui->totalProgressBar->setRange(0, progressBarMax);
         ui->totalProgressBar->setValue(0);
         ui->totalProgressBar->setTextVisible(true);
         ui->totalProgressBar->setFormat("0%");
