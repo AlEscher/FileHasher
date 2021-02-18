@@ -160,6 +160,8 @@ public:
         outputList = new QListWidget(groupBox);
         outputList->setObjectName(QString::fromUtf8("outputList"));
         outputList->setGeometry(QRect(0, 30, 911, 261));
+        outputList->setContextMenuPolicy(Qt::CustomContextMenu);
+        outputList->setTabKeyNavigation(true);
         FileHasher->setCentralWidget(centralwidget);
 
         retranslateUi(FileHasher);

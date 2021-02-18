@@ -321,6 +321,12 @@
        <height>261</height>
       </rect>
      </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+     <property name="tabKeyNavigation">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
   </widget>

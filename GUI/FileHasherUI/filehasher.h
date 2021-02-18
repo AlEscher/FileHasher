@@ -32,6 +32,8 @@ private slots:
 
     void on_fileTable_customContextMenuRequested(const QPoint &pos);
 
+    void on_outputList_customContextMenuRequested(const QPoint &pos);
+
 public slots:
     void ClearOutputBox();
     void ExportOuputToClipboard();
@@ -45,6 +47,7 @@ private:
 
     void AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize);
     void PopulateToolButton();
+    void SetClipboardText(QString text);
 };
 
 class Worker : public QObject

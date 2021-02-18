@@ -90,6 +90,16 @@ size_t GetSizeFromString(QString string)
     }
 }
 
+void FileHasher::SetClipboardText(QString text)
+{
+    QClipboard* clipboard = QGuiApplication::clipboard();
+    if (clipboard)
+    {
+        clipboard->clear();
+        clipboard->setText(text, QClipboard::Clipboard);
+    }
+}
+
 void AddToOutput(QString entry, QListWidget* output)
 {
     // Get current time
@@ -215,6 +225,25 @@ void FileHasher::on_fileTable_customContextMenuRequested(const QPoint& pos)
     }
 }
 
+void FileHasher::on_outputList_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu(this);
+
+    QAction* copyCell = menu.addAction("Copy Hash");
+    QAction* selectedAction = menu.exec(ui->outputList->viewport()->mapToGlobal(pos));
+    if (selectedAction == copyCell && ui->outputList->count() > 0)
+    {
+        if (QListWidgetItem* selectedItem = ui->outputList->currentItem())
+        {
+            // Items are structured like so: TIMESTAMP FILENAME HASHALGO: HASH
+            QString itemContent = selectedItem->text();
+            QStringList splitStrings = itemContent.split(' ');
+            QString hash = splitStrings.size() > 3 ? splitStrings[3] : "";
+            SetClipboardText(hash);
+        }
+    }
+}
+
 void FileHasher::ClearOutputBox()
 {
     ui->outputList->clear();
@@ -224,13 +253,7 @@ void FileHasher::ClearOutputBox()
 void FileHasher::ExportOuputToClipboard()
 {
     const QString hashes = "{ " + controller->GetCacheContents() + " }";
-
-    QClipboard* clipboard = QGuiApplication::clipboard();
-    if (clipboard)
-    {
-        clipboard->clear();
-        clipboard->setText(hashes, QClipboard::Clipboard);
-    }
+    SetClipboardText(hashes);
 }
 
 // ========================= Controller / Worker class =========================
