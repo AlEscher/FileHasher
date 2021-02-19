@@ -239,7 +239,9 @@ void FileHasher::on_outputList_customContextMenuRequested(const QPoint &pos)
             // Items are structured like so: TIMESTAMP FILENAME HASHALGO: HASH
             QString itemContent = selectedItem->text();
             QStringList splitStrings = itemContent.split(' ');
-            QString hash = splitStrings.size() > 3 ? splitStrings[3] : "";
+            size_t size = splitStrings.size();
+            // Hash will always be the last element
+            QString hash = size > 0 ? splitStrings[size - 1] : "";
             SetClipboardText(hash);
         }
     }
