@@ -71,6 +71,7 @@ class Worker : public QObject
         void resultReady(const QStringList &result);
         void UpdateFileStatus(const size_t min, const size_t max, const size_t value);
         void WaitForMonitor();
+        void ReportError(const QStringList &data);
 };
 
 class Controller : public QObject
@@ -100,6 +101,7 @@ class Controller : public QObject
         // most importantly this function will be executed in our main thread, meaning we can do send events
         void HandleResults(const QStringList &);
         void UpdateFileProgress(const size_t min, const size_t max, const size_t value);
+        void HandleError(const QStringList &data);
         inline void SetHashingStatus(const bool status)
         {
             m_bHashing = status;

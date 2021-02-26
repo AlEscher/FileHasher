@@ -13,6 +13,8 @@ private:
 public:
     // Get the size in bytes of the specified file
     size_t GetFileSize(QString filePath);
+    // Check if the specified element exists and is accessible
+    bool CheckFilePath(QString filePath);
     QString CreateHash(QString filePath, HashingAlgorithm* hashAlgo);
     inline void ResetHashingAlgorithm(HashingAlgorithm* hashAlgo)
     {

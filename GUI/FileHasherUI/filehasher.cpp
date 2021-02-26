@@ -270,6 +270,8 @@ Controller::Controller(Ui::FileHasher* ui, FileHasherDelegate* delegate)
     connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
     connect(this, &Controller::operate, worker, &Worker::DoWork);
     connect(worker, &Worker::resultReady, this, &Controller::HandleResults);
+    // Allows us to send an error message to the Controller instead of a result
+    connect(worker, &Worker::ReportError, this, &Controller::HandleError);
     connect(worker, &Worker::UpdateFileStatus, this, &Controller::UpdateFileProgress);
     // Worker thread will stay active and accept input until we close the application
     workerThread.start(QThread::HighPriority);
@@ -350,6 +352,15 @@ QString Controller::GetCacheContents()
     return hashes;
 }
 
+void Controller::HandleError(const QStringList& data)
+{
+    if (data.size() >= 2)
+    {
+        QString resultText = data[0] + ": " + data[1];
+        AddToOutput(resultText, ui->outputList);
+    }
+}
+
 Worker::Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate, Controller* controller)
 {
     this->ui = ui;
@@ -366,9 +377,19 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
 
     for (size_t row = 0; row < totalFiles; row++)
     {
+        const QStringList& currentParam = parameters[row];
+
+        if (!delegate->CheckFilePath(currentParam[1]))
+        {
+            QStringList errorData;
+            errorData.append(currentParam[0] + " " + "N/A");
+            errorData.append("ERROR: Check that the file exists / is accessible!");
+            emit ReportError(errorData);
+            continue;
+        }
+
         for (HashingAlgorithm* hashAlgorithm : hashAlgorithms)
         {
-            const QStringList& currentParam = parameters[row];
             // Set the progress bar for this file
             size_t currentFileSize = delegate->GetFileSize(currentParam[1]);
 
