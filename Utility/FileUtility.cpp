@@ -29,7 +29,7 @@ bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
 	m_bIsOpen = _wfopen_s(&m_pInput, filePath, L"rb") == 0;
 	if (m_bIsOpen)
 	{
-		m_nTotalFileSize = FileUtil::GetFileSizeW(filePath);
+		m_nTotalFileSize = FileUtil::GetFileSizeW(filePath).value_or(0U);
 	}
 
 	return m_bIsOpen;
@@ -38,6 +38,11 @@ bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
 bool FileUtil::CanRead() const
 {
 	return (m_bIsOpen && (ferror(m_pInput) == 0) && (BytesRemaining() > 0));
+}
+
+bool FileUtil::IsOpen() const
+{
+	return m_bIsOpen && ferror(m_pInput) == 0;
 }
 
 uint8_t* FileUtil::GetNextBlock()
@@ -91,30 +96,26 @@ void FileUtil::Reset()
 	}
 }
 
-size_t FileUtil::GetFileSizeW(const wchar_t* filePath)
+optional<size_t> FileUtil::GetFileSizeW(const wchar_t* filePath)
 {
-	size_t size = 0;
 	try
 	{
-		size = filesystem::file_size(filePath);
+		return optional<size_t>{filesystem::file_size(filePath)};
 	}
-	catch (filesystem::filesystem_error& e)
+	catch (filesystem::filesystem_error)
 	{
-		const char* error = e.what();
+		return nullopt;
 	}
-
-	return size;
 }
 
-size_t FileUtil::GetFileSizeA(const char* filePath)
+optional<size_t> FileUtil::GetFileSizeA(const char* filePath)
 {
 	size_t len = strnlen_s(filePath, 1024U) + 1;
-	size_t fileSize = 0U;
 	size_t ret = 0U;
 	wchar_t* widePath = new wchar_t[len];
 
 	mbstowcs_s(&ret, widePath, len, filePath, len - 1);
-	fileSize = FileUtil::GetFileSizeW(widePath);
+	optional<size_t> fileSize = FileUtil::GetFileSizeW(widePath);
 	delete[] widePath;
 
 	return fileSize;
@@ -125,8 +126,8 @@ vector<uint8_t> FileUtil::ReadFileContent(const wchar_t* filePath, size_t& fileS
 	vector<uint8_t> bufferVec;
 	fileSize = 0;
 
-	uintmax_t size = FileUtil::GetFileSizeW(filePath);
-	if (size == 0)
+	optional<size_t> size = FileUtil::GetFileSizeW(filePath);
+	if (!size.has_value())
 	{
 		return bufferVec;
 	}
@@ -140,6 +141,6 @@ vector<uint8_t> FileUtil::ReadFileContent(const wchar_t* filePath, size_t& fileS
 	bufferVec = vector<uint8_t>((istreambuf_iterator<char>(input)), istreambuf_iterator<char>());
 	input.close();
 
-	fileSize = size;
+	fileSize = size.value();
 	return bufferVec;
 }

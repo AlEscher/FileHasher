@@ -395,9 +395,13 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
 
             // Reset the HashAlgorithm's state before starting the displayWorker
             delegate->ResetHashingAlgorithm(hashAlgorithm);
-            emit UpdateFileStatus(0U, currentFileSize, 0U);
-            // Tell the display worker to start monitoring the progress of this hash
-            emit controller->StartMonitoring(hashAlgorithm, currentFileSize);
+            // No need to monitor empty files
+            if (currentFileSize > 0)
+            {
+                emit UpdateFileStatus(0U, currentFileSize, 0U);
+                // Tell the display worker to start monitoring the progress of this hash
+                emit controller->StartMonitoring(hashAlgorithm, currentFileSize);
+            }
 
             QString hash = delegate->CreateHash(currentParam[1], hashAlgorithm);
 

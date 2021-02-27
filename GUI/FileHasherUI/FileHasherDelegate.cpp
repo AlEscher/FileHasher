@@ -4,7 +4,7 @@
 
 size_t FileHasherDelegate::GetFileSize(QString filePath)
 {
-    return FileUtil::GetFileSizeW(reinterpret_cast<const wchar_t*>(filePath.unicode()));
+    return FileUtil::GetFileSizeW(reinterpret_cast<const wchar_t*>(filePath.unicode())).value_or(0U);
 }
 
 QString FileHasherDelegate::CreateHash(QString filePath, HashingAlgorithm *hashAlgo)

@@ -1,6 +1,7 @@
 #include <sstream>
 #include <iomanip>
 #include <cassert>
+#include <optional>
 
 #include "./HashingAlgorithm.h"
 #include "../Utility/BitwiseUtility.h"
@@ -114,32 +115,30 @@ uint8_t* HashingAlgorithm::GetDataBlock(const size_t paddingSize, const uint8_t*
 
 string HashingAlgorithm::CalculateFileHash(const wchar_t* filePath)
 {
-	size_t fileSize = 0;
-	fileSize = FileUtil::GetFileSizeW(filePath);
-	if (fileSize == 0)
+	optional<size_t> fileSize = FileUtil::GetFileSizeW(filePath);
+	if (!fileSize.has_value())
 	{
 		return "";
 	}
 
-	if (!m_pFileUtil->OpenFileStreamW(filePath) || !m_pFileUtil->CanRead())
+	if (!m_pFileUtil->OpenFileStreamW(filePath) || !m_pFileUtil->IsOpen())
 	{
 		return "";
 	}
 
-	string hash = Hash(fileSize);
+	string hash = Hash(fileSize.value());
 	m_pFileUtil->Reset();
 	return hash;
 }
 
 string HashingAlgorithm::CalculateFileHash(const wchar_t* filePath, size_t& fileSize)
 {
-	size_t fileSizeLoc = fileSize = 0;
-	fileSizeLoc = FileUtil::GetFileSizeW(filePath);
-	if (fileSizeLoc == 0)
+	optional<size_t> fileSizeLoc = FileUtil::GetFileSizeW(filePath);
+	if (!fileSizeLoc.has_value())
 	{
 		return "";
 	}
 
-	fileSize = fileSizeLoc;
+	fileSize = fileSizeLoc.value();
 	return CalculateFileHash(filePath);
 }

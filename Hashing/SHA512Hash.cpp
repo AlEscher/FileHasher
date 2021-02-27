@@ -24,7 +24,7 @@ constexpr size_t ENTRY_MESSAGE_SIZE = 80U;
 
 bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 {
-	while (m_pFileUtil->CanRead())
+	do
 	{
 		size_t currentBlockSize = 0U;
 		uint8_t* buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
@@ -68,7 +68,7 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 		}
 
 		delete[] buffer;
-	}
+	} while (m_pFileUtil->CanRead());
 
 	return true;
 }
