@@ -29,3 +29,24 @@ bool FileHasherDelegate::CheckFilePath(QString filePath)
 
     return true;
 }
+
+size_t FileHasherDelegate::GetSizeFromString(QString string)
+{
+    QStringList list = string.split(" ");
+    if (list.size() > 0)
+    {
+        return list.at(0).toUInt();
+    }
+    else
+    {
+        return 0U;
+    }
+}
+
+QString FileHasherDelegate::GetHashFromString(QString string)
+{
+    QStringList splitStrings = string.split(' ');
+    size_t size = splitStrings.size();
+    // Hash will always be the last element
+    return size > 0U ? splitStrings[size - 1U] : "";
+}
