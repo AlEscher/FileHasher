@@ -37,12 +37,12 @@ bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
 
 bool FileUtil::CanRead() const
 {
-	return (m_bIsOpen && (ferror(m_pInput) == 0) && (BytesRemaining() > 0));
+	return IsOpen() && (BytesRemaining() > 0);
 }
 
 bool FileUtil::IsOpen() const
 {
-	return m_bIsOpen && ferror(m_pInput) == 0;
+	return m_bIsOpen && (ferror(m_pInput) == 0);
 }
 
 uint8_t* FileUtil::GetNextBlock()

@@ -48,6 +48,7 @@ private:
     void AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize);
     void PopulateToolButton();
     void SetClipboardText(QString text);
+    QString GetClipboardText();
 };
 
 class Worker : public QObject

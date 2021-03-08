@@ -1053,7 +1053,8 @@ debug\FileHasherDelegate.obj: ..\FileHasherUI\FileHasherDelegate.cpp ..\FileHash
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Hashing\HashingAlgorithm.h \
-		..\..\Utility\FileUtility.h
+		..\..\Utility\FileUtility.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QFile
 
 debug\main.obj: ..\FileHasherUI\main.cpp ..\FileHasherUI\filehasher.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QMainWindow \

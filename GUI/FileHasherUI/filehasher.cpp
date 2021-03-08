@@ -90,6 +90,14 @@ size_t GetSizeFromString(QString string)
     }
 }
 
+QString GetHashFromString(QString string)
+{
+    QStringList splitStrings = string.split(' ');
+    size_t size = splitStrings.size();
+    // Hash will always be the last element
+    return size > 0U ? splitStrings[size - 1U] : "";
+}
+
 void FileHasher::SetClipboardText(QString text)
 {
     QClipboard* clipboard = QGuiApplication::clipboard();
@@ -98,6 +106,16 @@ void FileHasher::SetClipboardText(QString text)
         clipboard->clear();
         clipboard->setText(text, QClipboard::Clipboard);
     }
+}
+
+QString FileHasher::GetClipboardText()
+{
+    QClipboard* clipboard = QGuiApplication::clipboard();
+    if(clipboard)
+    {
+        return clipboard->text(QClipboard::Clipboard);
+    }
+    return "";
 }
 
 void AddToOutput(QString entry, QListWidget* output)
@@ -228,21 +246,39 @@ void FileHasher::on_fileTable_customContextMenuRequested(const QPoint& pos)
 
 void FileHasher::on_outputList_customContextMenuRequested(const QPoint &pos)
 {
+    if (ui->outputList->count() < 1)
+        return;
+
     QMenu menu(this);
 
     QAction* copyCell = menu.addAction("Copy Hash");
+    QAction* compareCell = menu.addAction("Compare to clipboard");
     QAction* selectedAction = menu.exec(ui->outputList->viewport()->mapToGlobal(pos));
-    if (selectedAction == copyCell && ui->outputList->count() > 0)
+    if (selectedAction == copyCell)
     {
         if (QListWidgetItem* selectedItem = ui->outputList->currentItem())
         {
             // Items are structured like so: TIMESTAMP FILENAME HASHALGO: HASH
-            QString itemContent = selectedItem->text();
-            QStringList splitStrings = itemContent.split(' ');
-            size_t size = splitStrings.size();
-            // Hash will always be the last element
-            QString hash = size > 0 ? splitStrings[size - 1] : "";
+            QString hash = GetHashFromString(selectedItem->text());
             SetClipboardText(hash);
+        }
+    }
+    else if (selectedAction == compareCell)
+    {
+        if (QListWidgetItem* selectedItem = ui->outputList->currentItem())
+        {
+            QString hash = GetHashFromString(selectedItem->text());
+            QString clipboardText = GetClipboardText();
+            if (QString::compare(hash, clipboardText, Qt::CaseInsensitive) == 0)
+            {
+                QMessageBox::information(this, "Hashes match", "The selected hash and the one saved in your clipboard match.");
+            }
+            else
+            {
+                QString message = QString("The selected computed hash:\n\"%1\"\nand the hash in your clipboard:\n\"%2\"\ndon't match")
+                        .arg(hash).arg(clipboardText);
+                QMessageBox::warning(this, "Hashes don't match", message);
+            }
         }
     }
 }
@@ -335,7 +371,7 @@ void Controller::UpdateFileProgress(const size_t min, const size_t max, const si
     }
     else
     {
-        double percentage = (double)value / (double)ui->fileProgressBar->maximum();
+        double percentage = static_cast<double>(value) / static_cast<double>(max);
         ui->fileProgressBar->setFormat(QString::number((percentage * 100), 'g', 3)+ "%");
     }
 }
