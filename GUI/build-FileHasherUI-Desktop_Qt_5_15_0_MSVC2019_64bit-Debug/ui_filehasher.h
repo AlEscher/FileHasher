@@ -54,14 +54,14 @@ public:
         if (FileHasher->objectName().isEmpty())
             FileHasher->setObjectName(QString::fromUtf8("FileHasher"));
         FileHasher->setEnabled(true);
-        FileHasher->resize(923, 568);
+        FileHasher->resize(932, 612);
         FileHasher->setTabShape(QTabWidget::Rounded);
         centralwidget = new QWidget(FileHasher);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         hashTargetsWidget = new QTabWidget(centralwidget);
         hashTargetsWidget->setObjectName(QString::fromUtf8("hashTargetsWidget"));
         hashTargetsWidget->setEnabled(true);
-        hashTargetsWidget->setGeometry(QRect(240, 0, 671, 311));
+        hashTargetsWidget->setGeometry(QRect(240, 0, 681, 311));
         hashTargetsWidget->setAutoFillBackground(false);
         hashTargetsWidget->setMovable(true);
         filesToHashTab = new QWidget();
@@ -124,10 +124,10 @@ public:
         sha256CB->setCursor(QCursor(Qt::PointingHandCursor));
         md5CB = new QCheckBox(hashAlgoTab);
         md5CB->setObjectName(QString::fromUtf8("md5CB"));
-        md5CB->setEnabled(false);
+        md5CB->setEnabled(true);
         md5CB->setGeometry(QRect(10, 50, 101, 19));
-        md5CB->setCursor(QCursor(Qt::ArrowCursor));
-        md5CB->setCheckable(false);
+        md5CB->setCursor(QCursor(Qt::PointingHandCursor));
+        md5CB->setCheckable(true);
         hashButton = new QPushButton(hashAlgoTab);
         hashButton->setObjectName(QString::fromUtf8("hashButton"));
         hashButton->setGeometry(QRect(10, 250, 201, 21));
@@ -151,15 +151,17 @@ public:
         hashAlgosWidget->addTab(hashAlgoTab, QString());
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 310, 901, 251));
+        groupBox->setGeometry(QRect(10, 310, 911, 291));
         groupBox->setAutoFillBackground(true);
         actionsButton = new QToolButton(groupBox);
         actionsButton->setObjectName(QString::fromUtf8("actionsButton"));
-        actionsButton->setGeometry(QRect(750, 10, 141, 21));
+        actionsButton->setGeometry(QRect(770, 10, 141, 21));
         actionsButton->setPopupMode(QToolButton::MenuButtonPopup);
         outputList = new QListWidget(groupBox);
         outputList->setObjectName(QString::fromUtf8("outputList"));
-        outputList->setGeometry(QRect(10, 30, 881, 211));
+        outputList->setGeometry(QRect(0, 30, 911, 261));
+        outputList->setContextMenuPolicy(Qt::CustomContextMenu);
+        outputList->setTabKeyNavigation(true);
         FileHasher->setCentralWidget(centralwidget);
 
         retranslateUi(FileHasher);

@@ -36,7 +36,8 @@ private slots:
 
 public slots:
     void ClearOutputBox();
-    void ExportOuputToClipboard();
+    void ExportJsonToClipboard();
+    void ExportArrayToClipboard();
 
 private:
     Ui::FileHasher *ui;

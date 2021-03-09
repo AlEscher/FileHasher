@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QThread>
 #include <QString>
+#include <QJsonObject>
+#include <QJsonArray>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class FileHasher; }
@@ -45,20 +47,19 @@ class Controller : public QObject
     public:
         Controller(Ui::FileHasher* ui, FileHasherDelegate* delegate);
         ~Controller();
-        inline void AddToCache(QString hash)
-        {
-            m_vGeneratedHashes.append(hash);
-        }
+        void AddToCache(QStringList data);
         inline void ClearCache()
         {
-            m_vGeneratedHashes.clear();
+            m_mCache = QJsonObject();
         }
-        // Returns the Cache's contents as a string, entries are separated by ','
-        QString GetCacheContents();
+        // Returns the Cache's contents as a JSON-string
+        QString GetCacheContentsAsJson();
+        // Returns the Cache's contents formatted as a C-Array
+        QString GetCacheContentAsArray();
     private:
         Ui::FileHasher* ui;
         bool m_bHashing = false;
-        QStringList m_vGeneratedHashes;
+        QJsonObject m_mCache;
         FileHasherDelegate* delegate;
     public slots:
         // This function will be called when the Worker thread wants to pass on his results,

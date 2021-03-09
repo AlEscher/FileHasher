@@ -3,6 +3,7 @@
 #include "FileHasherDelegate.h"
 
 #include <QTime>
+#include <QJsonDocument>
 
 void AddToOutput(QString entry, QListWidget* output)
 {
@@ -19,7 +20,9 @@ Controller::Controller(Ui::FileHasher* ui, FileHasherDelegate* delegate)
 {
     this->ui = ui;
     this->delegate = delegate;
+    this->m_mCache = QJsonObject();
     Worker *worker = new Worker(ui, delegate, this);
+
     worker->moveToThread(&workerThread);
     // The worker will delete itself once the thread finishes
     connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
@@ -52,7 +55,7 @@ Controller::~Controller()
 
 void Controller::HandleResults(const QStringList& result)
 {
-    if (result.size() < 3)
+    if (result.size() < 5)
     {
         SetHashingStatus(false);
         ui->hashButton->setCursor(Qt::ArrowCursor);
@@ -61,11 +64,11 @@ void Controller::HandleResults(const QStringList& result)
 
     // We can only send events to the GUI in the main thread,
     // so we need to do this here instead of in the Worker
-    QString resultText = result[0] + ": " + result[1];
+    QString resultText = result[0] + " " + result[1] + ": " + result[3];
     AddToOutput(resultText, ui->outputList);
-    AddToCache(result[1]);
+    AddToCache(result);
 
-    int value = ui->totalProgressBar->value() + (int)delegate->GetSizeFromString(result[2]);
+    int value = ui->totalProgressBar->value() + (int)delegate->GetSizeFromString(result[4]);
     float percentage = (float)value / (float)ui->totalProgressBar->maximum();
     ui->totalProgressBar->setValue(value);
     // Fix rounding error at 100%
@@ -95,16 +98,42 @@ void Controller::UpdateFileProgress(const size_t min, const size_t max, const si
     }
 }
 
-QString Controller::GetCacheContents()
+QString Controller::GetCacheContentsAsJson()
 {
-    QString hashes = "";
-    // Append the hashes into a string such as: "hash1", "hash2", "hash3"
-    for (int i = 0; i < m_vGeneratedHashes.size(); i++)
+    return QJsonDocument(m_mCache).toJson(QJsonDocument::Indented);
+}
+
+QString Controller::GetCacheContentAsArray()
+{
+
+}
+
+void Controller::AddToCache(QStringList data)
+{
+    if (data.size() < 5)
     {
-        hashes += "\"" + m_vGeneratedHashes[i] + "\"" + ((i < m_vGeneratedHashes.size() - 1) ? ", " : "");
+        return;
     }
 
-    return hashes;
+    QJsonObject entry;
+    // Check if an entry for this file already exists, if not create a new one
+    if (m_mCache.contains(data[0]))
+    {
+        entry = m_mCache[data[0]].toObject();
+    }
+    else
+    {
+        entry = QJsonObject();
+        entry["filePath"] = data[2];
+        entry["fileSizeKB"] = (int)delegate->GetSizeFromString(data[4]);
+        entry["hashes"] = QJsonObject();
+    }
+
+    QJsonObject hashes = entry["hashes"].toObject();
+    hashes[data[1]] = data[3];
+    entry["hashes"] = hashes;
+
+    m_mCache[data[0]] = entry;
 }
 
 void Controller::HandleError(const QStringList& data)
@@ -177,9 +206,16 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
             result.clear();
             // Append all values as we got them before starting the hashing,
             // as it may take some time and the user may add / delete files from the list
-            // in the meantime
-            result.append(currentParam[0] + " " + QString::fromStdString(hashAlgorithm->GetName()));
+            // in the meantime.
+            // filename
+            result.append(currentParam[0]);
+            // hashalgorithm
+            result.append(QString::fromStdString(hashAlgorithm->GetName()));
+            // filepath
+            result.append(currentParam[1]);
+            // hash
             result.append(hash);
+            // fileSize in KB
             result.append(currentParam[2]);
             // Signal to the controller that we have completed one hash and pass him the result
             emit resultReady(result);

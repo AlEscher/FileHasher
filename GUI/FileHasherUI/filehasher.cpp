@@ -66,13 +66,15 @@ void FileHasher::PopulateToolButton()
     actionsMenu = new QMenu;
     // Create and assign Actions to menu, menu will take ownership of these
     QAction* clearAction = actionsMenu->addAction("Clear Output");
-    QAction* exportAction = actionsMenu->addAction("Export as Array");
+    QAction* exportJsonAction = actionsMenu->addAction("Export as JSON");
+    QAction* exportArrayAction = actionsMenu->addAction("Export as C-Array");
 
     connect(clearAction, &QAction::triggered, this, &FileHasher::ClearOutputBox);
-    connect(exportAction, &QAction::triggered, this, &FileHasher::ExportOuputToClipboard);
+    connect(exportJsonAction, &QAction::triggered, this, &FileHasher::ExportJsonToClipboard);
+    connect(exportArrayAction, &QAction::triggered, this, &FileHasher::ExportArrayToClipboard);
 
     ui->actionsButton->setMenu(actionsMenu);
-    ui->actionsButton->setDefaultAction(exportAction);
+    ui->actionsButton->setDefaultAction(exportJsonAction);
     ui->actionsButton->setToolTip("Exported data will always be pasted into your clipboard");
     // Let the last chosen action be the currently displayed action
     connect(ui->actionsButton, &QToolButton::triggered, ui->actionsButton, &QToolButton::setDefaultAction);
@@ -257,8 +259,13 @@ void FileHasher::ClearOutputBox()
     controller->ClearCache();
 }
 
-void FileHasher::ExportOuputToClipboard()
+void FileHasher::ExportJsonToClipboard()
 {
-    const QString hashes = "{ " + controller->GetCacheContents() + " }";
-    SetClipboardText(hashes);
+    SetClipboardText(controller->GetCacheContentsAsJson());
 }
+
+void FileHasher::ExportArrayToClipboard()
+{
+    SetClipboardText(controller->GetCacheContentAsArray());
+}
+
