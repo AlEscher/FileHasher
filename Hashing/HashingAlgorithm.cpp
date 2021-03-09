@@ -123,10 +123,16 @@ string HashingAlgorithm::CalculateFileHash(const wchar_t* filePath)
 
 	if (!m_pFileUtil->OpenFileStreamW(filePath) || !m_pFileUtil->IsOpen())
 	{
+		m_nBytesProcessed = fileSize.value();
 		return "";
 	}
 
 	string hash = Hash(fileSize.value());
+	if (hash == "")
+	{
+		m_nBytesProcessed = fileSize.value();
+	}
+
 	m_pFileUtil->Reset();
 	return hash;
 }

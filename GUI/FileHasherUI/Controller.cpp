@@ -116,6 +116,11 @@ void Controller::HandleError(const QStringList& data)
     }
 }
 
+/* ======================= Worker =======================
+ * A Controller may manage many Workers, one Worker will
+ * always have one Controller assigned to them
+ */
+
 Worker::Worker(Ui::FileHasher* ui, FileHasherDelegate* delegate, Controller* controller)
 {
     this->ui = ui;
@@ -159,6 +164,15 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
             }
 
             QString hash = delegate->CreateHash(currentParam[1], hashAlgorithm);
+            if (hash.compare("") == 0)
+            {
+                QStringList errorData;
+                errorData.append(currentParam[0] + " " + QString::fromStdString(hashAlgorithm->GetName()));
+                errorData.append("ERROR: Something went wrong while hashing!");
+                emit ReportError(errorData);
+                emit WaitForMonitor();
+                continue;
+            }
 
             result.clear();
             // Append all values as we got them before starting the hashing,

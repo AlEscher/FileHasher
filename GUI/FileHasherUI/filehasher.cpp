@@ -66,13 +66,14 @@ void FileHasher::PopulateToolButton()
     actionsMenu = new QMenu;
     // Create and assign Actions to menu, menu will take ownership of these
     QAction* clearAction = actionsMenu->addAction("Clear Output");
-    QAction* exportAction = actionsMenu->addAction("Export to Clipboard");
+    QAction* exportAction = actionsMenu->addAction("Export as Array");
 
     connect(clearAction, &QAction::triggered, this, &FileHasher::ClearOutputBox);
     connect(exportAction, &QAction::triggered, this, &FileHasher::ExportOuputToClipboard);
 
     ui->actionsButton->setMenu(actionsMenu);
     ui->actionsButton->setDefaultAction(exportAction);
+    ui->actionsButton->setToolTip("Exported data will always be pasted into your clipboard");
     // Let the last chosen action be the currently displayed action
     connect(ui->actionsButton, &QToolButton::triggered, ui->actionsButton, &QToolButton::setDefaultAction);
 }
@@ -89,8 +90,7 @@ void FileHasher::SetClipboardText(QString text)
 
 QString FileHasher::GetClipboardText()
 {
-    QClipboard* clipboard = QGuiApplication::clipboard();
-    if(clipboard)
+    if(QClipboard* clipboard = QGuiApplication::clipboard())
     {
         return clipboard->text(QClipboard::Clipboard);
     }
