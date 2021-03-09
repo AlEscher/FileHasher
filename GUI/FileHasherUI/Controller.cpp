@@ -105,7 +105,29 @@ QString Controller::GetCacheContentsAsJson()
 
 QString Controller::GetCacheContentAsArray()
 {
+    QString hashes = "";
+    // Iterate through our cache, each entry represents one file
+    for (QJsonObject::const_iterator iter = m_mCache.constBegin(); iter != m_mCache.constEnd(); iter++)
+    {
+        QJsonObject current = iter->toObject();
+        if (current.contains("hashes"))
+        {
+            QJsonObject hashesJson = current["hashes"].toObject();
+            // Iterate through this file's cached hashes and append them into one string
+            for (QJsonObject::const_iterator hashIter = hashesJson.constBegin(); hashIter != hashesJson.constEnd(); hashIter++)
+            {
+                QString hash = "\"" + hashIter->toString() + "\"";
+                // Append this hash, with a preceding ',' except if this is the first entry of the array
+                if (iter != m_mCache.constBegin() || hashIter != hashesJson.constBegin())
+                {
+                    hashes += ", ";
+                }
+                hashes += hash;
+            }
+        }
+    }
 
+    return "{ " + hashes + " }";
 }
 
 void Controller::AddToCache(QStringList data)
