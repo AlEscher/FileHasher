@@ -13,6 +13,7 @@
 #include <QMenu>
 #include <QClipboard>
 #include <QTime>
+#include <QDesktopServices>
 
 using namespace std;
 
@@ -223,33 +224,41 @@ void FileHasher::on_outputList_customContextMenuRequested(const QPoint &pos)
 
     QAction* copyCell = menu.addAction("Copy Hash");
     QAction* compareCell = menu.addAction("Compare to clipboard");
+    QAction* lookupCell = menu.addAction("Lookup on Virustotal");
     QAction* selectedAction = menu.exec(ui->outputList->viewport()->mapToGlobal(pos));
+
+    QListWidgetItem* selectedItem = ui->outputList->currentItem();
+    if (!selectedItem)
+    {
+        return;
+    }
+
     if (selectedAction == copyCell)
     {
-        if (QListWidgetItem* selectedItem = ui->outputList->currentItem())
-        {
-            // Items are structured like so: TIMESTAMP FILENAME HASHALGO: HASH
-            QString hash = delegate->GetHashFromString(selectedItem->text());
-            SetClipboardText(hash);
-        }
+        // Items are structured like so: TIMESTAMP FILENAME HASHALGO: HASH
+        QString hash = delegate->GetHashFromString(selectedItem->text());
+        SetClipboardText(hash);
     }
     else if (selectedAction == compareCell)
     {
-        if (QListWidgetItem* selectedItem = ui->outputList->currentItem())
+        QString hash = delegate->GetHashFromString(selectedItem->text());
+        QString clipboardText = GetClipboardText();
+        if (QString::compare(hash, clipboardText, Qt::CaseInsensitive) == 0)
         {
-            QString hash = delegate->GetHashFromString(selectedItem->text());
-            QString clipboardText = GetClipboardText();
-            if (QString::compare(hash, clipboardText, Qt::CaseInsensitive) == 0)
-            {
-                QMessageBox::information(this, "Hashes match", "The selected hash and the one saved in your clipboard match.");
-            }
-            else
-            {
-                QString message = QString("The selected computed hash:\n\"%1\"\nand the hash in your clipboard:\n\"%2\"\ndon't match")
-                        .arg(hash).arg(clipboardText);
-                QMessageBox::warning(this, "Hashes don't match", message);
-            }
+            QMessageBox::information(this, "Hashes match", "The selected hash and the one saved in your clipboard match.");
         }
+        else
+        {
+            QString message = QString("The selected computed hash:\n\"%1\"\nand the hash in your clipboard:\n\"%2\"\ndon't match")
+                    .arg(hash, clipboardText);
+            QMessageBox::warning(this, "Hashes don't match", message);
+        }
+    }
+    else if (selectedAction == lookupCell)
+    {
+        QString hash = delegate->GetHashFromString(selectedItem->text());
+        QUrl url = QUrl(QString("https://www.virustotal.com/gui/file/%1/detection").arg(hash));
+        QDesktopServices::openUrl(url);
     }
 }
 
@@ -269,3 +278,7 @@ void FileHasher::ExportArrayToClipboard()
     SetClipboardText(controller->GetCacheContentAsArray());
 }
 
+void FileHasher::LookUpHashOnline()
+{
+
+}

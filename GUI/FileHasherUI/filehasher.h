@@ -49,6 +49,8 @@ private:
     void AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize);
     void PopulateToolButton();
     void SetClipboardText(QString text);
+    // Takes the currently selected hash and does a query on virustotal.com
+    void LookUpHashOnline();
     QString GetClipboardText();
 };
 
