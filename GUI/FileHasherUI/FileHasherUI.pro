@@ -23,6 +23,7 @@ SOURCES += \
     ../../Hashing/SHA256Hash.cpp \
     ../../Hashing/SHA512Hash.cpp \
     ../../Hashing/MD5Hash.cpp \
+    ../../Hashing/SHA1Hash.cpp \
     ../../Hashing/HashingAlgorithm.cpp \
     Style/framelesswindow/framelesswindow.cpp \
     Style/DarkStyle.cpp \

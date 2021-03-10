@@ -21,6 +21,16 @@ namespace BitUtil
 	{
 		return _rotr64(n, c);
 	}
+
+	inline uint32_t rotl32(uint32_t n, int c)
+	{
+		return _rotl(n, c);
+	}
+
+	inline uint64_t rotl64(uint64_t n, int c)
+	{
+		return _rotl64(n, c);
+	}
 	// Append one byte after the other and put them into an element of type T
 	template<class T>
 	T AppendBytes(const uint8_t* bytes)

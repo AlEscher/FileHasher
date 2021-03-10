@@ -6,6 +6,7 @@
 #include "./Hashing/MD5Hash.h"
 #include "./Hashing/SHA256Hash.h"
 #include "./Hashing/SHA512Hash.h"
+#include "./Hashing/SHA1Hash.h"
 
 using namespace std;
 
@@ -63,6 +64,10 @@ int HandleCommandLineInput(int argc, char** argv)
     {
         algorithm = new MD5Hasher();
     }
+    else if (arguments[1] == "SHA1")
+    {
+        algorithm = new SHA1Hasher();
+    }
     else
     {
         if (verbose)
@@ -101,6 +106,7 @@ int main(int argc, char** argv)
     HashingAlgorithm* sha256Hasher = new SHA256Hasher();
     HashingAlgorithm* sha512Hasher = new SHA512Hasher();
     HashingAlgorithm* md5Hasher = new MD5Hasher();
+    HashingAlgorithm* sha1Hasher = new SHA1Hasher();
     string input;
     wstring path = L"C:/Dev/Cpp/FileHasher/test2";
 
@@ -191,18 +197,21 @@ int main(int argc, char** argv)
             end = chrono::high_resolution_clock::now();
             cout << "File MD5:    " << md5Hash << endl;
             cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
+
+            start = chrono::high_resolution_clock::now();
+            string sha1Hash = sha1Hasher->CalculateFileHash(path.c_str());
+            end = chrono::high_resolution_clock::now();
+            cout << "File SHA1:   " << sha1Hash << endl;
+            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
         }
         else
         {
-            auto start = chrono::high_resolution_clock::now();
-            string hash = sha256Hasher->CalculateStringHash(input);
-            auto end = chrono::high_resolution_clock::now();
-            cout << "SHA256: " << hash << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " microseconds" << endl;
+            cout << "Unknown command: " << input << endl;
         }
     }
 
     delete sha256Hasher;
     delete sha512Hasher;
     delete md5Hasher;
+    delete sha1Hasher;
 }

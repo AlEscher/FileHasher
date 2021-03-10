@@ -147,6 +147,7 @@
     <ClCompile Include="FileHasher.cpp" />
     <ClCompile Include="Hashing\HashingAlgorithm.cpp" />
     <ClCompile Include="Hashing\MD5Hash.cpp" />
+    <ClCompile Include="Hashing\SHA1Hash.cpp" />
     <ClCompile Include="Hashing\SHA256Hash.cpp" />
     <ClCompile Include="Hashing\SHA512Hash.cpp" />
     <ClCompile Include="Utility\BitwiseUtility.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="GUI\FileHasherUI\UIDelegate.h" />
     <ClInclude Include="Hashing\HashingAlgorithm.h" />
     <ClInclude Include="Hashing\MD5Hash.h" />
+    <ClInclude Include="Hashing\SHA1Hash.h" />
     <ClInclude Include="Hashing\SHA256Hash.h" />
     <ClInclude Include="Hashing\SHA512Hash.h" />
     <ClInclude Include="Utility\BitwiseUtility.h" />

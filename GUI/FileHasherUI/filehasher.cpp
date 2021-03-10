@@ -5,6 +5,7 @@
 #include "../../Hashing/SHA256Hash.h"
 #include "../../Hashing/SHA512Hash.h"
 #include "../../Hashing/MD5Hash.h"
+#include "../../Hashing/SHA1Hash.h"
 #include "../../Utility/FileUtility.h"
 
 #include <QFileDialog>
@@ -148,6 +149,10 @@ void FileHasher::on_hashButton_clicked()
     if (ui->md5CB->isChecked())
     {
         hashAlgoVec.push_back(new MD5Hasher());
+    }
+    if (ui->sha1CB->isChecked())
+    {
+        hashAlgoVec.push_back(new SHA1Hasher());
     }
 
     if (hashAlgoVec.empty())
