@@ -43,12 +43,12 @@ public:
     QPushButton *hashButton;
     QProgressBar *totalProgressBar;
     QProgressBar *fileProgressBar;
-    QWidget *widget;
-    QVBoxLayout *verticalLayout;
-    QCheckBox *sha256CB;
-    QCheckBox *sha512CB;
+    QWidget *layoutWidget1;
+    QVBoxLayout *hashButtons;
     QCheckBox *md5CB;
     QCheckBox *sha1CB;
+    QCheckBox *sha256CB;
+    QCheckBox *sha512CB;
     QGroupBox *groupBox;
     QToolButton *actionsButton;
     QListWidget *outputList;
@@ -138,36 +138,36 @@ public:
         fileProgressBar->setObjectName(QString::fromUtf8("fileProgressBar"));
         fileProgressBar->setGeometry(QRect(10, 190, 201, 23));
         fileProgressBar->setValue(0);
-        widget = new QWidget(hashAlgoTab);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(11, 12, 74, 96));
-        verticalLayout = new QVBoxLayout(widget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        sha256CB = new QCheckBox(widget);
-        sha256CB->setObjectName(QString::fromUtf8("sha256CB"));
-        sha256CB->setCursor(QCursor(Qt::PointingHandCursor));
-
-        verticalLayout->addWidget(sha256CB);
-
-        sha512CB = new QCheckBox(widget);
-        sha512CB->setObjectName(QString::fromUtf8("sha512CB"));
-        sha512CB->setCursor(QCursor(Qt::PointingHandCursor));
-
-        verticalLayout->addWidget(sha512CB);
-
-        md5CB = new QCheckBox(widget);
+        layoutWidget1 = new QWidget(hashAlgoTab);
+        layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 10, 91, 96));
+        hashButtons = new QVBoxLayout(layoutWidget1);
+        hashButtons->setObjectName(QString::fromUtf8("hashButtons"));
+        hashButtons->setContentsMargins(0, 0, 0, 0);
+        md5CB = new QCheckBox(layoutWidget1);
         md5CB->setObjectName(QString::fromUtf8("md5CB"));
         md5CB->setEnabled(true);
         md5CB->setCursor(QCursor(Qt::PointingHandCursor));
         md5CB->setCheckable(true);
 
-        verticalLayout->addWidget(md5CB);
+        hashButtons->addWidget(md5CB);
 
-        sha1CB = new QCheckBox(widget);
+        sha1CB = new QCheckBox(layoutWidget1);
         sha1CB->setObjectName(QString::fromUtf8("sha1CB"));
 
-        verticalLayout->addWidget(sha1CB);
+        hashButtons->addWidget(sha1CB);
+
+        sha256CB = new QCheckBox(layoutWidget1);
+        sha256CB->setObjectName(QString::fromUtf8("sha256CB"));
+        sha256CB->setCursor(QCursor(Qt::PointingHandCursor));
+
+        hashButtons->addWidget(sha256CB);
+
+        sha512CB = new QCheckBox(layoutWidget1);
+        sha512CB->setObjectName(QString::fromUtf8("sha512CB"));
+        sha512CB->setCursor(QCursor(Qt::PointingHandCursor));
+
+        hashButtons->addWidget(sha512CB);
 
         hashAlgosWidget->addTab(hashAlgoTab, QString());
         groupBox = new QGroupBox(centralwidget);
@@ -209,10 +209,10 @@ public:
         hashButton->setText(QCoreApplication::translate("FileHasher", "Generate Hashes", nullptr));
         totalProgressBar->setFormat(QCoreApplication::translate("FileHasher", "Idle", nullptr));
         fileProgressBar->setFormat(QCoreApplication::translate("FileHasher", "Idle", nullptr));
-        sha256CB->setText(QCoreApplication::translate("FileHasher", "SHA256", nullptr));
-        sha512CB->setText(QCoreApplication::translate("FileHasher", "SHA512", nullptr));
         md5CB->setText(QCoreApplication::translate("FileHasher", "MD5", nullptr));
         sha1CB->setText(QCoreApplication::translate("FileHasher", "SHA1", nullptr));
+        sha256CB->setText(QCoreApplication::translate("FileHasher", "SHA256", nullptr));
+        sha512CB->setText(QCoreApplication::translate("FileHasher", "SHA512", nullptr));
         hashAlgosWidget->setTabText(hashAlgosWidget->indexOf(hashAlgoTab), QCoreApplication::translate("FileHasher", "Hash Algorithms", nullptr));
         groupBox->setTitle(QCoreApplication::translate("FileHasher", "Output", nullptr));
         actionsButton->setText(QCoreApplication::translate("FileHasher", "Actions", nullptr));

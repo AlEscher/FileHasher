@@ -138,14 +138,6 @@ void FileHasher::on_hashButton_clicked()
         return;
     }
 
-    if (ui->sha256CB->isChecked())
-    {
-        hashAlgoVec.push_back(new SHA256Hasher());
-    }
-    if (ui->sha512CB->isChecked())
-    {
-        hashAlgoVec.push_back(new SHA512Hasher());
-    }
     if (ui->md5CB->isChecked())
     {
         hashAlgoVec.push_back(new MD5Hasher());
@@ -153,6 +145,14 @@ void FileHasher::on_hashButton_clicked()
     if (ui->sha1CB->isChecked())
     {
         hashAlgoVec.push_back(new SHA1Hasher());
+    }
+    if (ui->sha256CB->isChecked())
+    {
+        hashAlgoVec.push_back(new SHA256Hasher());
+    }
+    if (ui->sha512CB->isChecked())
+    {
+        hashAlgoVec.push_back(new SHA512Hasher());
     }
 
     if (hashAlgoVec.empty())

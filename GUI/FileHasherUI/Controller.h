@@ -34,7 +34,7 @@ class Worker : public QObject
 
     signals:
         void resultReady(const QStringList &result);
-        void UpdateFileStatus(const size_t min, const size_t max, const size_t value);
+        void UpdateFileStatus(const size_t fileSize, const size_t value);
         void WaitForMonitor();
         void ReportError(const QStringList &data);
 };
@@ -65,7 +65,7 @@ class Controller : public QObject
         // This function will be called when the Worker thread wants to pass on his results,
         // most importantly this function will be executed in our main thread, meaning we can do send events
         void HandleResults(const QStringList &);
-        void UpdateFileProgress(const size_t min, const size_t max, const size_t value);
+        void UpdateFileProgress(const size_t fileSize, const size_t value);
         void HandleError(const QStringList &data);
         inline void SetHashingStatus(const bool status)
         {

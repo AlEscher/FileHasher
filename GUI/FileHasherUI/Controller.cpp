@@ -5,6 +5,9 @@
 #include <QTime>
 #include <QJsonDocument>
 
+constexpr int BAR_RANGE_MIN = 0;
+constexpr int BAR_RANGE_MAX = INT32_MAX;
+
 void AddToOutput(QString entry, QListWidget* output)
 {
     // Get current time
@@ -82,18 +85,27 @@ void Controller::HandleResults(const QStringList& result)
     }
 }
 
-void Controller::UpdateFileProgress(const size_t min, const size_t max, const size_t value)
+void Controller::UpdateFileProgress(const size_t fileSize, const size_t value)
 {
-    ui->fileProgressBar->setRange((int)min, (int)max);
-    ui->fileProgressBar->setValue((int)std::min(value, max));
+    double percentage = static_cast<double>(value) / static_cast<double>(fileSize);
+    if (fileSize > BAR_RANGE_MAX)
+    {
+        ui->fileProgressBar->setRange(BAR_RANGE_MIN, BAR_RANGE_MAX);
+        int scaledValue = static_cast<int>(BAR_RANGE_MAX * percentage);
+        ui->fileProgressBar->setValue((int)std::min(scaledValue, BAR_RANGE_MAX));
+    }
+    else
+    {
+        ui->fileProgressBar->setRange(BAR_RANGE_MIN, (int)fileSize);
+        ui->fileProgressBar->setValue((int)std::min(value, fileSize));
+    }
 
-    if (value >= max)
+    if (value >= fileSize)
     {
         ui->fileProgressBar->setFormat("100%");
     }
     else
     {
-        double percentage = static_cast<double>(value) / static_cast<double>(max);
         ui->fileProgressBar->setFormat(QString::number((percentage * 100), 'g', 3)+ "%");
     }
 }
@@ -147,7 +159,7 @@ void Controller::AddToCache(QStringList data)
     {
         entry = QJsonObject();
         entry["filePath"] = data[2];
-        entry["fileSizeKB"] = (int)delegate->GetSizeFromString(data[4]);
+        entry["fileSizeB"] = (int)delegate->GetFileSize(data[2]);
         entry["hashes"] = QJsonObject();
     }
 
@@ -209,7 +221,7 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
             // No need to monitor empty files
             if (currentFileSize > 0)
             {
-                emit UpdateFileStatus(0U, currentFileSize, 0U);
+                emit UpdateFileStatus(currentFileSize, 0U);
                 // Tell the display worker to start monitoring the progress of this hash
                 emit controller->StartMonitoring(hashAlgorithm, currentFileSize);
             }
@@ -270,14 +282,14 @@ void Worker::MonitorProgress(const HashingAlgorithm* algorithm, const size_t fil
         size_t progress = algorithm->GetBytesProcessed();
         if (progress != oldValue)
         {
-            emit UpdateFileStatus(ui->fileProgressBar->minimum(), fileSize, progress);
+            emit UpdateFileStatus(fileSize, progress);
             oldValue = progress;
         }
 
         QThread::msleep(10);
     }
 
-    emit UpdateFileStatus(ui->fileProgressBar->minimum(), fileSize, algorithm->GetBytesProcessed());
+    emit UpdateFileStatus(fileSize, algorithm->GetBytesProcessed());
 }
 
 void Worker::TerminateMonitoring()

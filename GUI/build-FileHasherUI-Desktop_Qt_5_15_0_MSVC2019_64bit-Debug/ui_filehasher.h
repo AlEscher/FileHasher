@@ -22,6 +22,7 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -39,11 +40,14 @@ public:
     QPushButton *clearListButton;
     QTabWidget *hashAlgosWidget;
     QWidget *hashAlgoTab;
-    QCheckBox *sha256CB;
-    QCheckBox *md5CB;
     QPushButton *hashButton;
     QProgressBar *totalProgressBar;
     QProgressBar *fileProgressBar;
+    QWidget *layoutWidget1;
+    QVBoxLayout *hashButtons;
+    QCheckBox *md5CB;
+    QCheckBox *sha1CB;
+    QCheckBox *sha256CB;
     QCheckBox *sha512CB;
     QGroupBox *groupBox;
     QToolButton *actionsButton;
@@ -118,16 +122,6 @@ public:
         hashAlgosWidget->setTabShape(QTabWidget::Rounded);
         hashAlgoTab = new QWidget();
         hashAlgoTab->setObjectName(QString::fromUtf8("hashAlgoTab"));
-        sha256CB = new QCheckBox(hashAlgoTab);
-        sha256CB->setObjectName(QString::fromUtf8("sha256CB"));
-        sha256CB->setGeometry(QRect(10, 10, 131, 19));
-        sha256CB->setCursor(QCursor(Qt::PointingHandCursor));
-        md5CB = new QCheckBox(hashAlgoTab);
-        md5CB->setObjectName(QString::fromUtf8("md5CB"));
-        md5CB->setEnabled(true);
-        md5CB->setGeometry(QRect(10, 50, 101, 19));
-        md5CB->setCursor(QCursor(Qt::PointingHandCursor));
-        md5CB->setCheckable(true);
         hashButton = new QPushButton(hashAlgoTab);
         hashButton->setObjectName(QString::fromUtf8("hashButton"));
         hashButton->setGeometry(QRect(10, 250, 201, 21));
@@ -144,10 +138,37 @@ public:
         fileProgressBar->setObjectName(QString::fromUtf8("fileProgressBar"));
         fileProgressBar->setGeometry(QRect(10, 190, 201, 23));
         fileProgressBar->setValue(0);
-        sha512CB = new QCheckBox(hashAlgoTab);
+        layoutWidget1 = new QWidget(hashAlgoTab);
+        layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 10, 91, 96));
+        hashButtons = new QVBoxLayout(layoutWidget1);
+        hashButtons->setObjectName(QString::fromUtf8("hashButtons"));
+        hashButtons->setContentsMargins(0, 0, 0, 0);
+        md5CB = new QCheckBox(layoutWidget1);
+        md5CB->setObjectName(QString::fromUtf8("md5CB"));
+        md5CB->setEnabled(true);
+        md5CB->setCursor(QCursor(Qt::PointingHandCursor));
+        md5CB->setCheckable(true);
+
+        hashButtons->addWidget(md5CB);
+
+        sha1CB = new QCheckBox(layoutWidget1);
+        sha1CB->setObjectName(QString::fromUtf8("sha1CB"));
+
+        hashButtons->addWidget(sha1CB);
+
+        sha256CB = new QCheckBox(layoutWidget1);
+        sha256CB->setObjectName(QString::fromUtf8("sha256CB"));
+        sha256CB->setCursor(QCursor(Qt::PointingHandCursor));
+
+        hashButtons->addWidget(sha256CB);
+
+        sha512CB = new QCheckBox(layoutWidget1);
         sha512CB->setObjectName(QString::fromUtf8("sha512CB"));
-        sha512CB->setGeometry(QRect(10, 30, 72, 19));
         sha512CB->setCursor(QCursor(Qt::PointingHandCursor));
+
+        hashButtons->addWidget(sha512CB);
+
         hashAlgosWidget->addTab(hashAlgoTab, QString());
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
@@ -185,11 +206,12 @@ public:
         addFileButton->setText(QCoreApplication::translate("FileHasher", "Add File", nullptr));
         clearListButton->setText(QCoreApplication::translate("FileHasher", "Clear List", nullptr));
         hashTargetsWidget->setTabText(hashTargetsWidget->indexOf(filesToHashTab), QCoreApplication::translate("FileHasher", "Files to Hash", nullptr));
-        sha256CB->setText(QCoreApplication::translate("FileHasher", "SHA256", nullptr));
-        md5CB->setText(QCoreApplication::translate("FileHasher", "MD5", nullptr));
         hashButton->setText(QCoreApplication::translate("FileHasher", "Generate Hashes", nullptr));
         totalProgressBar->setFormat(QCoreApplication::translate("FileHasher", "Idle", nullptr));
         fileProgressBar->setFormat(QCoreApplication::translate("FileHasher", "Idle", nullptr));
+        md5CB->setText(QCoreApplication::translate("FileHasher", "MD5", nullptr));
+        sha1CB->setText(QCoreApplication::translate("FileHasher", "SHA1", nullptr));
+        sha256CB->setText(QCoreApplication::translate("FileHasher", "SHA256", nullptr));
         sha512CB->setText(QCoreApplication::translate("FileHasher", "SHA512", nullptr));
         hashAlgosWidget->setTabText(hashAlgosWidget->indexOf(hashAlgoTab), QCoreApplication::translate("FileHasher", "Hash Algorithms", nullptr));
         groupBox->setTitle(QCoreApplication::translate("FileHasher", "Output", nullptr));
