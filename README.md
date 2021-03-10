@@ -24,13 +24,11 @@ These measurements were done with the release version of the Console file, the G
 ## GUI:  
 ![GUI_Preview](https://github.com/AlEscher/FileHasher/blob/master/GUI/FileHasherUI/Resources/GUIPreview.PNG)
 
-## Known Issues:  
-- File progress bar breaks with files > 2GB, this is because QProgressBar only takes signed integers  
-
 ## Sources:
 The only sources used are:
 - [SHA2](https://en.wikipedia.org/wiki/SHA-2)
 - [MD5](https://en.wikipedia.org/wiki/MD5)
+- [SHA1](https://en.wikipedia.org/wiki/SHA-1)
 - Sources included in code comments
 
 ## External
