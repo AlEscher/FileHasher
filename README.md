@@ -2,6 +2,7 @@
 Create and compare hashes of files and / or text.  
 Generate the hashes of the files you want (e.g. .exe and .dll) and compare this hash to the one generated at runtime.  
 By doing so you can detect updates for any game / software without relying on strings or version numbers inside the file. This approach also never touches the file in memory, it only reads it from the disk.  
+For the download and information on how to use the GUI or the CLI tool please see [Releases](https://github.com/AlEscher/FileHasher/releases/latest)
   
 ![MSBuild](https://github.com/AlEscher/FileHasher/workflows/MSBuild/badge.svg) ![CodeQL](https://github.com/AlEscher/FileHasher/workflows/CodeQL/badge.svg)
 
