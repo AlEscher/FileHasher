@@ -43,14 +43,17 @@ void ExportDialog::on_saveAsBtn_clicked()
     const QString filePath = QFileDialog::getSaveFileName(this, "Save as", "", filter);
     const QByteArray content = ui->exportedText->toPlainText().toUtf8();
 
-    // Check that the JSON is correctly formatted in case the user made any changes manually
-    QJsonParseError jsonError;
-    QJsonDocument::fromJson(content, &jsonError);
-    if (jsonError.error != QJsonParseError::NoError)
+    if (m_bIsJson)
     {
-        QMessageBox::warning(this, "Invalid JSON", QString("The exported JSON string is invalid\nUndo any manual changes or export it again to fix this warning:\n\"%1\"")
-                             .arg(jsonError.errorString()));
-        return;
+        // Check that the JSON is correctly formatted in case the user made any changes manually
+        QJsonParseError jsonError;
+        QJsonDocument::fromJson(content, &jsonError);
+        if (jsonError.error != QJsonParseError::NoError)
+        {
+            QMessageBox::warning(this, "Invalid JSON", QString("The exported JSON string is invalid\nUndo any manual changes or export it again to fix this warning:\n\"%1\"")
+                                 .arg(jsonError.errorString()));
+            return;
+        }
     }
 
     QFile newFile = QFile(filePath);
