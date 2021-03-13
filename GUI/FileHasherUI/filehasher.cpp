@@ -7,12 +7,12 @@
 #include "../../Hashing/MD5Hash.h"
 #include "../../Hashing/SHA1Hash.h"
 #include "../../Utility/FileUtility.h"
+#include "exportdialog.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTableWidgetItem>
 #include <QMenu>
-#include <QClipboard>
 #include <QTime>
 #include <QDesktopServices>
 
@@ -24,6 +24,10 @@ FileHasher::FileHasher(QWidget *parent) : QMainWindow(parent), ui(new Ui::FileHa
     ui->fileTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     delegate = new FileHasherDelegate();
     controller = new Controller(ui, delegate);
+    m_pExportDialog = new ExportDialog(this, delegate);
+    m_exportWindow.setContent(m_pExportDialog);
+    m_exportWindow.setWindowTitle("Exported Data");
+
     setFixedSize(size());
     PopulateToolButton();
 
@@ -38,7 +42,8 @@ FileHasher::~FileHasher()
     delete ui;
     delete delegate;
     delete controller;
-    delete actionsMenu;
+    delete m_pActionsMenu;
+    delete m_pExportDialog;
 }
 
 void FileHasher::AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize)
@@ -65,40 +70,22 @@ void FileHasher::AddFileToTable(QTableWidget* table, const QString& fileName, co
 
 void FileHasher::PopulateToolButton()
 {
-    actionsMenu = new QMenu;
+    m_pActionsMenu = new QMenu;
     // Create and assign Actions to menu, menu will take ownership of these
-    QAction* clearAction = actionsMenu->addAction("Clear Output");
-    QAction* exportJsonAction = actionsMenu->addAction("Export as JSON");
-    QAction* exportArrayAction = actionsMenu->addAction("Export as C-Array");
+    QAction* clearAction = m_pActionsMenu->addAction("Clear Output");
+    QAction* exportJsonAction = m_pActionsMenu->addAction("Export as JSON");
+    QAction* exportArrayAction = m_pActionsMenu->addAction("Export as C-Array");
 
     connect(clearAction, &QAction::triggered, this, &FileHasher::ClearOutputBox);
     connect(exportJsonAction, &QAction::triggered, this, &FileHasher::ExportJsonToClipboard);
     connect(exportArrayAction, &QAction::triggered, this, &FileHasher::ExportArrayToClipboard);
 
-    ui->actionsButton->setMenu(actionsMenu);
+    ui->actionsButton->setMenu(m_pActionsMenu);
     ui->actionsButton->setDefaultAction(exportJsonAction);
     ui->actionsButton->setToolTip("Exported data will always be pasted into your clipboard");
+    ui->actionsButton->setToolTipDuration(0);
     // Let the last chosen action be the currently displayed action
     connect(ui->actionsButton, &QToolButton::triggered, ui->actionsButton, &QToolButton::setDefaultAction);
-}
-
-void FileHasher::SetClipboardText(QString text)
-{
-    QClipboard* clipboard = QGuiApplication::clipboard();
-    if (clipboard)
-    {
-        clipboard->clear();
-        clipboard->setText(text, QClipboard::Clipboard);
-    }
-}
-
-QString FileHasher::GetClipboardText()
-{
-    if(QClipboard* clipboard = QGuiApplication::clipboard())
-    {
-        return clipboard->text(QClipboard::Clipboard);
-    }
-    return "";
 }
 
 void FileHasher::on_addFileButton_clicked()
@@ -242,12 +229,12 @@ void FileHasher::on_outputList_customContextMenuRequested(const QPoint &pos)
     {
         // Items are structured like so: TIMESTAMP FILENAME HASHALGO: HASH
         QString hash = delegate->GetHashFromString(selectedItem->text());
-        SetClipboardText(hash);
+        delegate->SetClipboardText(hash);
     }
     else if (selectedAction == compareCell)
     {
         QString hash = delegate->GetHashFromString(selectedItem->text());
-        QString clipboardText = GetClipboardText();
+        QString clipboardText = delegate->GetClipboardText();
         if (QString::compare(hash, clipboardText, Qt::CaseInsensitive) == 0)
         {
             QMessageBox::information(this, "Hashes match", "The selected hash and the one saved in your clipboard match.");
@@ -275,15 +262,16 @@ void FileHasher::ClearOutputBox()
 
 void FileHasher::ExportJsonToClipboard()
 {
-    SetClipboardText(controller->GetCacheContentsAsJson());
+    ShowExportDialog(controller->GetCacheContentsAsJson(), true);
 }
 
 void FileHasher::ExportArrayToClipboard()
 {
-    SetClipboardText(controller->GetCacheContentAsArray());
+    ShowExportDialog(controller->GetCacheContentAsArray(), false);
 }
 
-void FileHasher::LookUpHashOnline()
+void FileHasher::ShowExportDialog(QString data, bool isJson)
 {
-
+    m_pExportDialog->SetTextBoxContent(data, isJson);
+    m_exportWindow.show();
 }

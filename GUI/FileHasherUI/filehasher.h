@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 #include <QThread>
-#include "../../Hashing/HashingAlgorithm.h"
 #include <QString>
+
+#include "../../Hashing/HashingAlgorithm.h"
+#include "Style/framelesswindow/framelesswindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class FileHasher; }
@@ -14,6 +16,7 @@ class FileHasherDelegate;
 class QTableWidget;
 class Controller;
 class HashingAlgorithm;
+class ExportDialog;
 
 class FileHasher : public QMainWindow
 {
@@ -38,20 +41,19 @@ public slots:
     void ClearOutputBox();
     void ExportJsonToClipboard();
     void ExportArrayToClipboard();
+    void ShowExportDialog(QString data, bool isJson);
 
 private:
     Ui::FileHasher *ui;
     FileHasherDelegate *delegate;
     Controller* controller;
+    QMenu* m_pActionsMenu;
+    ExportDialog* m_pExportDialog;
+    FramelessWindow m_exportWindow;
     size_t m_nTotalFileSize = 0;
-    QMenu* actionsMenu;
 
     void AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize);
     void PopulateToolButton();
-    void SetClipboardText(QString text);
-    // Takes the currently selected hash and does a query on virustotal.com
-    void LookUpHashOnline();
-    QString GetClipboardText();
 };
 
 #endif // FILEHASHER_H

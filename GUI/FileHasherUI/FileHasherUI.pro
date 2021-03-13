@@ -16,6 +16,7 @@ INCLUDEPATH += "Style/framelesswindow"
 SOURCES += \
     Controller.cpp \
     FileHasherDelegate.cpp \
+    exportdialog.cpp \
     main.cpp \
     filehasher.cpp \
     ../../Utility/FileUtility.cpp \
@@ -32,12 +33,14 @@ SOURCES += \
 HEADERS += \
     Controller.h \
     FileHasherDelegate.h \
+    exportdialog.h \
     filehasher.h \
     Style/DarkStyle.h \
     Style/framelesswindow/framelesswindow.h \
     Style/framelesswindow/windowdragger.h
 
 FORMS += \
+    exportdialog.ui \
     filehasher.ui \
     Style/framelesswindow/framelesswindow.ui
 

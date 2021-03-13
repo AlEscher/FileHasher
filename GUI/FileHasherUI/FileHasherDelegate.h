@@ -14,13 +14,15 @@ private:
     Worker* worker = nullptr;
 public:
     // Get the file size from a string, for example 123 from "123 KB"
-    size_t GetSizeFromString(QString string);
-    QString GetHashFromString(QString string);
+    size_t GetSizeFromString(const QString& string);
+    QString GetHashFromString(const QString& string);
     // Get the size in bytes of the specified file
-    size_t GetFileSize(QString filePath);
+    size_t GetFileSize(const QString& filePath);
     // Check if the specified element exists and is accessible
-    bool CheckFilePath(QString filePath);
-    QString CreateHash(QString filePath, HashingAlgorithm* hashAlgo);
+    bool CheckFilePath(const QString& filePath);
+    QString CreateHash(const QString&, HashingAlgorithm* hashAlgo);
+    bool SetClipboardText(const QString& text);
+    QString GetClipboardText();
     inline void ResetHashingAlgorithm(HashingAlgorithm* hashAlgo)
     {
         if (hashAlgo)
