@@ -19,14 +19,15 @@
 
 #include "ui_framelesswindow.h"
 
-FramelessWindow::FramelessWindow(QWidget *parent)
+FramelessWindow::FramelessWindow(QWidget *parent, bool bIsMainWindow)
     : QWidget(parent),
       ui(new Ui::FramelessWindow),
       m_bMousePressed(false),
       m_bDragTop(false),
       m_bDragLeft(false),
       m_bDragRight(false),
-      m_bDragBottom(false) {
+      m_bDragBottom(false),
+      m_bIsMainWindow(bIsMainWindow){
   setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint);
   // append minimize button flag in case of windows,
   // for correct windows native handling of minimize function
@@ -174,7 +175,11 @@ void FramelessWindow::on_minimizeButton_clicked() {
   setWindowState(Qt::WindowMinimized);
 }
 
-void FramelessWindow::on_closeButton_clicked() { close(); }
+void FramelessWindow::on_closeButton_clicked()
+{
+    closeChildWidgets();
+    close();
+}
 
 void FramelessWindow::on_windowTitlebar_doubleClicked() {
 }
@@ -429,4 +434,28 @@ bool FramelessWindow::eventFilter(QObject *obj, QEvent *event) {
   }
 
   return QWidget::eventFilter(obj, event);
+}
+
+void FramelessWindow::closeChildWidgets()
+{
+    // If we are the main window, call close on our main widget(s)
+    // which will then also close our child windows
+    if (m_bIsMainWindow)
+    {
+        QLayout* layout = ui->windowContent->layout();
+        for (int i = 0; i < layout->count(); i++)
+        {
+            QLayoutItem* item = layout->itemAt(i);
+            if (item && !item->isEmpty() && item->widget())
+            {
+                item->widget()->close();
+            }
+        }
+    }
+}
+
+void FramelessWindow::closeEvent(QCloseEvent *event)
+{
+    closeChildWidgets();
+    event->accept();
 }

@@ -24,7 +24,7 @@ class FramelessWindow : public QWidget {
   Q_OBJECT
 
  public:
-  explicit FramelessWindow(QWidget *parent = Q_NULLPTR);
+  explicit FramelessWindow(QWidget *parent = Q_NULLPTR, bool m_bIsMainWindow = false);
   virtual ~FramelessWindow();
   void setContent(QWidget *w);
 
@@ -34,6 +34,7 @@ class FramelessWindow : public QWidget {
   bool topBorderHit(const QPoint &pos);
   bool bottomBorderHit(const QPoint &pos);
   void styleWindow(bool bActive, bool bNoState);
+  void closeChildWidgets();
 
  public slots:
   void setWindowTitle(const QString &text);
@@ -46,12 +47,13 @@ class FramelessWindow : public QWidget {
   void on_windowTitlebar_doubleClicked();
 
  protected:
-  virtual void changeEvent(QEvent *event);
-  virtual void mouseDoubleClickEvent(QMouseEvent *event);
+  virtual void changeEvent(QEvent *event) override;
+  virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
   virtual void checkBorderDragging(QMouseEvent *event);
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
-  virtual bool eventFilter(QObject *obj, QEvent *event);
+  virtual void mousePressEvent(QMouseEvent *event) override;
+  virtual void mouseReleaseEvent(QMouseEvent *event) override;
+  virtual bool eventFilter(QObject *obj, QEvent *event) override;
+  virtual void closeEvent(QCloseEvent* event) override;
 
  private:
   Ui::FramelessWindow *ui;
@@ -62,6 +64,7 @@ class FramelessWindow : public QWidget {
   bool m_bDragLeft;
   bool m_bDragRight;
   bool m_bDragBottom;
+  bool m_bIsMainWindow;
 };
 
 #endif  // FRAMELESSWINDOW_H

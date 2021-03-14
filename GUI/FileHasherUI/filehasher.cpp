@@ -15,6 +15,7 @@
 #include <QMenu>
 #include <QTime>
 #include <QDesktopServices>
+#include <QCloseEvent>
 
 using namespace std;
 
@@ -44,6 +45,12 @@ FileHasher::~FileHasher()
     delete controller;
     delete m_pActionsMenu;
     delete m_pExportDialog;
+}
+
+void FileHasher::closeEvent(QCloseEvent *event)
+{
+    m_exportWindow.close();
+    event->accept();
 }
 
 void FileHasher::AddFileToTable(QTableWidget* table, const QString& fileName, const QString& filePath, const size_t fileSize)

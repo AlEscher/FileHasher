@@ -43,6 +43,11 @@ public slots:
     void ExportArrayToClipboard();
     void ShowExportDialog(QString data, bool isJson);
 
+protected:
+    // Override QWidget's closeEvent handler, where we want to
+    // close all our child FramelessWindows
+    void closeEvent(QCloseEvent* event) override;
+
 private:
     Ui::FileHasher *ui;
     FileHasherDelegate *delegate;

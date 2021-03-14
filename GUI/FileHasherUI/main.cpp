@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QApplication::setStyle(new DarkStyle);
     QApplication::setPalette(QApplication::style()->standardPalette());
     FileHasher* w = new FileHasher;
-    FramelessWindow framelessWindow;
+    FramelessWindow framelessWindow = FramelessWindow(Q_NULLPTR, true);
     framelessWindow.setContent(w);
     framelessWindow.setWindowTitle("FileHasher UI");
     framelessWindow.setWindowIcon(QIcon(":./appico.ico"));
