@@ -36,7 +36,7 @@ namespace BitUtil
 	T AppendBytes(const uint8_t* bytes)
 	{
 		T result = 0ULL;
-		size_t size = sizeof(T);
+		const size_t size = sizeof(T);
 		for (size_t j = 0; j < size; j++)
 		{
 			// Shift first byte into upper 8 bit of our result, second byte into next 8 bits, etc...

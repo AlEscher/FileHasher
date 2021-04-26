@@ -9,16 +9,16 @@
 using namespace std;
 
 #define ROTR(n, c) BitUtil::rotr32(n, c)
-#define XOR(a, b) (a ^ b)
-#define RSH(a, b) (a >> b)
+#define XOR(a, b) ((a) ^ (b))
+#define RSH(a, b) ((a) >> (b))
 
 #define s0(w) (XOR(XOR(ROTR(w, 7), ROTR(w, 18)), RSH(w, 3)))
 #define s1(w) (XOR(XOR(ROTR(w, 17), ROTR(w, 19)), RSH(w, 10)))
 
 #define S1(e) (XOR(XOR(ROTR(e, 6), ROTR(e, 11)), ROTR(e, 25)))
 #define S0(a) (XOR(XOR(ROTR(a, 2), ROTR(a, 13)), ROTR(a, 22)))
-#define ch(e, f, g) (XOR((e & f), ((~e) & g)))
-#define maj(a, b, c) (XOR(XOR((a & b), (a & c)), (b & c)))
+#define ch(e, f, g) (XOR(((e) & (f)), ((~(e)) & (g))))
+#define maj(a, b, c) (XOR(XOR(((a) & (b)), ((a) & (c))), ((b) & (c))))
 
 constexpr size_t ENTRY_MESSAGE_SIZE = 64U;
 
@@ -52,19 +52,19 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 				w[i] = w[i - 16] + s0(w[i - 15]) + w[i - 7] + s1(w[i - 2]);
 			}
 
-			uint32_t a = hPrime[0], b = hPrime[1], c = hPrime[2], d = hPrime[3], e = hPrime[4], f = hPrime[5], g = hPrime[6], h = hPrime[7];
+			uint32_t a = m_hPrime[0], b = m_hPrime[1], c = m_hPrime[2], d = m_hPrime[3], e = m_hPrime[4], f = m_hPrime[5], g = m_hPrime[6], h = m_hPrime[7];
 
 			// Compression
 			for (size_t i = 0; i < ENTRY_MESSAGE_SIZE; i++)
 			{
-				uint32_t temp1 = h + S1(e) + ch(e, f, g) + k[i] + w[i];
-				uint32_t temp2 = S0(a) + maj(a, b, c);
+				const uint32_t temp1 = h + S1(e) + ch(e, f, g) + m_k[i] + w[i];
+				const uint32_t temp2 = S0(a) + maj(a, b, c);
 
 				h = g; g = f; f = e; e = d + temp1; d = c; c = b; b = a; a = temp1 + temp2;
 			}
 
-			hPrime[0] += a; hPrime[1] += b; hPrime[2] += c; hPrime[3] += d;
-			hPrime[4] += e; hPrime[5] += f; hPrime[6] += g; hPrime[7] += h;
+			m_hPrime[0] += a; m_hPrime[1] += b; m_hPrime[2] += c; m_hPrime[3] += d;
+			m_hPrime[4] += e; m_hPrime[5] += f; m_hPrime[6] += g; m_hPrime[7] += h;
 		}
 
 		delete[] buffer;
@@ -76,10 +76,10 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 string SHA256Hasher::Digest() const
 {
 	stringstream ss;
-	for (size_t i = 0; i < 8; i++) 
+	for (unsigned int i : m_hPrime)
 	{
 		// Keep leading 0s
-		ss << hex << setfill('0') << setw(8) << hPrime[i];
+		ss << hex << setfill('0') << setw(8) << i;
 	}
 
 	return ss.str();
@@ -87,14 +87,14 @@ string SHA256Hasher::Digest() const
 
 void SHA256Hasher::ResetPrimes()
 {
-	hPrime[0] = 0x6a09e667U;
-	hPrime[1] = 0xbb67ae85U;
-	hPrime[2] = 0x3c6ef372U;
-	hPrime[3] = 0xa54ff53aU;
-	hPrime[4] = 0x510e527fU;
-	hPrime[5] = 0x9b05688cU;
-	hPrime[6] = 0x1f83d9abU;
-	hPrime[7] = 0x5be0cd19U;
+	m_hPrime[0] = 0x6a09e667U;
+	m_hPrime[1] = 0xbb67ae85U;
+	m_hPrime[2] = 0x3c6ef372U;
+	m_hPrime[3] = 0xa54ff53aU;
+	m_hPrime[4] = 0x510e527fU;
+	m_hPrime[5] = 0x9b05688cU;
+	m_hPrime[6] = 0x1f83d9abU;
+	m_hPrime[7] = 0x5be0cd19U;
 }
 
 string SHA256Hasher::CalculateStringHash(const string& input)
@@ -103,6 +103,4 @@ string SHA256Hasher::CalculateStringHash(const string& input)
 }
 
 SHA256Hasher::~SHA256Hasher()
-{
-
-}
+= default;

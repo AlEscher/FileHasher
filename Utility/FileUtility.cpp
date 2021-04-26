@@ -6,9 +6,7 @@
 using namespace std;
 
 FileUtil::FileUtil()
-{
-	
-}
+= default;
 
 FileUtil::FileUtil(size_t blockSize)
 {
@@ -52,15 +50,14 @@ uint8_t* FileUtil::GetNextBlock()
 		return nullptr;
 	}
 
-	size_t size = std::min(m_nBlockSize, BytesRemaining());
-	uint8_t* block = new uint8_t[size];
+	const size_t size = std::min(m_nBlockSize, BytesRemaining());
+	auto* block = new uint8_t[size];
 	if (!block)
 	{
 		return nullptr;
 	}
 
-	size_t elementsRead = fread(block, 1U, size, m_pInput);
-	if (elementsRead != size && BytesRemaining() > 0)
+	if (const size_t elementsRead = fread(block, 1U, size, m_pInput); elementsRead != size && BytesRemaining() > 0)
 	{
 		// If we read less than we intended to and End Of File is not reached, something went wrong
 		delete[] block;
@@ -77,7 +74,7 @@ size_t FileUtil::BytesRemaining() const
 		return 0U;
 	}
 
-	int64_t bytesRead = _ftelli64(m_pInput);
+	const int64_t bytesRead = _ftelli64(m_pInput);
 	if (bytesRead == -1LL)
 	{
 		return 0U;
@@ -102,7 +99,7 @@ optional<size_t> FileUtil::GetFileSizeW(const wchar_t* filePath)
 	{
 		return optional<size_t>{filesystem::file_size(filePath)};
 	}
-	catch (filesystem::filesystem_error)
+	catch (filesystem::filesystem_error&)
 	{
 		return nullopt;
 	}
@@ -110,12 +107,12 @@ optional<size_t> FileUtil::GetFileSizeW(const wchar_t* filePath)
 
 optional<size_t> FileUtil::GetFileSizeA(const char* filePath)
 {
-	size_t len = strnlen_s(filePath, 1024U) + 1;
+	const size_t len = strnlen_s(filePath, 1024U) + 1;
 	size_t ret = 0U;
-	wchar_t* widePath = new wchar_t[len];
+	auto* widePath = new wchar_t[len];
 
 	mbstowcs_s(&ret, widePath, len, filePath, len - 1);
-	optional<size_t> fileSize = FileUtil::GetFileSizeW(widePath);
+	const optional<size_t> fileSize = FileUtil::GetFileSizeW(widePath);
 	delete[] widePath;
 
 	return fileSize;

@@ -1,18 +1,18 @@
+#include <chrono>
 #include <iostream>
 #include <sstream>
-#include <chrono>
 
 #include "./Hashing/HashingAlgorithm.h"
 #include "./Hashing/MD5Hash.h"
+#include "./Hashing/SHA1Hash.h"
 #include "./Hashing/SHA256Hash.h"
 #include "./Hashing/SHA512Hash.h"
-#include "./Hashing/SHA1Hash.h"
 
 using namespace std;
 
 string GetProgramName(const string& pathToProgram)
 {
-    string programName = "";
+    string programName;
     vector<string> elements;
     istringstream f(pathToProgram);
     // Get program name from command line argument containing program path
@@ -30,7 +30,7 @@ void PrintHelp(const string& pathToProgram)
     cout << "\t- " << programName << " <HashAlgorithm> <PathToFile>" << endl;
 }
 
-int HandleCommandLineInput(int argc, char** argv)
+int HandleCommandLineInput(const int argc, char** argv)
 {
     if (argc < 3)
     {
@@ -39,19 +39,19 @@ int HandleCommandLineInput(int argc, char** argv)
     }
 
     vector<string> arguments;
+    arguments.reserve(argc);
     for (int i = 0; i < argc; i++)
     {
-        arguments.push_back(argv[i]);
+        arguments.emplace_back(argv[i]);
     }
 
     bool verbose = false;
-    const vector<string>::iterator verbosePosition = find(arguments.begin(), arguments.end(), "-v");
-    if (verbosePosition != arguments.end())
+    if (const auto verbosePosition = find(arguments.begin(), arguments.end(), "-v"); verbosePosition != arguments.end())
     {
         verbose = true;
     }
 
-    HashingAlgorithm* algorithm = nullptr;
+    HashingAlgorithm* algorithm;
     if (arguments[1] == "SHA256")
     {
         algorithm = new SHA256Hasher();
@@ -78,15 +78,15 @@ int HandleCommandLineInput(int argc, char** argv)
         return 1;
     }
 
-    size_t len = strnlen_s(arguments[2].c_str(), 1024U) + 1;
-    size_t fileSize = 0U;
+    const size_t len = strnlen_s(arguments[2].c_str(), 1024U) + 1;
+    [[maybe_unused]] size_t fileSize = 0U;
     size_t ret = 0U;
-    wchar_t* widePath = new wchar_t[len];
+    auto* widePath = new wchar_t[len];
     mbstowcs_s(&ret, widePath, len, arguments[2].c_str(), len - 1);
 
-    string hash = algorithm->CalculateFileHash(widePath);
+    const string hash = algorithm->CalculateFileHash(widePath);
     delete[] widePath;
-    if (hash == "")
+    if (hash.empty())
     {
         if (verbose)
         {
@@ -107,7 +107,6 @@ int main(int argc, char** argv)
     HashingAlgorithm* sha512Hasher = new SHA512Hasher();
     HashingAlgorithm* md5Hasher = new MD5Hasher();
     HashingAlgorithm* sha1Hasher = new SHA1Hasher();
-    string input;
     wstring path = L"C:/Dev/Cpp/FileHasher/test2";
 
     if (argc > 1)
@@ -117,21 +116,22 @@ int main(int argc, char** argv)
 
     while (true)
     {
-        input = "";
+        string input;
         cin >> input;
 
         if (input == "exit")
         {
             break;
         }
-        else if (input == "-path")
+    	
+        if (input == "-path")
         {
-            cout << "Enter path: ";
-            wcin >> path;
+	        cout << "Enter path: ";
+	        wcin >> path;
         }
         else if (input == "file")
         {
-            /*
+	        /*
             * Tested files (Release mode), times include reading file and hashing,
             * so this may vary depending on harddrive (NVMe SSD for me). Tested only once:
             * Size (using filesystem::file_size / 1000) and duration (using chrono::high_resolution_clock) :
@@ -176,37 +176,37 @@ int main(int argc, char** argv)
             * - 115 KB          => 215 ms
             */
 
-            // Hash the file "test", can be changed at runtime
-            size_t fileSize = 0;
-            auto start = chrono::high_resolution_clock::now();
-            string sha256Hash = sha256Hasher->CalculateFileHash(path.c_str(), fileSize);
-            auto end = chrono::high_resolution_clock::now();
-            cout << "File " << sha256Hasher->GetName() << ": " << sha256Hash << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " micros, with size: " << fileSize / 1000 << " KB" << endl;
+	        // Hash the file "test", can be changed at runtime
+	        size_t fileSize = 0;
+	        auto start = chrono::high_resolution_clock::now();
+	        string sha256Hash = sha256Hasher->CalculateFileHash(path.c_str(), fileSize);
+	        auto end = chrono::high_resolution_clock::now();
+	        cout << "File " << sha256Hasher->GetName() << ": " << sha256Hash << endl;
+	        cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
+	        cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " micros, with size: " << fileSize / 1000 << " KB" << endl;
 
-            start = chrono::high_resolution_clock::now();
-            string sha512Hash = sha512Hasher->CalculateFileHash(path.c_str());
-            end = chrono::high_resolution_clock::now();
-            cout << "File " << sha512Hasher->GetName() << ": " << sha512Hash << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms " << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " micros" << endl;
+	        start = chrono::high_resolution_clock::now();
+	        string sha512Hash = sha512Hasher->CalculateFileHash(path.c_str());
+	        end = chrono::high_resolution_clock::now();
+	        cout << "File " << sha512Hasher->GetName() << ": " << sha512Hash << endl;
+	        cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms " << endl;
+	        cout << "Took: " << chrono::duration_cast<chrono::microseconds>(end - start).count() << " micros" << endl;
 
-            start = chrono::high_resolution_clock::now();
-            string md5Hash = md5Hasher->CalculateFileHash(path.c_str());
-            end = chrono::high_resolution_clock::now();
-            cout << "File MD5:    " << md5Hash << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
+	        start = chrono::high_resolution_clock::now();
+	        string md5Hash = md5Hasher->CalculateFileHash(path.c_str());
+	        end = chrono::high_resolution_clock::now();
+	        cout << "File MD5:    " << md5Hash << endl;
+	        cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
 
-            start = chrono::high_resolution_clock::now();
-            string sha1Hash = sha1Hasher->CalculateFileHash(path.c_str());
-            end = chrono::high_resolution_clock::now();
-            cout << "File SHA1:   " << sha1Hash << endl;
-            cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
+	        start = chrono::high_resolution_clock::now();
+	        string sha1Hash = sha1Hasher->CalculateFileHash(path.c_str());
+	        end = chrono::high_resolution_clock::now();
+	        cout << "File SHA1:   " << sha1Hash << endl;
+	        cout << "Took: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms, with size: " << fileSize / 1000 << " KB" << endl;
         }
         else
         {
-            cout << "Unknown command: " << input << endl;
+	        cout << "Unknown command: " << input << endl;
         }
     }
 

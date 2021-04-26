@@ -3,12 +3,12 @@
 
 #include "./HashingAlgorithm.h"
 
-class MD5Hasher : public HashingAlgorithm
+class MD5Hasher final : public HashingAlgorithm
 {
 private:
-    bool Process(const uint8_t* padding, const size_t paddingSize) override;
+    bool Process(const uint8_t* padding, size_t paddingSize) override;
     void ResetPrimes() override;
-    std::string Digest() const override;
+    [[nodiscard]] std::string Digest() const override;
 
     uint32_t m_Primes[4] = { 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476 };
     const uint32_t m_Constants[64] = { 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
@@ -34,9 +34,9 @@ private:
                                     6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21
                                   };
 public:
-	std::string CalculateStringHash(const std::string& input);
+	std::string CalculateStringHash(const std::string& input) override;
 
-	inline std::string GetName() const
+    [[nodiscard]] std::string GetName() const override
 	{
 		return "MD5";
 	}

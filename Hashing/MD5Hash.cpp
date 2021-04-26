@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define LEFTROT(n, s) ((n << s) | (n >> (32 - s)))
+#define LEFTROT(n, s) (((n) << (s)) | ((n) >> (32 - (s))))
 
 constexpr size_t ENTRY_MESSAGE_SIZE = 16U;
 
@@ -41,7 +41,7 @@ bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 				uint32_t F = 0U;
 				size_t g = 0U;
 
-				if (0 <= i && i < 16)
+				if (i < 16)
 				{
 					F = (B & C) | (~B & D);
 					g = i;
@@ -87,10 +87,10 @@ void MD5Hasher::ResetPrimes()
 std::string MD5Hasher::Digest() const
 {
 	stringstream ss;
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned int m_Prime : m_Primes)
 	{
 		// Keep leading 0s
-		ss << hex << setfill('0') << setw(8) << BitUtil::SwapEndian32(m_Primes[i]);
+		ss << hex << setfill('0') << setw(8) << BitUtil::SwapEndian32(m_Prime);
 	}
 
 	return ss.str();
