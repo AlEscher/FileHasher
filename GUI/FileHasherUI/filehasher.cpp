@@ -16,6 +16,7 @@
 #include <QTime>
 #include <QDesktopServices>
 #include <QCloseEvent>
+#include <QMimeData>
 
 using namespace std;
 
@@ -45,6 +46,45 @@ FileHasher::~FileHasher()
     delete controller;
     delete m_pActionsMenu;
     delete m_pExportDialog;
+}
+
+void FileHasher::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasUrls())
+    {
+        e->accept();
+    }
+}
+
+void FileHasher::dragMoveEvent(QDragMoveEvent *e)
+{
+    // Only allow drops inside the file table
+    QRect fileTableArea = ui->hashTargetsWidget->geometry();
+    if (fileTableArea.contains(e->pos()))
+    {
+        e->acceptProposedAction();
+    }
+    else
+    {
+        e->ignore();
+    }
+}
+
+void FileHasher::dropEvent(QDropEvent *e)
+{
+    const QMimeData* data = e->mimeData();
+    if (data->hasUrls())
+    {
+        for (const QUrl& url : data->urls())
+        {
+            const QString filePath = url.toLocalFile();
+            // Don't add folders
+            if (delegate->CheckFilePath(filePath))
+            {
+                this->AddFileToTable(ui->fileTable, url.fileName(), filePath, delegate->GetFileSize(filePath));
+            }
+        }
+    }
 }
 
 void FileHasher::closeEvent(QCloseEvent *event)

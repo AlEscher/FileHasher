@@ -30,9 +30,9 @@ protected:
 	uint8_t* GetDataBlock(size_t paddingSize, const uint8_t* padding, size_t& blockSize);
 public:
 	// Calculate file hash
-	std::string CalculateFileHash(const wchar_t* filePath);
+	[[nodiscard]] std::string CalculateFileHash(const wchar_t* filePath);
 	// Calculate file hash and set fileSize (not really needed, mostly for debugging purposes)
-	std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize);
+	[[nodiscard]] std::string CalculateFileHash(const wchar_t* filePath, size_t& fileSize);
 	// Calculate hash for given string
 	virtual std::string CalculateStringHash(const std::string& input) = 0;
 	// Returns the name of the HashingAlgorithm instance, e.g. "SHA256"

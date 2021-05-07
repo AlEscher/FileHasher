@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     framelessWindow.setContent(w);
     framelessWindow.setWindowTitle("FileHasher UI");
     framelessWindow.setWindowIcon(QIcon(":./appico.ico"));
+    framelessWindow.setAcceptDrops(true);
     framelessWindow.show();
     // Lock the size in (Size of FramelessWindow is determined by its content)
     framelessWindow.setFixedSize(framelessWindow.size());

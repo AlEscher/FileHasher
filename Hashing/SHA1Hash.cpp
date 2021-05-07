@@ -37,7 +37,7 @@ bool SHA1Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 				M[i] = BitUtil::rotl32((M[i - 3] ^ M[i - 8] ^ M[i - 14] ^ M[i - 16]), 1);
 			}
 
-			uint32_t A = m_Primes[0], B = m_Primes[1], C = m_Primes[2], D = m_Primes[3], E = m_Primes[4];
+			uint32_t A = m_primes[0], B = m_primes[1], C = m_primes[2], D = m_primes[3], E = m_primes[4];
 
 			for (size_t i = 0; i < ENTRY_MESSAGE_SIZE; i++)
 			{
@@ -70,7 +70,7 @@ bool SHA1Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 				C = BitUtil::rotl32(B, 30); B = A; A = temp;
 			}
 
-			m_Primes[0] += A; m_Primes[1] += B; m_Primes[2] += C; m_Primes[3] += D; m_Primes[4] += E;
+			m_primes[0] += A; m_primes[1] += B; m_primes[2] += C; m_primes[3] += D; m_primes[4] += E;
 		}
 
 		delete[] buffer;
@@ -81,17 +81,17 @@ bool SHA1Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 
 void SHA1Hasher::ResetPrimes()
 {
-	m_Primes[0] = 0x67452301;
-	m_Primes[1] = 0xefcdab89;
-	m_Primes[2] = 0x98badcfe;
-	m_Primes[3] = 0x10325476;
-	m_Primes[4] = 0xc3d2e1f0;
+	m_primes[0] = 0x67452301;
+	m_primes[1] = 0xefcdab89;
+	m_primes[2] = 0x98badcfe;
+	m_primes[3] = 0x10325476;
+	m_primes[4] = 0xc3d2e1f0;
 }
 
 string SHA1Hasher::Digest() const
 {
 	stringstream ss;
-	for (unsigned int m_Prime : m_Primes)
+	for (unsigned int m_Prime : m_primes)
 	{
 		// Keep leading 0s
 		ss << hex << setfill('0') << setw(8) << m_Prime;

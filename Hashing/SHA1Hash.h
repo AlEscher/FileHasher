@@ -8,7 +8,7 @@ private:
     void ResetPrimes() override;
     [[nodiscard]] std::string Digest() const override;
 
-    uint32_t m_Primes[5] = { 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 };
+    uint32_t m_primes[5] = { 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 };
     
 public:
     std::string CalculateStringHash(const std::string& input) override;

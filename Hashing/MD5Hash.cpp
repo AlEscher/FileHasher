@@ -34,7 +34,7 @@ bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 				M[i] = BitUtil::SwapEndian32(BitUtil::AppendBytes<uint32_t>(buffer + chunk + (i * 4)));
 			}
 
-			uint32_t A = m_Primes[0], B = m_Primes[1], C = m_Primes[2], D = m_Primes[3];
+			uint32_t A = m_primes[0], B = m_primes[1], C = m_primes[2], D = m_primes[3];
 
 			for (size_t i = 0; i < 64; i++)
 			{
@@ -62,12 +62,12 @@ bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 					g = (7 * i) % 16;
 				}
 
-				F += A + m_Constants[i] + M[g];
+				F += A + m_constants[i] + M[g];
 				A = D; D = C; C = B;
-				B += LEFTROT(F, m_Shifts[i]);
+				B += LEFTROT(F, m_shifts[i]);
 			}
 
-			m_Primes[0] += A; m_Primes[1] += B; m_Primes[2] += C; m_Primes[3] += D;
+			m_primes[0] += A; m_primes[1] += B; m_primes[2] += C; m_primes[3] += D;
 		}
 
 		delete[] buffer;
@@ -78,16 +78,16 @@ bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 
 void MD5Hasher::ResetPrimes()
 {
-	m_Primes[0] = 0x67452301;
-	m_Primes[1] = 0xefcdab89;
-	m_Primes[2] = 0x98badcfe;
-	m_Primes[3] = 0x10325476;
+	m_primes[0] = 0x67452301;
+	m_primes[1] = 0xefcdab89;
+	m_primes[2] = 0x98badcfe;
+	m_primes[3] = 0x10325476;
 }
 
 std::string MD5Hasher::Digest() const
 {
 	stringstream ss;
-	for (unsigned int m_Prime : m_Primes)
+	for (unsigned int m_Prime : m_primes)
 	{
 		// Keep leading 0s
 		ss << hex << setfill('0') << setw(8) << BitUtil::SwapEndian32(m_Prime);

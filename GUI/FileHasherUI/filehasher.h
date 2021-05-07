@@ -25,6 +25,9 @@ class FileHasher : public QMainWindow
 public:
     FileHasher(QWidget *parent = nullptr);
     ~FileHasher();
+    void dragEnterEvent(QDragEnterEvent* e) override;
+    void dragMoveEvent(QDragMoveEvent* e) override;
+    void dropEvent(QDropEvent* e) override;
 
 private slots:
     void on_addFileButton_clicked();

@@ -59,6 +59,7 @@ public:
             FileHasher->setObjectName(QString::fromUtf8("FileHasher"));
         FileHasher->setEnabled(true);
         FileHasher->resize(932, 612);
+        FileHasher->setAcceptDrops(true);
         FileHasher->setTabShape(QTabWidget::Rounded);
         centralwidget = new QWidget(FileHasher);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
