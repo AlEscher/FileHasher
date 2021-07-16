@@ -195,7 +195,6 @@ void FileHasher::on_hashButton_clicked()
         return;
     }
     controller->SetHashingStatus(true);
-    ui->hashButton->setCursor(Qt::WaitCursor);
 
     QTableWidget* table = ui->fileTable;
     int totalFiles = table->rowCount();
@@ -229,7 +228,6 @@ void FileHasher::on_hashButton_clicked()
     {
         QMessageBox::warning(this, "Warning", "No files selected!");
         controller->SetHashingStatus(false);
-        ui->hashButton->setCursor(Qt::ArrowCursor);
         return;
     }
 }

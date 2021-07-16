@@ -43,7 +43,7 @@ bool FileUtil::IsOpen() const
 	return m_bIsOpen && (ferror(m_pInput) == 0);
 }
 
-uint8_t* FileUtil::GetNextBlock()
+std::unique_ptr<uint8_t[]> FileUtil::GetNextBlock()
 {
 	if (!CanRead())
 	{
@@ -51,16 +51,15 @@ uint8_t* FileUtil::GetNextBlock()
 	}
 
 	const size_t size = std::min(m_nBlockSize, BytesRemaining());
-	auto* block = new uint8_t[size];
+	auto block = std::make_unique<uint8_t[]>(size);
 	if (!block)
 	{
 		return nullptr;
 	}
 
-	if (const size_t elementsRead = fread(block, 1U, size, m_pInput); elementsRead != size && BytesRemaining() > 0)
+	if (const size_t elementsRead = fread(block.get(), 1U, size, m_pInput); elementsRead != size && BytesRemaining() > 0)
 	{
 		// If we read less than we intended to and End Of File is not reached, something went wrong
-		delete[] block;
 		return nullptr;
 	}
 

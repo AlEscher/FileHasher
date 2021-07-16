@@ -103,10 +103,10 @@ int HandleCommandLineInput(const int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-    HashingAlgorithm* sha256Hasher = new SHA256Hasher();
-    HashingAlgorithm* sha512Hasher = new SHA512Hasher();
-    HashingAlgorithm* md5Hasher = new MD5Hasher();
-    HashingAlgorithm* sha1Hasher = new SHA1Hasher();
+    unique_ptr<HashingAlgorithm> sha256Hasher = make_unique<SHA256Hasher>();
+    unique_ptr<HashingAlgorithm> sha512Hasher = make_unique<SHA512Hasher>();
+    unique_ptr<HashingAlgorithm> md5Hasher = make_unique<MD5Hasher>();
+    unique_ptr<HashingAlgorithm> sha1Hasher = make_unique<SHA1Hasher>();
     wstring path = L"C:/Dev/Cpp/FileHasher/test2";
 
     if (argc > 1)
@@ -209,9 +209,4 @@ int main(int argc, char** argv)
 	        cout << "Unknown command: " << input << endl;
         }
     }
-
-    delete sha256Hasher;
-    delete sha512Hasher;
-    delete md5Hasher;
-    delete sha1Hasher;
 }

@@ -27,7 +27,7 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 	do
 	{
 		size_t currentBlockSize = 0U;
-		uint8_t* buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
+		auto buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
 		if (!buffer)
 		{
 			return false;
@@ -43,7 +43,7 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			for (size_t i = 0; i < 16; i++)
 			{
 				// Combine 8 bytes into one 64-bit entry
-				w[i] = BitUtil::AppendBytes<uint64_t>(buffer + chunk + i * 8);
+				w[i] = BitUtil::AppendBytes<uint64_t>(buffer.get() + chunk + i * 8);
 			}
 
 			// Extend the first 16 words into the remaining 64 words
@@ -67,8 +67,7 @@ bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			m_primes[4] += e; m_primes[5] += f; m_primes[6] += g; m_primes[7] += h;
 		}
 
-		delete[] buffer;
-	} while (m_pFileUtil->CanRead());
+	} while (m_pFileUtil->CanRead() && !m_bStop);
 
 	return true;
 }

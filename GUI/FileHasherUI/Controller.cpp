@@ -179,6 +179,19 @@ void Controller::HandleError(const QStringList& data)
     }
 }
 
+void Controller::SetHashingStatus(const bool status)
+{
+    m_bHashing = status;
+    if (m_bHashing)
+    {
+        ui->hashButton->setCursor(Qt::WaitCursor);
+    }
+    else
+    {
+        ui->hashButton->setCursor(Qt::ArrowCursor);
+    }
+}
+
 /* ======================= Worker =======================
  * A Controller may manage many Workers, one Worker will
  * always have one Controller assigned to them
@@ -235,6 +248,15 @@ void Worker::DoWork(const std::vector<HashingAlgorithm*>& hashAlgorithms, const 
                 emit ReportError(errorData);
                 emit WaitForMonitor();
                 continue;
+            }
+            else if (hashAlgorithm->WasInterrupted())
+            {
+                QStringList errorData;
+                errorData.append(currentParam[0] + " " + QString::fromStdString(hashAlgorithm->GetName()));
+                errorData.append("ERROR: Hash was interrupted!");
+                emit ReportError(errorData);
+                emit WaitForMonitor();
+                break;
             }
 
             result.clear();

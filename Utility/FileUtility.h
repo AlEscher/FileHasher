@@ -4,11 +4,6 @@
 
 class FileUtil
 {
-private:
-	FILE* m_pInput = nullptr;
-	bool m_bIsOpen = false;
-	size_t m_nBlockSize = 4096U;
-	size_t m_nTotalFileSize = 0U;
 public:
 	// Get the size of a file on disk in bytes
 	static std::optional<size_t> GetFileSizeW(const wchar_t* filePath);
@@ -30,7 +25,7 @@ public:
 	// Checks whether the file stream is open and error free
 	[[nodiscard]] bool IsOpen() const;
 	// Read the next block from the file, returns a heap allocated pointer, nullptr if anything fails
-	uint8_t* GetNextBlock();
+	[[nodiscard]] std::unique_ptr<uint8_t[]> GetNextBlock();
 	// Returns how many bytes we still have to read
 	[[nodiscard]] size_t BytesRemaining() const;
 	// Close the file stream and reset internal values
@@ -40,4 +35,10 @@ public:
 	{
 		return this->m_nBlockSize;
 	}
+
+private:
+	FILE* m_pInput = nullptr;
+	bool m_bIsOpen = false;
+	size_t m_nBlockSize = 4096U;
+	size_t m_nTotalFileSize = 0U;
 };

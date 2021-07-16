@@ -14,7 +14,7 @@ bool SHA1Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 	do
 	{
 		size_t currentBlockSize = 0U;
-		uint8_t* buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
+		auto buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
 		if (!buffer)
 		{
 			return false;
@@ -29,7 +29,7 @@ bool SHA1Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			for (size_t i = 0; i < 16; i++)
 			{
 				// Append 4 bytes and put them into one variable
-				M[i] = BitUtil::AppendBytes<uint32_t>(buffer + chunk + (i * 4));
+				M[i] = BitUtil::AppendBytes<uint32_t>(buffer.get() + chunk + (i * 4));
 			}
 
 			for (size_t i = 16; i < ENTRY_MESSAGE_SIZE; i++)
@@ -72,9 +72,8 @@ bool SHA1Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 
 			m_primes[0] += A; m_primes[1] += B; m_primes[2] += C; m_primes[3] += D; m_primes[4] += E;
 		}
-
-		delete[] buffer;
-	} while (m_pFileUtil->CanRead());
+		
+	} while (m_pFileUtil->CanRead() && !m_bStop);
 
 	return true;
 }

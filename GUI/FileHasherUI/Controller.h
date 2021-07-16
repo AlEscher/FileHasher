@@ -56,6 +56,11 @@ class Controller : public QObject
         QString GetCacheContentsAsJson();
         // Returns the Cache's contents formatted as a C-Array
         QString GetCacheContentAsArray();
+        void SetHashingStatus(const bool status);
+        bool GetHashingStatus() const
+        {
+            return m_bHashing;
+        }
     private:
         Ui::FileHasher* ui;
         bool m_bHashing = false;
@@ -67,14 +72,7 @@ class Controller : public QObject
         void HandleResults(const QStringList &);
         void UpdateFileProgress(const size_t fileSize, const size_t value);
         void HandleError(const QStringList &data);
-        inline void SetHashingStatus(const bool status)
-        {
-            m_bHashing = status;
-        }
-        inline bool GetHashingStatus()
-        {
-            return m_bHashing;
-        }
+
     signals:
         void operate(const std::vector<HashingAlgorithm*> &, const std::vector<QStringList> &);
         void StartMonitoring(const HashingAlgorithm* algorithm, const size_t fileSize);

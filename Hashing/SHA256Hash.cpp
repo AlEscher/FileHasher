@@ -27,7 +27,7 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 	do
 	{
 		size_t currentBlockSize = 0U;
-		uint8_t* buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
+		auto buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
 		if (!buffer)
 		{
 			return false;
@@ -43,7 +43,7 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			for (size_t i = 0; i < 16; i++)
 			{
 				// Append 4 bytes and put them into one variable
-				w[i] = BitUtil::AppendBytes<uint32_t>(buffer + chunk + (i * 4));
+				w[i] = BitUtil::AppendBytes<uint32_t>(buffer.get() + chunk + (i * 4));
 			}
 
 			// Extend the first 16 words into the remaining 48 words
@@ -66,9 +66,8 @@ bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			m_hPrime[0] += a; m_hPrime[1] += b; m_hPrime[2] += c; m_hPrime[3] += d;
 			m_hPrime[4] += e; m_hPrime[5] += f; m_hPrime[6] += g; m_hPrime[7] += h;
 		}
-
-		delete[] buffer;
-	} while (m_pFileUtil->CanRead());
+		
+	} while (m_pFileUtil->CanRead() && !m_bStop);
 
 	return true;
 }

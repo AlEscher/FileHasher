@@ -16,7 +16,7 @@ bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 	do
 	{
 		size_t currentBlockSize = 0U;
-		uint8_t* buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
+		auto buffer = GetDataBlock(paddingSize, padding, currentBlockSize);
 		if (!buffer)
 		{
 			return false;
@@ -31,7 +31,7 @@ bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 			for (size_t i = 0; i < 16; i++)
 			{
 				// Append 4 bytes and put them into one variable
-				M[i] = BitUtil::SwapEndian32(BitUtil::AppendBytes<uint32_t>(buffer + chunk + (i * 4)));
+				M[i] = BitUtil::SwapEndian32(BitUtil::AppendBytes<uint32_t>(buffer.get() + chunk + (i * 4)));
 			}
 
 			uint32_t A = m_primes[0], B = m_primes[1], C = m_primes[2], D = m_primes[3];
@@ -69,9 +69,8 @@ bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
 
 			m_primes[0] += A; m_primes[1] += B; m_primes[2] += C; m_primes[3] += D;
 		}
-
-		delete[] buffer;
-	} while (m_pFileUtil->CanRead());
+		
+	} while (m_pFileUtil->CanRead() && !m_bStop);
 
 	return true;
 }
