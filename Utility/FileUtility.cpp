@@ -50,8 +50,8 @@ std::unique_ptr<uint8_t[]> FileUtil::GetNextBlock()
 		return nullptr;
 	}
 
-	const size_t size = std::min(m_nBlockSize, BytesRemaining());
-	auto block = std::make_unique<uint8_t[]>(size);
+	const size_t size = min(m_nBlockSize, BytesRemaining());
+	auto block = make_unique<uint8_t[]>(size);
 	if (!block)
 	{
 		return nullptr;

@@ -10,14 +10,14 @@ using namespace std;
 std::string HashingAlgorithm::Hash(const size_t fileSize)
 {
 	size_t paddingSize = 0U;
-	const auto padding = this->PreProcess(fileSize, paddingSize);
+	auto padding = this->PreProcess(fileSize, paddingSize);
 	if (!padding)
 	{
 		return "";
 	}
 
 	m_nBytesProcessed = 0U;
-	if (!this->Process(padding.get(), paddingSize))
+	if (!this->Process(std::move(padding), paddingSize))
 	{
 		return "";
 	}
@@ -75,7 +75,7 @@ unique_ptr<uint8_t[]> HashingAlgorithm::PreProcess(const size_t fileSize, size_t
 	return buffer;
 }
 
-unique_ptr<uint8_t[]> HashingAlgorithm::GetDataBlock(const size_t paddingSize, const uint8_t* padding, size_t& blockSize)
+unique_ptr<uint8_t[]> HashingAlgorithm::GetDataBlock(const size_t paddingSize, const unique_ptr<uint8_t[]>& padding, size_t& blockSize)
 {
 	size_t currentBlockSize = std::min(m_pFileUtil->BytesRemaining(), m_pFileUtil->GetBlockSize());
 	unique_ptr<uint8_t[]> buffer;
@@ -84,7 +84,7 @@ unique_ptr<uint8_t[]> HashingAlgorithm::GetDataBlock(const size_t paddingSize, c
 	{
 		const size_t lastBlockLength = m_pFileUtil->BytesRemaining();
 		buffer = m_pFileUtil->GetNextBlock();
-		auto finalBlock = std::make_unique<uint8_t[]>(lastBlockLength + paddingSize);
+		auto finalBlock = make_unique<uint8_t[]>(lastBlockLength + paddingSize);
 		if (!finalBlock)
 		{
 			return nullptr;
@@ -92,7 +92,7 @@ unique_ptr<uint8_t[]> HashingAlgorithm::GetDataBlock(const size_t paddingSize, c
 
 		// Copy our block, then append the padding
 		memcpy_s(finalBlock.get(), lastBlockLength + paddingSize, buffer.get(), lastBlockLength);
-		memcpy_s(finalBlock.get() + lastBlockLength, lastBlockLength + paddingSize, padding, paddingSize);
+		memcpy_s(finalBlock.get() + lastBlockLength, lastBlockLength + paddingSize, padding.get(), paddingSize);
 
 		buffer = move(finalBlock);
 		currentBlockSize = lastBlockLength + paddingSize;

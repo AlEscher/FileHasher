@@ -22,7 +22,7 @@ public:
     }
 
 private:
-    bool Process(const uint8_t* padding, size_t paddingSize) override;
+    bool Process(std::unique_ptr<uint8_t[]> padding, size_t paddingSize) override;
     void ResetPrimes() override;
     [[nodiscard]] std::string Digest() const override;
 

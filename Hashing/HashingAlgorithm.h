@@ -58,7 +58,7 @@ protected:
 	bool m_bStop = false;
 
 	// Caller takes ownership of data block
-	[[nodiscard]] std::unique_ptr<uint8_t[]> GetDataBlock(size_t paddingSize, const uint8_t* padding, size_t& blockSize);
+	[[nodiscard]] std::unique_ptr<uint8_t[]> GetDataBlock(size_t paddingSize, const std::unique_ptr<uint8_t[]>& padding, size_t& blockSize);
 
 private:
 	// Start the hashing process
@@ -66,7 +66,7 @@ private:
 	// Pad the message so the length in bits is a multiple of chunk size, returns the padding
 	virtual std::unique_ptr<uint8_t[]> PreProcess(size_t fileSize, size_t& paddingSize);
 	// Iterate through the message in blocks and process each block
-	virtual bool Process(const uint8_t* padding, size_t paddingSize) = 0;
+	virtual bool Process(std::unique_ptr<uint8_t[]> padding, size_t paddingSize) = 0;
 	// Resets the prime numbers to their initial values
 	virtual void ResetPrimes() = 0;
 	// Digests the processed message and returns our hash

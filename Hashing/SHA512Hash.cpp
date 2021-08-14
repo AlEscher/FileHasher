@@ -22,7 +22,7 @@ using namespace std;
 constexpr size_t ENTRY_MESSAGE_SIZE = 80U;
 
 
-bool SHA512Hasher::Process(const uint8_t* padding, const size_t paddingSize)
+bool SHA512Hasher::Process(unique_ptr<uint8_t[]> padding, size_t paddingSize)
 {
 	do
 	{

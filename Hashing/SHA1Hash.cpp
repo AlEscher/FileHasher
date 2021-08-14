@@ -9,7 +9,7 @@ using namespace std;
 
 constexpr size_t ENTRY_MESSAGE_SIZE = 80U;
 
-bool SHA1Hasher::Process(const uint8_t* padding, const size_t paddingSize)
+bool SHA1Hasher::Process(std::unique_ptr<uint8_t[]> padding, const size_t paddingSize)
 {
 	do
 	{

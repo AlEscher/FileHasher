@@ -56,7 +56,7 @@ private:
               0x431d67c49c100d4cULL, 0x4cc5d4becb3e42b6ULL, 0x597f299cfc657e2aULL, 0x5fcb6fab3ad6faecULL, 0x6c44198c4a475817ULL };
 
     // Process and hash the message
-    bool Process(const uint8_t* padding, size_t paddingSize) override;
+    bool Process(std::unique_ptr<uint8_t[]> padding, size_t paddingSize) override;
     // Resets the prime constants
     void ResetPrimes() override;
     // Digests the processed message and returns our hash

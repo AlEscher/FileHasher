@@ -11,7 +11,7 @@ using namespace std;
 
 constexpr size_t ENTRY_MESSAGE_SIZE = 16U;
 
-bool MD5Hasher::Process(const uint8_t* padding, const size_t paddingSize)
+bool MD5Hasher::Process(std::unique_ptr<uint8_t[]> padding, const size_t paddingSize)
 {
 	do
 	{

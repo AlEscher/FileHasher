@@ -22,7 +22,7 @@ using namespace std;
 
 constexpr size_t ENTRY_MESSAGE_SIZE = 64U;
 
-bool SHA256Hasher::Process(const uint8_t* padding, const size_t paddingSize)
+bool SHA256Hasher::Process(std::unique_ptr<uint8_t[]> padding, const size_t paddingSize)
 {
 	do
 	{
