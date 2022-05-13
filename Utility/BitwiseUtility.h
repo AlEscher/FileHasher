@@ -1,15 +1,31 @@
 #pragma once
 #include <cstdint>
 
+#ifdef _MSC_VER
+#include <intrin.h>
+#else
+#include <x86intrin.h>  // Not just <immintrin.h> for compilers other than icc
+#endif
+
+#define GCC_COMPILER (defined(__GNUC__) && !defined(__clang__))
+
 namespace BitUtil
 {
 	inline uint32_t SwapEndian32(uint32_t in)
 	{
+#if GCC_COMPILER
+		return 0;
+#else
 		return _byteswap_ulong(in);
+#endif
 	}
 	inline uint64_t SwapEndian64(uint64_t in)
 	{
+#if GCC_COMPILER
+		return 0;
+#else
 		return _byteswap_uint64(in);
+#endif
 	}
 
 	inline uint32_t rotr32(uint32_t n, int c)
@@ -19,7 +35,11 @@ namespace BitUtil
 
 	inline uint64_t rotr64(uint64_t n, int c)
 	{
+#if GCC_COMPILER
+		return __rorq(n, c);
+#else
 		return _rotr64(n, c);
+#endif
 	}
 
 	inline uint32_t rotl32(uint32_t n, int c)
@@ -29,7 +49,11 @@ namespace BitUtil
 
 	inline uint64_t rotl64(uint64_t n, int c)
 	{
+#if GCC_COMPILER
+		return __rolq(n, c);
+#else
 		return _rotl64(n, c);
+#endif
 	}
 	// Append one byte after the other and put them into an element of type T
 	template<class T>

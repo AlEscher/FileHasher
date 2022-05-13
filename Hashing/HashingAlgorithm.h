@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <memory>
 
 #include "../Utility/FileUtility.h"
 
@@ -54,7 +55,7 @@ protected:
 	size_t CHUNK_SIZE_BITS = 0U;
 	// The size of the message length to be appended in padding, in bits
 	size_t MESSAGE_LENGTH_SIZE = 0U;
-	bool LITTLE_ENDIAN = false;
+	bool m_bLittleEndian = false;
 	bool m_bStop = false;
 
 	// Caller takes ownership of data block

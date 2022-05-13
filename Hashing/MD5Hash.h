@@ -18,7 +18,7 @@ public:
         this->CHUNK_SIZE_BITS = 512U;
         this->CHUNK_SIZE_BYTES = 64U;
         this->MESSAGE_LENGTH_SIZE = 64U;
-        this->LITTLE_ENDIAN = true;
+        this->m_bLittleEndian = true;
     }
 
 private:

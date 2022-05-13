@@ -1,9 +1,17 @@
 #include <cassert>
 #include <iomanip>
 #include <optional>
+#include <algorithm>
 
 #include "./HashingAlgorithm.h"
 #include "../Utility/BitwiseUtility.h"
+
+#define GCC_COMPILER (defined(__GNUC__) && !defined(__clang__))
+
+#if GCC_COMPILER
+#include <cstring>
+#include <algorithm>
+#endif
 
 using namespace std;
 
@@ -52,12 +60,12 @@ unique_ptr<uint8_t[]> HashingAlgorithm::PreProcess(const size_t fileSize, size_t
 	numKBits -= 7;
 	// Extra 8 bytes since for SHA512 L must be 128 bits, upper 64 bits will always be 0
 	// For e.g. SHA256 where L must be 64 bits, this will be 0
-	const uint64_t extraPadding = std::max(MESSAGE_LENGTH_SIZE / 8 - 8, 0ULL);
+	const uint64_t extraPadding = std::max(MESSAGE_LENGTH_SIZE / 8ULL - 8ULL, 0ULL);
 	for (; padCounter <= numKBits / 8 + extraPadding; padCounter++)
 	{
 		buffer[padCounter] = 0x00;
 	}
-	if (LITTLE_ENDIAN)
+	if (m_bLittleEndian)
 	{
 		L = BitUtil::SwapEndian64(L);
 	}
@@ -91,8 +99,8 @@ unique_ptr<uint8_t[]> HashingAlgorithm::GetDataBlock(const size_t paddingSize, c
 		}
 
 		// Copy our block, then append the padding
-		memcpy_s(finalBlock.get(), lastBlockLength + paddingSize, buffer.get(), lastBlockLength);
-		memcpy_s(finalBlock.get() + lastBlockLength, lastBlockLength + paddingSize, padding.get(), paddingSize);
+		memcpy(finalBlock.get(), buffer.get(), lastBlockLength);
+		memcpy(finalBlock.get() + lastBlockLength, padding.get(), paddingSize);
 
 		buffer = move(finalBlock);
 		currentBlockSize = lastBlockLength + paddingSize;

@@ -1,7 +1,14 @@
 #include <filesystem>
 #include <fstream>
+#include <iostream>
+#include <optional>
 
 #include "./FileUtility.h"
+
+#define GCC_COMPILER (defined(__GNUC__) && !defined(__clang__))
+#if GCC_COMPILER
+#include <string.h>
+#endif
 
 using namespace std;
 
@@ -94,23 +101,21 @@ void FileUtil::Reset()
 
 optional<size_t> FileUtil::GetFileSizeW(const wchar_t* filePath)
 {
-	try
-	{
-		return optional<size_t>{filesystem::file_size(filePath)};
-	}
-	catch (filesystem::filesystem_error&)
-	{
-		return nullopt;
-	}
+	return optional<size_t>{filesystem::file_size(filePath)};
 }
 
 optional<size_t> FileUtil::GetFileSizeA(const char* filePath)
 {
+#if GCC_COMPILER
+	const size_t len = strlen(filePath) + 1
+#else
 	const size_t len = strnlen_s(filePath, 1024U) + 1;
+#endif
+	;
 	size_t ret = 0U;
 	auto* widePath = new wchar_t[len];
 
-	mbstowcs_s(&ret, widePath, len, filePath, len - 1);
+	mbstowcs(widePath, filePath, len);
 	const optional<size_t> fileSize = FileUtil::GetFileSizeW(widePath);
 	delete[] widePath;
 
@@ -128,7 +133,8 @@ vector<uint8_t> FileUtil::ReadFileContent(const wchar_t* filePath, size_t& fileS
 		return bufferVec;
 	}
 
-	ifstream input(filePath, ios::binary);
+	ifstream input{};
+	input.open(filePath, ios::binary);
 	if (input.fail())
 	{
 		return bufferVec;
