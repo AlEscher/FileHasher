@@ -33,7 +33,9 @@ bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
 {
 	Reset();
 #ifdef GCC_COMPILER
-	auto mbFilePath = std::make_unique<const char[]>(wcslen(filePath));
+	auto strLen = wcslen(filePath) + 1;
+	auto mbFilePath = std::make_unique<char[]>(strLen);
+	wcstombs(mbFilePath.get(), filePath, strLen);
 	m_pInput = fopen(mbFilePath.get(), "rb");
 	m_bIsOpen = m_pInput != nullptr;
 #else
@@ -146,7 +148,9 @@ vector<uint8_t> FileUtil::ReadFileContent(const wchar_t* filePath, size_t& fileS
 	}
 
 #ifdef GCC_COMPILER
-	auto mbFilePath = std::make_unique<const char[]>(wcslen(filePath));
+	auto strLen = wcslen(filePath) + 1;
+	auto mbFilePath = std::make_unique<char[]>(strLen);
+	wcstombs(mbFilePath.get(), filePath, strLen);
 	ifstream input{ mbFilePath.get(), ios::binary };
 #else
 	ifstream input{ filePath, ios::binary };

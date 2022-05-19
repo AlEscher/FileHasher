@@ -14,7 +14,7 @@ namespace BitUtil
 	inline uint32_t SwapEndian32(uint32_t in)
 	{
 #if GCC_COMPILER
-		return 0;
+		return __builtin_bswap32(in);
 #else
 		return _byteswap_ulong(in);
 #endif
@@ -22,7 +22,7 @@ namespace BitUtil
 	inline uint64_t SwapEndian64(uint64_t in)
 	{
 #if GCC_COMPILER
-		return 0;
+		return __builtin_bswap64(in);
 #else
 		return _byteswap_uint64(in);
 #endif

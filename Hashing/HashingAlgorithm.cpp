@@ -10,7 +10,6 @@
 
 #if GCC_COMPILER
 #include <cstring>
-#include <algorithm>
 #endif
 
 using namespace std;
@@ -123,13 +122,12 @@ string HashingAlgorithm::CalculateFileHash(const wchar_t* filePath)
 	{
 		return "";
 	}
-
+	
 	if (!m_pFileUtil->OpenFileStreamW(filePath) || !m_pFileUtil->IsOpen())
 	{
 		m_nBytesProcessed = fileSize.value();
 		return "";
 	}
-
 	string hash = Hash(fileSize.value());
 	if (hash.empty() || m_bStop)
 	{
