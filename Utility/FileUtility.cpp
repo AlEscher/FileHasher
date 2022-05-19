@@ -8,6 +8,7 @@
 #define GCC_COMPILER (defined(__GNUC__) && !defined(__clang__))
 #if GCC_COMPILER
 #include <string.h>
+#include <stdio.h>
 #endif
 
 using namespace std;
@@ -31,7 +32,13 @@ FileUtil::~FileUtil()
 bool FileUtil::OpenFileStreamW(const wchar_t* filePath)
 {
 	Reset();
+#ifdef GCC_COMPILER
+	auto mbFilePath = std::make_unique<const char[]>(wcslen(filePath));
+	m_pInput = fopen(mbFilePath.get(), "rb");
+	m_bIsOpen = m_pInput != nullptr;
+#else
 	m_bIsOpen = _wfopen_s(&m_pInput, filePath, L"rb") == 0;
+#endif
 	if (m_bIsOpen)
 	{
 		m_nTotalFileSize = FileUtil::GetFileSizeW(filePath).value_or(0U);
@@ -80,7 +87,12 @@ size_t FileUtil::BytesRemaining() const
 		return 0U;
 	}
 
+#ifdef GCC_COMPILER
+	// Will not work for large files, but GCC seems to have no proper method for this
+	const int64_t bytesRead = ftell(m_pInput);
+#else
 	const int64_t bytesRead = _ftelli64(m_pInput);
+#endif
 	if (bytesRead == -1LL)
 	{
 		return 0U;
@@ -133,8 +145,12 @@ vector<uint8_t> FileUtil::ReadFileContent(const wchar_t* filePath, size_t& fileS
 		return bufferVec;
 	}
 
-	ifstream input{};
-	input.open(filePath, ios::binary);
+#ifdef GCC_COMPILER
+	auto mbFilePath = std::make_unique<const char[]>(wcslen(filePath));
+	ifstream input{ mbFilePath.get(), ios::binary };
+#else
+	ifstream input{ filePath, ios::binary };
+#endif
 	if (input.fail())
 	{
 		return bufferVec;
