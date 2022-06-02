@@ -13,10 +13,17 @@ using namespace std;
 
 constexpr size_t NUM_ITERATIONS = 4000;
 
+#ifdef __linux__
+const wstring emptyFilePath = L"/mnt/c/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/empty.txt";
+const wstring quickFoxFilePath = L"/mnt/c/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/quickfox.txt";
+const wstring randomTextFilePath = L"/mnt/c/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/random_text.txt";
+const wstring randomBytesFilePath = L"/mnt/c/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/random_bytes";
+#else
 const wstring emptyFilePath = L"C:/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/empty.txt";
 const wstring quickFoxFilePath = L"C:/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/quickfox.txt";
 const wstring randomTextFilePath = L"C:/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/random_text.txt";
 const wstring randomBytesFilePath = L"C:/Dev/cppProfilerBenchmark/CppProfilerBenchmark/FileHasher/Testing/TestFiles/random_bytes";
+#endif
 const array<wstring, 4> files{emptyFilePath, quickFoxFilePath, randomTextFilePath, randomBytesFilePath};
 
 int main()
